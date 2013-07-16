@@ -1,0 +1,4 @@
+EZBlocker
+=========
+
+Spotify Ad Blocker
