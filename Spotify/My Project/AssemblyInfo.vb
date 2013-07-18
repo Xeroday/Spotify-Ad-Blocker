@@ -10,12 +10,12 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyTitle("EZBlocker")> 
 <Assembly: AssemblyDescription("Blocks Spotify Ads")> 
-<Assembly: AssemblyCompany("")> 
+<Assembly: AssemblyCompany("http://www.ericzhang.me")> 
 <Assembly: AssemblyProduct("EZBlocker")> 
-<Assembly: AssemblyCopyright("Copyright ©  2012 Eric Zhang")> 
+<Assembly: AssemblyCopyright("Copyright ©  2012-2013 Eric Zhang")> 
 <Assembly: AssemblyTrademark("")> 
 
-<Assembly: ComVisible(False)>
+<Assembly: ComVisible(False)> 
 
 'The following GUID is for the ID of the typelib if this project is exposed to COM
 <Assembly: Guid("ae104380-2b6a-4dec-ae74-7bfe22b25e0b")> 

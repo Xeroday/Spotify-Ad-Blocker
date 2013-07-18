@@ -59,7 +59,11 @@ Public Class Form1
             My.Computer.FileSystem.WriteAllBytes("nircmd.exe", My.Resources.nircmd, False)
         End If
         If Not My.Computer.FileSystem.FileExists(Application.StartupPath & "\blocklist.txt") Then
-            My.Computer.FileSystem.WriteAllText("blocklist.txt", Environment.NewLine, False)
+            Try
+                My.Computer.Network.DownloadFile("http://www.ericzhang.me/dl/?file=blocklist.txt", "blocklist.txt")
+            Catch ex As Exception
+                My.Computer.FileSystem.WriteAllText("blocklist.txt", Environment.NewLine, False)
+            End Try
         End If
         Try
             Process.Start(Environment.GetEnvironmentVariable("APPDATA") & "\Spotify\spotify.exe")
@@ -106,7 +110,7 @@ Public Class Form1
             title = spotifyProcess.MainWindowTitle.ToString
         Next
         If Not title.Contains(" - ") Then 'Spotify is paused (Auto-pause for muting during an ad)
-            NotifyIcon1.ShowBalloonTip(10000, "EZBlocker", "Playing ad in background.", ToolTipIcon.None)
+            NotifyIcon1.ShowBalloonTip(5000, "EZBlocker", "Playing ad in background.", ToolTipIcon.None)
             Keyboard.SendKey(Keys.MediaPlayPause) 'Resume playing the ad
         End If
     End Sub
