@@ -60,8 +60,11 @@ Public Class Form1
         End If
         If Not My.Computer.FileSystem.FileExists(Application.StartupPath & "\blocklist.txt") Then
             Try
-                My.Computer.Network.DownloadFile("http://www.ericzhang.me/dl/?file=blocklist.txt", "blocklist.txt")
+                Dim _WebClient As New System.Net.WebClient()
+                _WebClient.Headers("User-Agent") = "EZBlocker " & My.Application.Info.Version.ToString & " " & My.Computer.Info.OSFullName
+                _WebClient.DownloadFile("http://www.ericzhang.me/dl/?file=blocklist.txt", "blocklist.txt")
             Catch ex As Exception
+                MessageBox.Show("Could not download blocklist, EZBlocker will create an empty one.")
                 My.Computer.FileSystem.WriteAllText("blocklist.txt", Environment.NewLine, False)
             End Try
         End If
