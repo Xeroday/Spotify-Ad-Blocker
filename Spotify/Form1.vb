@@ -1,10 +1,10 @@
 ﻿Imports System
 Imports System.IO
+Imports System.Net
+
 Public Class Form1
     Dim spotifyProcess As Process
-    Dim title As String = "N/A"
     Dim artist As String = "N/A"
-    Dim titleSplit() As String
     Dim emdash As Char = ChrW(8211)
     Dim checked As Boolean = False
     Dim muted As Boolean = False
@@ -18,32 +18,27 @@ Public Class Form1
     End Sub
 
     Private Sub Timer1_Tick(sender As System.Object, e As System.EventArgs) Handles BlocklistTimer.Tick
-        title = getTitle()
-        If title.Contains(" - ") Then 'A song is playing
-            title = title.Remove(0, 10) 'Remove "Spotify - "
-            title = title.Replace(" " & emdash & " ", "#") 'Replace spacer with parceable character
-            titleSplit = title.Split(CChar("#")) 'Split Artist and Song Name
-            If artist.Equals(titleSplit(0)) Then
-                checked = True
-            Else
-                artist = titleSplit(0)
-                checked = False
-            End If
-            If Not checked Then
-                If Not muted Then
-                    If My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\blocklist.txt").Contains(artist) Then 'Check blacklist for artist
-                        Shell("cmd.exe /c nircmd muteappvolume spotify.exe 1", vbHide) 'Mute Spotify process
-                        muted = True
-                        ResumeTimer.Start()
-                    Else
-                        NotifyIcon1.ShowBalloonTip(10000, "EZBlocker", Environment.NewLine & artist & " is currently unblocked. Click this balloon popup to add " & artist & " to the blacklist.", ToolTipIcon.None) 'Artist is not in blacklist
-                        clicked = False
-                    End If
+        Dim titleSplit = getTitle()
+        If artist.Equals(titleSplit(0)) Then
+            checked = True
+        Else
+            artist = titleSplit(0)
+            checked = False
+        End If
+        If Not checked Then
+            If Not muted Then
+                If My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\blocklist.txt").Contains(artist) Then 'Check blacklist for artist
+                    Shell("cmd.exe /c nircmd muteappvolume spotify.exe 1", vbHide) 'Mute Spotify process
+                    muted = True
+                    ResumeTimer.Start()
                 Else
-                    Shell("cmd.exe /c nircmd muteappvolume spotify.exe 0", vbHide) 'Not an ad, unmute
-                    muted = False
-                    ResumeTimer.Stop()
+                    NotifyIcon1.ShowBalloonTip(10000, "EZBlocker", Environment.NewLine & artist & " is currently unblocked. Click this balloon popup to add " & artist & " to the blacklist.", ToolTipIcon.None) 'Artist is not in blacklist
+                    clicked = False
                 End If
+            Else
+                Shell("cmd.exe /c nircmd muteappvolume spotify.exe 0", vbHide) 'Not an ad, unmute
+                muted = False
+                ResumeTimer.Stop()
             End If
         End If
     End Sub
@@ -93,21 +88,28 @@ Public Class Form1
         End If
     End Sub
 
-
     Private Sub checkUpdate()
 
     End Sub
 
-    Private Function getTitle() As String
+    Private Function getTitle() As String()
+        Dim t As String
+        Dim ts() As String
         If Me.WindowState = FormWindowState.Minimized And Me.ShowInTaskbar = True Then 'Hide from system bar
             NotifyIcon1.ShowBalloonTip(10000, "EZBlocker", "Click this icon to restore EZBlocker.", ToolTipIcon.None)
             Me.ShowInTaskbar = False 'Hide, not remove to keep process priority
         End If
-
         For Each Me.spotifyProcess In Process.GetProcessesByName("spotify") 'Hook onto Spotify
-            Return spotifyProcess.MainWindowTitle.ToString
+            t = spotifyProcess.MainWindowTitle.ToString
+            If t.Contains(" - ") Then 'A song is playing
+                t = t.Remove(0, 10).Replace(" " & emdash & " ", "#") 'Remove "Spotify - ", Replace spacer with parceable character
+                ts = t.Split(CChar("#")) 'Split Artist and Song Name
+                Console.WriteLine(ts(0))
+                Return ts
+            End If
+            Return {"", ""} 'Return here to prevent extra loops
         Next
-        Return ""
+        Return {"", ""}
     End Function
 
     Private Sub wait(ByVal interval As Integer)
@@ -119,7 +121,22 @@ Public Class Form1
         sw.Stop()
     End Sub
 
-    Private Sub Timer2_Tick(sender As Object, e As EventArgs) Handles ResumeTimer.Tick
+    Public Function GetPage(ByVal PageURL As String) As String
+        Dim S As String = ""
+        Try
+            Dim Request As HttpWebRequest = CType(WebRequest.Create(PageURL), HttpWebRequest)
+            Dim Response As HttpWebResponse = CType(Request.GetResponse(), HttpWebResponse)
+            Using Reader As StreamReader = New StreamReader(Response.GetResponseStream())
+                S = Reader.ReadToEnd
+            End Using
+        Catch ex As Exception
+            Debug.WriteLine("Exception: " + ex.Message)
+        End Try
+        Return S
+    End Function
+
+    Private Sub Timer2_Tick(sender As Object, e As EventArgs) Handles ResumeTimer.Tick 'Resumes playing ads when auto stopped due to muting
+        Dim title As String = ""
         For Each Me.spotifyProcess In Process.GetProcessesByName("spotify") 'Hook onto Spotify
             title = spotifyProcess.MainWindowTitle.ToString
         Next
@@ -130,6 +147,5 @@ Public Class Form1
     End Sub
 
     Private Sub AutoblockTimer_Tick(sender As Object, e As EventArgs) Handles AutoblockTimer.Tick
-
     End Sub
 End Class

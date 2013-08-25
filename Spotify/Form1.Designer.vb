@@ -44,7 +44,7 @@ Partial Class Form1
         '
         'BlocklistTimer
         '
-        Me.BlocklistTimer.Interval = 500
+        Me.BlocklistTimer.Interval = 750
         '
         'NotifyIcon1
         '
@@ -77,7 +77,7 @@ Partial Class Form1
         'AutoblockTimer
         '
         Me.AutoblockTimer.Enabled = True
-        Me.AutoblockTimer.Interval = 500
+        Me.AutoblockTimer.Interval = 750
         '
         'Form1
         '
