@@ -116,10 +116,9 @@ Public Class Form1
                 Dim rArtist As String = GetPage("http://ws.spotify.com/search/1/artist?q=" & HttpUtility.UrlEncode(artist)) 'Query server for artist
                 Using reader As XmlReader = XmlReader.Create(New StringReader(rArtist))
                     reader.ReadToFollowing("opensearch:totalResults") 'Get number of results
-                    'If reader.ReadElementContentAsInt() = 0 Then '0 results = ad
-                    If True Then '0 results = ad
-                            Button1.PerformClick()
-                            Return True
+                    If reader.ReadElementContentAsInt() = 0 Then '0 results = ad
+                        Button1.PerformClick()
+                        Return True
                     End If
                 End Using
             Catch ex As Exception
@@ -173,4 +172,12 @@ Public Class Form1
         End If
     End Sub
 
+    Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
+        Process.Start("http://www.ericzhang.me/projects/spotify-ad-blocker-ezblocker/")
+    End Sub
+
+    Private Sub AutoAddCheckBox_CheckedChanged(sender As Object, e As EventArgs) Handles AutoAddCheckBox.CheckedChanged
+        autoAdd = AutoAddCheckBox.Checked
+        Console.WriteLine(autoAdd)
+    End Sub
 End Class

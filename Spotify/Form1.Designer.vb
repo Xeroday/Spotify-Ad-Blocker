@@ -30,13 +30,15 @@ Partial Class Form1
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.ResumeTimer = New System.Windows.Forms.Timer(Me.components)
+        Me.AutoAddCheckBox = New System.Windows.Forms.CheckBox()
+        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.SuspendLayout()
         '
         'Button1
         '
-        Me.Button1.Location = New System.Drawing.Point(12, 12)
+        Me.Button1.Location = New System.Drawing.Point(12, 6)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(255, 29)
+        Me.Button1.Size = New System.Drawing.Size(238, 29)
         Me.Button1.TabIndex = 0
         Me.Button1.Text = "&Add Current Song to Blocklist"
         Me.Button1.UseVisualStyleBackColor = True
@@ -54,18 +56,18 @@ Partial Class Form1
         '
         'Button2
         '
-        Me.Button2.Location = New System.Drawing.Point(12, 47)
+        Me.Button2.Location = New System.Drawing.Point(12, 41)
         Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(255, 29)
+        Me.Button2.Size = New System.Drawing.Size(238, 29)
         Me.Button2.TabIndex = 0
         Me.Button2.Text = "&Open Blacklist"
         Me.Button2.UseVisualStyleBackColor = True
         '
         'Button3
         '
-        Me.Button3.Location = New System.Drawing.Point(13, 82)
+        Me.Button3.Location = New System.Drawing.Point(12, 76)
         Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(255, 29)
+        Me.Button3.Size = New System.Drawing.Size(238, 29)
         Me.Button3.TabIndex = 0
         Me.Button3.Text = "&Mute/Unmute Spotify"
         Me.Button3.UseVisualStyleBackColor = True
@@ -74,11 +76,36 @@ Partial Class Form1
         '
         Me.ResumeTimer.Interval = 1500
         '
+        'AutoAddCheckBox
+        '
+        Me.AutoAddCheckBox.AutoSize = True
+        Me.AutoAddCheckBox.Checked = True
+        Me.AutoAddCheckBox.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.AutoAddCheckBox.Location = New System.Drawing.Point(12, 111)
+        Me.AutoAddCheckBox.Name = "AutoAddCheckBox"
+        Me.AutoAddCheckBox.Size = New System.Drawing.Size(169, 17)
+        Me.AutoAddCheckBox.TabIndex = 1
+        Me.AutoAddCheckBox.Text = "Enable Automatic Ad Blocking"
+        Me.AutoAddCheckBox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.AutoAddCheckBox.UseVisualStyleBackColor = True
+        '
+        'LinkLabel1
+        '
+        Me.LinkLabel1.AutoSize = True
+        Me.LinkLabel1.Location = New System.Drawing.Point(215, 112)
+        Me.LinkLabel1.Name = "LinkLabel1"
+        Me.LinkLabel1.Size = New System.Drawing.Size(35, 13)
+        Me.LinkLabel1.TabIndex = 2
+        Me.LinkLabel1.TabStop = True
+        Me.LinkLabel1.Text = "About"
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(280, 118)
+        Me.ClientSize = New System.Drawing.Size(262, 132)
+        Me.Controls.Add(Me.LinkLabel1)
+        Me.Controls.Add(Me.AutoAddCheckBox)
         Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Button1)
@@ -89,6 +116,7 @@ Partial Class Form1
         Me.Name = "Form1"
         Me.Text = "EZBlocker"
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
     Friend WithEvents Button1 As System.Windows.Forms.Button
@@ -97,5 +125,7 @@ Partial Class Form1
     Friend WithEvents Button2 As System.Windows.Forms.Button
     Friend WithEvents Button3 As System.Windows.Forms.Button
     Friend WithEvents ResumeTimer As System.Windows.Forms.Timer
+    Friend WithEvents AutoAddCheckBox As System.Windows.Forms.CheckBox
+    Friend WithEvents LinkLabel1 As System.Windows.Forms.LinkLabel
 
 End Class
