@@ -17,14 +17,8 @@ Public Class Form1
         artist = "N/A"
     End Sub
 
-    Private Sub Timer1_Tick(sender As System.Object, e As System.EventArgs) Handles Timer1.Tick
-        If Me.WindowState = FormWindowState.Minimized And Me.ShowInTaskbar = True Then 'Hide from system bar
-            NotifyIcon1.ShowBalloonTip(10000, "EZBlocker", "Click this icon to restore EZBlocker.", ToolTipIcon.None)
-            Me.ShowInTaskbar = False 'Hide, not remove to keep process priority
-        End If
-        For Each Me.spotifyProcess In Process.GetProcessesByName("spotify") 'Hook onto Spotify
-            title = spotifyProcess.MainWindowTitle.ToString
-        Next
+    Private Sub Timer1_Tick(sender As System.Object, e As System.EventArgs) Handles BlocklistTimer.Tick
+        title = getTitle()
         If title.Contains(" - ") Then 'A song is playing
             title = title.Remove(0, 10) 'Remove "Spotify - "
             title = title.Replace(" " & emdash & " ", "#") 'Replace spacer with parceable character
@@ -99,6 +93,23 @@ Public Class Form1
         End If
     End Sub
 
+
+    Private Sub checkUpdate()
+
+    End Sub
+
+    Private Function getTitle() As String
+        If Me.WindowState = FormWindowState.Minimized And Me.ShowInTaskbar = True Then 'Hide from system bar
+            NotifyIcon1.ShowBalloonTip(10000, "EZBlocker", "Click this icon to restore EZBlocker.", ToolTipIcon.None)
+            Me.ShowInTaskbar = False 'Hide, not remove to keep process priority
+        End If
+
+        For Each Me.spotifyProcess In Process.GetProcessesByName("spotify") 'Hook onto Spotify
+            Return spotifyProcess.MainWindowTitle.ToString
+        Next
+        Return ""
+    End Function
+
     Private Sub wait(ByVal interval As Integer)
         Dim sw As New Stopwatch
         sw.Start()
@@ -116,5 +127,9 @@ Public Class Form1
             NotifyIcon1.ShowBalloonTip(5000, "EZBlocker", "Playing ad in background.", ToolTipIcon.None)
             Keyboard.SendKey(Keys.MediaPlayPause) 'Resume playing the ad
         End If
+    End Sub
+
+    Private Sub AutoblockTimer_Tick(sender As Object, e As EventArgs) Handles AutoblockTimer.Tick
+
     End Sub
 End Class

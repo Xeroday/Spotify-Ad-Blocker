@@ -25,11 +25,12 @@ Partial Class Form1
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
         Me.Button1 = New System.Windows.Forms.Button()
-        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
+        Me.BlocklistTimer = New System.Windows.Forms.Timer(Me.components)
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.ResumeTimer = New System.Windows.Forms.Timer(Me.components)
+        Me.AutoblockTimer = New System.Windows.Forms.Timer(Me.components)
         Me.SuspendLayout()
         '
         'Button1
@@ -41,10 +42,9 @@ Partial Class Form1
         Me.Button1.Text = "&Add Current Song to Blocklist"
         Me.Button1.UseVisualStyleBackColor = True
         '
-        'Timer1
+        'BlocklistTimer
         '
-        Me.Timer1.Enabled = True
-        Me.Timer1.Interval = 500
+        Me.BlocklistTimer.Interval = 500
         '
         'NotifyIcon1
         '
@@ -74,6 +74,11 @@ Partial Class Form1
         '
         Me.ResumeTimer.Interval = 1500
         '
+        'AutoblockTimer
+        '
+        Me.AutoblockTimer.Enabled = True
+        Me.AutoblockTimer.Interval = 500
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -92,10 +97,11 @@ Partial Class Form1
 
     End Sub
     Friend WithEvents Button1 As System.Windows.Forms.Button
-    Friend WithEvents Timer1 As System.Windows.Forms.Timer
+    Friend WithEvents BlocklistTimer As System.Windows.Forms.Timer
     Friend WithEvents NotifyIcon1 As System.Windows.Forms.NotifyIcon
     Friend WithEvents Button2 As System.Windows.Forms.Button
     Friend WithEvents Button3 As System.Windows.Forms.Button
     Friend WithEvents ResumeTimer As System.Windows.Forms.Timer
+    Friend WithEvents AutoblockTimer As System.Windows.Forms.Timer
 
 End Class
