@@ -14,6 +14,7 @@ Public Class Form1
     Dim muted As Boolean = False
     Dim stream As StreamWriter
     Dim clicked As Boolean = False
+    Dim website As String = "http://www.ericzhang.me/projects/spotify-ad-blocker-ezblocker/"
 
     Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles Button1.Click
         My.Computer.FileSystem.WriteAllText("blocklist.txt", artist & Environment.NewLine, True)
@@ -47,7 +48,8 @@ Public Class Form1
     End Sub
 
     Private Sub Form1_Load(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
-        If Not My.Computer.FileSystem.FileExists(Application.StartupPath & "\nircmd.exe") Then
+        checkUpdate()
+        If Not My.Computer.FileSystem.FileExists(Application.StartupPath & "\nircmd.exe") Then ' Extract
             My.Computer.FileSystem.WriteAllBytes("nircmd.exe", My.Resources.nircmd, False)
         End If
         If Not My.Computer.FileSystem.FileExists(Application.StartupPath & "\blocklist.txt") Then
@@ -60,7 +62,7 @@ Public Class Form1
                 My.Computer.FileSystem.WriteAllText("blocklist.txt", Environment.NewLine, False)
             End Try
         End If
-        Try
+        Try ' Start Spotify
             Process.Start(Environment.GetEnvironmentVariable("APPDATA") & "\Spotify\spotify.exe")
         Catch ex As Exception
         End Try
@@ -68,7 +70,17 @@ Public Class Form1
     End Sub
 
     Private Sub checkUpdate()
-
+        Try
+            Dim latest As String = GetPage("http://www.ericzhang.me/dl/?file=EZBlocker-version.txt", "EZBlocker " & My.Application.Info.Version.ToString & " " & My.Computer.Info.OSFullName) 'Query for latest version
+            If Double.Parse(latest) > Double.Parse(My.Application.Info.Version.ToString.Substring(0, 3)) Then
+                If MessageBox.Show("Your EZBlocker is out of date. Would you like to upgrade?", "EZBlocker", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) = vbYes Then
+                    Process.Start(website)
+                    Me.Close()
+                End If
+            End If
+        Catch ex As Exception
+            Console.WriteLine("Error checking for updates")
+        End Try
     End Sub
 
     Private Function GetTitle() As String()
@@ -102,10 +114,10 @@ Public Class Form1
         End If
     End Function
 
-    Public Function GetPage(ByVal URL As String) As String
+    Public Function GetPage(ByVal URL As String, ByVal UA As String) As String
         Dim S As String = ""
         Dim _WebClient As New System.Net.WebClient()
-        _WebClient.Headers("User-Agent") = "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Trident/5.0)"
+        _WebClient.Headers("User-Agent") = UA
         S = _WebClient.DownloadString(URL)
         Return S
     End Function
@@ -113,11 +125,12 @@ Public Class Form1
     Private Function Check() As Boolean ' Check to see if an ad is playing and add to block list
         If autoAdd Then
             Try
-                Dim rArtist As String = GetPage("http://ws.spotify.com/search/1/artist?q=" & HttpUtility.UrlEncode(artist)) 'Query server for artist
+                Dim rArtist As String = GetPage("http://ws.spotify.com/search/1/artist?q=" & HttpUtility.UrlEncode(artist), "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Trident/5.0)") 'Query server for artist
                 Using reader As XmlReader = XmlReader.Create(New StringReader(rArtist))
                     reader.ReadToFollowing("opensearch:totalResults") 'Get number of results
                     If reader.ReadElementContentAsInt() = 0 Then '0 results = ad
                         Button1.PerformClick()
+                        clicked = True
                         Return True
                     End If
                 End Using
@@ -173,11 +186,10 @@ Public Class Form1
     End Sub
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
-        Process.Start("http://www.ericzhang.me/projects/spotify-ad-blocker-ezblocker/")
+        Process.Start(website)
     End Sub
 
     Private Sub AutoAddCheckBox_CheckedChanged(sender As Object, e As EventArgs) Handles AutoAddCheckBox.CheckedChanged
         autoAdd = AutoAddCheckBox.Checked
-        Console.WriteLine(autoAdd)
     End Sub
 End Class
