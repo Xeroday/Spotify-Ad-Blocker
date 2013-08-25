@@ -10,7 +10,7 @@ Public Class Form1
     Dim titleSplit() As String
     Dim artist As String = "N/A"
     Dim emdash As Char = ChrW(8211)
-    Dim autoAdd As Boolean = True ' Auto add to blocklist
+    Dim autoAdd As Boolean = False ' Auto add to blocklist
     Dim muted As Boolean = False
     Dim stream As StreamWriter
     Dim clicked As Boolean = False
@@ -24,20 +24,23 @@ Public Class Form1
     Private Sub Timer1_Tick(sender As System.Object, e As System.EventArgs) Handles MainTimer.Tick
         titleSplit = GetTitle()
         If playing Then
-            If Not Checked() Then
+            If Not Checked() Then ' If not the same artist then:
                 If Not muted Then
                     If My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\blocklist.txt").Contains(artist) Then
                         Shell("cmd.exe /c nircmd muteappvolume spotify.exe 1", vbHide) 'Mute Spotify process
                         muted = True
                         ResumeTimer.Start()
                     Else
-                        NotifyIcon1.ShowBalloonTip(10000, "EZBlocker", artist & " is currently unblocked. Click this balloon popup to add " & artist & " to the blacklist.", ToolTipIcon.None) 'Artist is not in blacklist
-                        clicked = False
+                        If Not Check() Then ' If no add is autoblocked or autoAdd is disabled: 
+                            NotifyIcon1.ShowBalloonTip(10000, "EZBlocker", artist & " is currently unblocked. Click this balloon popup to add " & artist & " to the blacklist.", ToolTipIcon.None) 'Artist is not in blacklist
+                            clicked = False
+                        End If
                     End If
                 Else
                     Shell("cmd.exe /c nircmd muteappvolume spotify.exe 0", vbHide) 'Not an ad, unmute
-                    muted = False
                     ResumeTimer.Stop()
+                    muted = False
+                    artist = "N/A"
                 End If
             End If
         End If
@@ -95,9 +98,7 @@ Public Class Form1
             Return True
         Else
             artist = titleSplit(0)
-            If autoAdd Then
-                Check()
-            End If
+            Console.WriteLine(artist)
             Return False
         End If
     End Function
@@ -110,24 +111,27 @@ Public Class Form1
         Return S
     End Function
 
-    Private Sub Check() ' Check to see if an ad is playing and add to block list
-        Console.WriteLine(artist)
-        Try
-            Dim rArtist As String = GetPage("http://ws.spotify.com/search/1/artist?q=" & HttpUtility.UrlEncode(artist)) 'Query server for artist
-            Using reader As XmlReader = XmlReader.Create(New StringReader(rArtist))
-                reader.ReadToFollowing("opensearch:totalResults") 'Get number of results
-                Console.WriteLine(reader.ReadElementContentAsInt())
-                If reader.ReadElementContentAsInt() = 0 Then '0 results = ad
-                    If Not clicked Then
-                        Button1.PerformClick()
-                        clicked = True
+    Private Function Check() As Boolean ' Check to see if an ad is playing and add to block list
+        If autoAdd Then
+            Try
+                Dim rArtist As String = GetPage("http://ws.spotify.com/search/1/artist?q=" & HttpUtility.UrlEncode(artist)) 'Query server for artist
+                Using reader As XmlReader = XmlReader.Create(New StringReader(rArtist))
+                    reader.ReadToFollowing("opensearch:totalResults") 'Get number of results
+                    'If reader.ReadElementContentAsInt() = 0 Then '0 results = ad
+                    If True Then '0 results = ad
+                        If Not clicked Then
+                            Button1.PerformClick()
+                            clicked = True
+                            Return True
+                        End If
                     End If
-                End If
-            End Using
-        Catch ex As Exception
-            Console.WriteLine("Error checking ad")
-        End Try
-    End Sub
+                End Using
+            Catch ex As Exception
+                Console.WriteLine("Error checking ad")
+            End Try
+        End If
+        Return False
+    End Function
 
     Private Sub wait(ByVal interval As Integer)
         Dim sw As New Stopwatch
