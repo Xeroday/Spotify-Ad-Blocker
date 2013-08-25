@@ -7,7 +7,7 @@ Public Class Form1
     Dim song As String = ""
     Dim artist As String = ""
     Dim emdash As Char = ChrW(8211)
-    Dim autoBlock As Boolean = True
+    Dim autoAdd As Boolean = True
     Dim muted As Boolean = False
     Dim stream As StreamWriter
     Dim clicked As Boolean = False
@@ -19,9 +19,12 @@ Public Class Form1
     End Sub
 
     Private Sub Timer1_Tick(sender As System.Object, e As System.EventArgs) Handles MainTimer.Tick
+        If autoAdd Then
+            Check()
+        End If
         If Not Checked() Then
             If Not muted Then
-                If Check() Then
+                If My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\blocklist.txt").Contains(artist) Then
                     Shell("cmd.exe /c nircmd muteappvolume spotify.exe 1", vbHide) 'Mute Spotify process
                     muted = True
                     ResumeTimer.Start()
@@ -92,27 +95,17 @@ Public Class Form1
         End If
     End Function
 
-    Public Function GetPage(ByVal PageURL As String) As String
+    Public Function GetPage(ByVal URL As String) As String
         Dim S As String = ""
-        Try
-            Dim Request As HttpWebRequest = CType(WebRequest.Create(PageURL), HttpWebRequest)
-            Dim Response As HttpWebResponse = CType(Request.GetResponse(), HttpWebResponse)
-            Using Reader As StreamReader = New StreamReader(Response.GetResponseStream())
-                S = Reader.ReadToEnd
-            End Using
-        Catch ex As Exception
-            Debug.WriteLine("Exception: " + ex.Message)
-        End Try
+        Dim _WebClient As New System.Net.WebClient()
+        _WebClient.Headers("User-Agent") = "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Trident/5.0)"
+        S = _WebClient.DownloadString(URL)
         Return S
     End Function
 
-    Private Function Check() As Boolean ' Check to see if an ad is playing
-        If autoBlock Then
-            Console.WriteLine(GetPage(""))
-        Else ' Use the blacklist
-            Return My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\blocklist.txt").Contains(artist)
-        End If
-    End Function
+    Private Sub Check() ' Check to see if an ad is playing and add to block list
+        Console.WriteLine(song & " " & artist)
+    End Sub
 
     Private Sub wait(ByVal interval As Integer)
         Dim sw As New Stopwatch
