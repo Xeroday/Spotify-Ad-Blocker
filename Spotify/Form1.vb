@@ -1,13 +1,15 @@
 ﻿Imports System
 Imports System.IO
 Imports System.Net
+Imports System.Web
+Imports System.Xml
 
 Public Class Form1
     Dim spotifyProcess As Process
-    Dim song As String = ""
-    Dim artist As String = ""
+    Dim playing As Boolean = False
+    Dim artist As String = "N/A"
     Dim emdash As Char = ChrW(8211)
-    Dim autoAdd As Boolean = True
+    Dim autoAdd As Boolean = True ' Auto add to blocklist
     Dim muted As Boolean = False
     Dim stream As StreamWriter
     Dim clicked As Boolean = False
@@ -15,14 +17,11 @@ Public Class Form1
     Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles Button1.Click
         My.Computer.FileSystem.WriteAllText("blocklist.txt", artist & Environment.NewLine, True)
         NotifyIcon1.ShowBalloonTip(10000, "EZBlocker", artist & " has been added to the blacklist. To delete, open the blacklist and remove the line containing " & artist & ".", ToolTipIcon.None)
-        artist = ""
+        artist = "N/A"
     End Sub
 
     Private Sub Timer1_Tick(sender As System.Object, e As System.EventArgs) Handles MainTimer.Tick
-        If autoAdd Then
-            Check()
-        End If
-        If Not Checked() Then
+        If playing And Not Checked() Then ' Short circuit == important
             If Not muted Then
                 If My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\blocklist.txt").Contains(artist) Then
                     Shell("cmd.exe /c nircmd muteappvolume spotify.exe 1", vbHide) 'Mute Spotify process
@@ -75,9 +74,12 @@ Public Class Form1
         For Each Me.spotifyProcess In Process.GetProcessesByName("spotify") 'Hook onto Spotify
             t = spotifyProcess.MainWindowTitle.ToString
             If t.Contains(" - ") Then 'A song is playing
+                playing = True
                 t = t.Remove(0, 10).Replace(" " & emdash & " ", "#") 'Remove "Spotify - ", Replace spacer with parceable character
                 ts = t.Split(CChar("#")) 'Split Artist and Song Name
                 Return ts
+            Else
+                playing = False
             End If
             Return {"", ""} 'Return here to prevent extra loops
         Next
@@ -90,7 +92,9 @@ Public Class Form1
             Return True
         Else
             artist = titleSplit(0)
-            song = titleSplit(1)
+            If autoAdd Then
+                Check()
+            End If
             Return False
         End If
     End Function
@@ -104,7 +108,12 @@ Public Class Form1
     End Function
 
     Private Sub Check() ' Check to see if an ad is playing and add to block list
-        Console.WriteLine(song & " " & artist)
+        Console.WriteLine(artist)
+        Dim rArtist As String = GetPage("http://ws.spotify.com/search/1/artist?q=" & HttpUtility.UrlEncode(artist))
+        Using reader As XmlReader = XmlReader.Create(New StringReader(rArtist))
+            reader.ReadToFollowing("opensearch:totalResults")
+            Console.WriteLine(reader.ReadElementContentAsInt())
+        End Using
     End Sub
 
     Private Sub wait(ByVal interval As Integer)
