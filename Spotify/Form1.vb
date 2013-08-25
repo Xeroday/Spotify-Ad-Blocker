@@ -10,7 +10,7 @@ Public Class Form1
     Dim titleSplit() As String
     Dim artist As String = "N/A"
     Dim emdash As Char = ChrW(8211)
-    Dim autoAdd As Boolean = False ' Auto add to blocklist
+    Dim autoAdd As Boolean = True ' Auto add to blocklist
     Dim muted As Boolean = False
     Dim stream As StreamWriter
     Dim clicked As Boolean = False
@@ -98,7 +98,6 @@ Public Class Form1
             Return True
         Else
             artist = titleSplit(0)
-            Console.WriteLine(artist)
             Return False
         End If
     End Function
@@ -119,11 +118,8 @@ Public Class Form1
                     reader.ReadToFollowing("opensearch:totalResults") 'Get number of results
                     'If reader.ReadElementContentAsInt() = 0 Then '0 results = ad
                     If True Then '0 results = ad
-                        If Not clicked Then
                             Button1.PerformClick()
-                            clicked = True
                             Return True
-                        End If
                     End If
                 End Using
             Catch ex As Exception
