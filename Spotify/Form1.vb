@@ -7,6 +7,7 @@ Imports System.Xml
 Public Class Form1
     Dim spotifyProcess As Process
     Dim playing As Boolean = False
+    Dim titleSplit() As String
     Dim artist As String = "N/A"
     Dim emdash As Char = ChrW(8211)
     Dim autoAdd As Boolean = True ' Auto add to blocklist
@@ -21,20 +22,23 @@ Public Class Form1
     End Sub
 
     Private Sub Timer1_Tick(sender As System.Object, e As System.EventArgs) Handles MainTimer.Tick
-        If playing And Not Checked() Then ' Short circuit == important
-            If Not muted Then
-                If My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\blocklist.txt").Contains(artist) Then
-                    Shell("cmd.exe /c nircmd muteappvolume spotify.exe 1", vbHide) 'Mute Spotify process
-                    muted = True
-                    ResumeTimer.Start()
+        titleSplit = GetTitle()
+        If playing Then
+            If Not Checked() Then
+                If Not muted Then
+                    If My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\blocklist.txt").Contains(artist) Then
+                        Shell("cmd.exe /c nircmd muteappvolume spotify.exe 1", vbHide) 'Mute Spotify process
+                        muted = True
+                        ResumeTimer.Start()
+                    Else
+                        NotifyIcon1.ShowBalloonTip(10000, "EZBlocker", artist & " is currently unblocked. Click this balloon popup to add " & artist & " to the blacklist.", ToolTipIcon.None) 'Artist is not in blacklist
+                        clicked = False
+                    End If
                 Else
-                    NotifyIcon1.ShowBalloonTip(10000, "EZBlocker", artist & " is currently unblocked. Click this balloon popup to add " & artist & " to the blacklist.", ToolTipIcon.None) 'Artist is not in blacklist
-                    clicked = False
+                    Shell("cmd.exe /c nircmd muteappvolume spotify.exe 0", vbHide) 'Not an ad, unmute
+                    muted = False
+                    ResumeTimer.Stop()
                 End If
-            Else
-                Shell("cmd.exe /c nircmd muteappvolume spotify.exe 0", vbHide) 'Not an ad, unmute
-                muted = False
-                ResumeTimer.Stop()
             End If
         End If
     End Sub
@@ -87,7 +91,6 @@ Public Class Form1
     End Function
 
     Private Function Checked() As Boolean ' See if current artist has been checked
-        Dim titleSplit = GetTitle()
         If artist.Equals(titleSplit(0)) Then
             Return True
         Else
@@ -109,11 +112,21 @@ Public Class Form1
 
     Private Sub Check() ' Check to see if an ad is playing and add to block list
         Console.WriteLine(artist)
-        Dim rArtist As String = GetPage("http://ws.spotify.com/search/1/artist?q=" & HttpUtility.UrlEncode(artist))
-        Using reader As XmlReader = XmlReader.Create(New StringReader(rArtist))
-            reader.ReadToFollowing("opensearch:totalResults")
-            Console.WriteLine(reader.ReadElementContentAsInt())
-        End Using
+        Try
+            Dim rArtist As String = GetPage("http://ws.spotify.com/search/1/artist?q=" & HttpUtility.UrlEncode(artist)) 'Query server for artist
+            Using reader As XmlReader = XmlReader.Create(New StringReader(rArtist))
+                reader.ReadToFollowing("opensearch:totalResults") 'Get number of results
+                Console.WriteLine(reader.ReadElementContentAsInt())
+                If reader.ReadElementContentAsInt() = 0 Then '0 results = ad
+                    If Not clicked Then
+                        Button1.PerformClick()
+                        clicked = True
+                    End If
+                End If
+            End Using
+        Catch ex As Exception
+            Console.WriteLine("Error checking ad")
+        End Try
     End Sub
 
     Private Sub wait(ByVal interval As Integer)
