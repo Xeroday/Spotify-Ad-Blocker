@@ -72,7 +72,7 @@ Public Class Form1
     Private Sub checkUpdate()
         Try
             Dim latest As String = GetPage("http://www.ericzhang.me/dl/?file=EZBlocker-version.txt", "EZBlocker " & My.Application.Info.Version.ToString & " " & My.Computer.Info.OSFullName) 'Query for latest version
-            If Double.Parse(latest) > Double.Parse(My.Application.Info.Version.ToString.Substring(0, 3)) Then
+            If Double.Parse(latest) > Double.Parse(My.Application.Info.Version.ToString.Replace(".", "")) Then
                 If MessageBox.Show("Your EZBlocker is out of date. Would you like to upgrade?", "EZBlocker", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) = vbYes Then
                     Process.Start(website)
                     Me.Close()
@@ -125,7 +125,7 @@ Public Class Form1
     Private Function Check() As Boolean ' Check to see if an ad is playing and add to block list
         If autoAdd Then
             Try
-                Dim rArtist As String = GetPage("http://ws.spotify.com/search/1/artist?q=" & HttpUtility.UrlEncode(artist), "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Trident/5.0)") 'Query server for artist
+                Dim rArtist As String = GetPage("http://ws.spotify.com/search/1/artist?q=" & artist, "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Trident/5.0)") 'Query server for artist
                 Using reader As XmlReader = XmlReader.Create(New StringReader(rArtist))
                     reader.ReadToFollowing("opensearch:totalResults") 'Get number of results
                     If reader.ReadElementContentAsInt() = 0 Then '0 results = ad
