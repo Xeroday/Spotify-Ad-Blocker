@@ -54,6 +54,7 @@
             this.OpenButton.TabIndex = 1;
             this.OpenButton.Text = "Open Blocklist";
             this.OpenButton.UseVisualStyleBackColor = true;
+            this.OpenButton.Click += new System.EventHandler(this.OpenButton_Click);
             // 
             // AutoAddCheck
             // 
