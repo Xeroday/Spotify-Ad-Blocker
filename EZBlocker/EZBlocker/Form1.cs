@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Reflection;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -25,10 +26,11 @@ namespace EZBlocker
         public Main()
         {
             InitializeComponent();
+            CheckUpdate();
             if (!File.Exists(nircmdPath))
                 File.WriteAllBytes(nircmdPath, EZBlocker.Properties.Resources.nircmdc);
             if (!File.Exists(blocklistPath))
-                File.WriteAllText(blocklistPath, GetPage("http://www.ericzhang.me/dl/?file=blocklist.txt"));
+                new WebClient().DownloadFile("http://www.ericzhang.me/dl/?file=blocklist.txt", blocklistPath);
             try
             {
                 Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe");
@@ -92,14 +94,9 @@ namespace EZBlocker
             return true;
         }
 
-        /**
-         * Attempts to check if the current song is an ad
-         * 
-         * Checks with iTunes API, can also use http://ws.spotify.com/search/1/artist?q=artist
-         **/
-        private Boolean IsAd(String artist)
+        private void Mute(int i)
         {
-            return GetPage("http://itunes.apple.com/search?entity=musicArtist&limit=1&term=" + artist.Replace(" ", "+")).Contains("\"resultCount\":0");
+
         }
 
         /**
@@ -117,6 +114,16 @@ namespace EZBlocker
         }
 
         /**
+         * Attempts to check if the current song is an ad
+         * 
+         * Checks with iTunes API, can also use http://ws.spotify.com/search/1/artist?q=artist
+         **/
+        private Boolean IsAd(String artist)
+        {
+            return GetPage("http://itunes.apple.com/search?entity=musicArtist&limit=1&term=" + artist.Replace(" ", "+")).Contains("\"resultCount\":0"); // Ghetto URL encoding for .net 3.5
+        }
+
+        /**
          * Gets the source of a given URL
          **/
         private String GetPage(String URL)
@@ -124,8 +131,24 @@ namespace EZBlocker
             WebClient w = new WebClient();
             w.Headers.Add("user-agent", "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1667.0 Safari/537.36");
             String s = w.DownloadString(URL);
-            
             return s;
+        }
+
+        /**
+         * Checks if the current installation is the latest version. Prompts user if not.
+         **/
+        private void CheckUpdate()
+        {
+            int latest = Convert.ToInt32(GetPage("http://www.ericzhang.me/dl/?file=EZBlocker-version.txt"));
+            int current = Convert.ToInt32(Assembly.GetExecutingAssembly().GetName().Version.ToString().Replace(".", ""));
+            if (latest > current)
+            {
+                if (MessageBox.Show("There is a newer version of EZBlocker available. Would you like to upgrade?", "EZBlocker", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    Process.Start(website);
+                    Application.Exit();   
+                }
+            }
         }
 
         private void BlockButton_Click(object sender, EventArgs e)
