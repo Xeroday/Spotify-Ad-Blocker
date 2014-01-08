@@ -78,6 +78,16 @@ namespace EZBlocker
         }
 
         /**
+         * Attempts to check if the current song is an ad
+         * 
+         * Checks with iTunes API, can also use http://ws.spotify.com/search/1/artist?q=artist
+         **/
+        private Boolean IsAd(String artist)
+        {
+            return GetPage("http://itunes.apple.com/search?entity=musicArtist&limit=1&term=" + artist.Replace(" ", "+")).Contains("\"resultCount\":0");
+        }
+
+        /**
          * Checks if an artist is in the blocklist (Exact match only)
          **/
         private Boolean IsBlocked(String artist)
@@ -91,10 +101,15 @@ namespace EZBlocker
             return false;
         }
 
+        /**
+         * Gets the source of a given URL
+         **/
         private String GetPage(String URL)
         {
-            String s = String.Empty;
             WebClient w = new WebClient();
+            w.Headers.Add("user-agent", "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1667.0 Safari/537.36");
+            String s = w.DownloadString(URL);
+            
             return s;
         }
 
@@ -111,6 +126,11 @@ namespace EZBlocker
         private void OpenButton_Click(object sender, EventArgs e)
         {
             Process.Start("notepad.exe", blocklistPath);
+        }
+
+        private void MuteButton_Click(object sender, EventArgs e)
+        {
+
         }
 
     }
