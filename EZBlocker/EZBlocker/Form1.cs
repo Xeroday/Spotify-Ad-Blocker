@@ -94,9 +94,21 @@ namespace EZBlocker
             return true;
         }
 
+        /**
+         * Mutes/Unmutes Spotify.
+         * 
+         * i: 0 = unmute, 1 = mute, 2 = toggle
+         **/
         private void Mute(int i)
         {
-
+            // http://stackoverflow.com/questions/1469764/run-command-prompt-commands
+            System.Diagnostics.Process process = new System.Diagnostics.Process();
+            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+            startInfo.FileName = "cmd.exe";
+            startInfo.Arguments = "/C nircmdc muteappvolume spotify.exe " + i.ToString();
+            process.StartInfo = startInfo;
+            process.Start();
         }
 
         /**
@@ -168,7 +180,7 @@ namespace EZBlocker
 
         private void MuteButton_Click(object sender, EventArgs e)
         {
-
+            Mute(2);
         }
 
     }
