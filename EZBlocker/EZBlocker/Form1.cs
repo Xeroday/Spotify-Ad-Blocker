@@ -18,10 +18,25 @@ namespace EZBlocker
         private Boolean autoAdd = true;
 
         private String blocklistPath = Application.StartupPath + @"\blocklist.txt";
+        private String nircmdPath = Application.StartupPath +@"\nircmdc.exe";
+
+        private String website = @"http://www.ericzhang.me/projects/spotify-ad-blocker-ezblocker/";
 
         public Main()
         {
             InitializeComponent();
+            if (!File.Exists(nircmdPath))
+                File.WriteAllBytes(nircmdPath, EZBlocker.Properties.Resources.nircmdc);
+            if (!File.Exists(blocklistPath))
+                File.WriteAllText(blocklistPath, GetPage("http://www.ericzhang.me/dl/?file=blocklist.txt"));
+            try
+            {
+                Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe");
+            }
+            catch (Exception e)
+            {
+                // Ignore
+            }
         }
 
         private void MainTimer_Tick(object sender, EventArgs e)
@@ -73,7 +88,7 @@ namespace EZBlocker
         private Boolean AddToBlockList(String artist)
         {
             if (!IsPlaying()) return false;
-            System.IO.File.AppendAllText(blocklistPath, artist + "\r\n");
+            File.AppendAllText(blocklistPath, artist + "\r\n");
             return true;
         }
 
@@ -92,7 +107,7 @@ namespace EZBlocker
          **/
         private Boolean IsBlocked(String artist)
         {
-            String[] lines = System.IO.File.ReadAllLines(blocklistPath);
+            String[] lines = File.ReadAllLines(blocklistPath);
             for (var i = 0; i < lines.Length; i++)
             {
                 if (lines[i].Equals(artist))
