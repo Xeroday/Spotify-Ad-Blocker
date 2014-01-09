@@ -43,7 +43,6 @@ namespace EZBlocker
                 // Ignore
             }
             Mute(0); // Unmute Spotify, if muted
-            Notify("l");
         }
 
         /**
@@ -55,15 +54,34 @@ namespace EZBlocker
             if (IsPlaying())
             {
                 String artist = GetArtist();
-                if (autoAdd)
+                if (autoAdd) // Auto add to block list
                     if (IsAd(artist))
                         AddToBlockList(artist);
                 if (!lastChecked.Equals(artist)) // Song has changed
                 {
                     lastChecked = artist;
-                    
+                    if (IsInBlocklist(artist)) // Should mute
+                    {
+                        if (!muted)
+                            Mute(1); // Mute Spotify
+                        ResumeTimer.Start();
+                    }
+                    else // Should unmute
+                    {
+                        if (muted)
+                            Mute(0); // Unmute Spotify
+                        ResumeTimer.Stop();
+                    }
                 }
             }
+        }
+
+        /**
+         * Will attempt to play ad while muted
+         **/
+        private void ResumeTimer_Tick(object sender, EventArgs e)
+        {
+            UpdateTitle();
         }
 
         /**
@@ -214,28 +232,6 @@ namespace EZBlocker
             }
         }
 
-        private void BlockButton_Click(object sender, EventArgs e)
-        {
-            AddToBlockList(GetArtist());
-        }
-
-        private void AutoAddCheck_CheckedChanged(object sender, EventArgs e)
-        {
-            autoAdd = AutoAddCheck.Checked;
-        }
-
-        private void OpenButton_Click(object sender, EventArgs e)
-        {
-            Console.WriteLine(IsAd(GetArtist()));
-
-            // TODO Process.Start("notepad.exe", blocklistPath);
-        }
-
-        private void MuteButton_Click(object sender, EventArgs e)
-        {
-            Mute(2);
-        }
-
         private void NotifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             if (this.ShowInTaskbar.Equals(false))
@@ -255,6 +251,28 @@ namespace EZBlocker
         {
             this.WindowState = FormWindowState.Normal;
             this.ShowInTaskbar = true;
+        }
+
+        private void BlockButton_Click(object sender, EventArgs e)
+        {
+            AddToBlockList(GetArtist());
+        }
+
+        private void AutoAddCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            autoAdd = AutoAddCheckbox.Checked;
+        }
+
+        private void OpenButton_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine(IsAd(GetArtist()));
+
+            // TODO Process.Start("notepad.exe", blocklistPath);
+        }
+
+        private void MuteButton_Click(object sender, EventArgs e)
+        {
+            Mute(2);
         }
 
     }

@@ -32,10 +32,12 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.BlockButton = new System.Windows.Forms.Button();
             this.OpenButton = new System.Windows.Forms.Button();
-            this.AutoAddCheck = new System.Windows.Forms.CheckBox();
+            this.AutoAddCheckbox = new System.Windows.Forms.CheckBox();
             this.MainTimer = new System.Windows.Forms.Timer(this.components);
             this.MuteButton = new System.Windows.Forms.Button();
             this.NotifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.ResumeTimer = new System.Windows.Forms.Timer(this.components);
+            this.NotifyCheckbox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // BlockButton
@@ -58,18 +60,18 @@
             this.OpenButton.UseVisualStyleBackColor = true;
             this.OpenButton.Click += new System.EventHandler(this.OpenButton_Click);
             // 
-            // AutoAddCheck
+            // AutoAddCheckbox
             // 
-            this.AutoAddCheck.AutoSize = true;
-            this.AutoAddCheck.Checked = true;
-            this.AutoAddCheck.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.AutoAddCheck.Location = new System.Drawing.Point(12, 87);
-            this.AutoAddCheck.Name = "AutoAddCheck";
-            this.AutoAddCheck.Size = new System.Drawing.Size(211, 17);
-            this.AutoAddCheck.TabIndex = 2;
-            this.AutoAddCheck.Text = "AutoAdd Ads to Blocklist (Experimental)";
-            this.AutoAddCheck.UseVisualStyleBackColor = true;
-            this.AutoAddCheck.CheckedChanged += new System.EventHandler(this.AutoAddCheck_CheckedChanged);
+            this.AutoAddCheckbox.AutoSize = true;
+            this.AutoAddCheckbox.Checked = true;
+            this.AutoAddCheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.AutoAddCheckbox.Location = new System.Drawing.Point(12, 87);
+            this.AutoAddCheckbox.Name = "AutoAddCheckbox";
+            this.AutoAddCheckbox.Size = new System.Drawing.Size(211, 17);
+            this.AutoAddCheckbox.TabIndex = 2;
+            this.AutoAddCheckbox.Text = "AutoAdd Ads to Blocklist (Experimental)";
+            this.AutoAddCheckbox.UseVisualStyleBackColor = true;
+            this.AutoAddCheckbox.CheckedChanged += new System.EventHandler(this.AutoAddCheck_CheckedChanged);
             // 
             // MainTimer
             // 
@@ -91,16 +93,34 @@
             // 
             this.NotifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("NotifyIcon.Icon")));
             this.NotifyIcon.Visible = true;
-            this.NotifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIcon_MouseDoubleClick);
             this.NotifyIcon.BalloonTipClicked += new System.EventHandler(this.NotifyIcon_BalloonTipClicked);
+            this.NotifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIcon_MouseDoubleClick);
+            // 
+            // ResumeTimer
+            // 
+            this.ResumeTimer.Interval = 1000;
+            this.ResumeTimer.Tick += new System.EventHandler(this.ResumeTimer_Tick);
+            // 
+            // NotifyCheckbox
+            // 
+            this.NotifyCheckbox.AutoSize = true;
+            this.NotifyCheckbox.Checked = true;
+            this.NotifyCheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.NotifyCheckbox.Location = new System.Drawing.Point(12, 110);
+            this.NotifyCheckbox.Name = "NotifyCheckbox";
+            this.NotifyCheckbox.Size = new System.Drawing.Size(162, 17);
+            this.NotifyCheckbox.TabIndex = 4;
+            this.NotifyCheckbox.Text = "Enable Taskbar Notifications";
+            this.NotifyCheckbox.UseVisualStyleBackColor = true;
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(819, 373);
+            this.Controls.Add(this.NotifyCheckbox);
             this.Controls.Add(this.MuteButton);
-            this.Controls.Add(this.AutoAddCheck);
+            this.Controls.Add(this.AutoAddCheckbox);
             this.Controls.Add(this.OpenButton);
             this.Controls.Add(this.BlockButton);
             this.Cursor = System.Windows.Forms.Cursors.Default;
@@ -119,10 +139,12 @@
 
         private System.Windows.Forms.Button BlockButton;
         private System.Windows.Forms.Button OpenButton;
-        private System.Windows.Forms.CheckBox AutoAddCheck;
+        private System.Windows.Forms.CheckBox AutoAddCheckbox;
         private System.Windows.Forms.Timer MainTimer;
         private System.Windows.Forms.Button MuteButton;
         private System.Windows.Forms.NotifyIcon NotifyIcon;
+        private System.Windows.Forms.Timer ResumeTimer;
+        private System.Windows.Forms.CheckBox NotifyCheckbox;
     }
 }
 
