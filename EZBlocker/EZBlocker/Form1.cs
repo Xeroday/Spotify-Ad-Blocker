@@ -11,10 +11,11 @@ using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
 using Newtonsoft.Json;
-using System.Windows.Forms;
+using System.Runtime.InteropServices;
 
 namespace EZBlocker
 {
+
     public partial class Main : Form
     {
         private String title = String.Empty; // Title of the Spotify window
@@ -25,9 +26,16 @@ namespace EZBlocker
 
         private String blocklistPath = Application.StartupPath + @"\blocklist.txt";
         private String nircmdPath = Application.StartupPath +@"\nircmdc.exe";
-        private String ua = "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1667.0 Safari/537.36";
 
-        private String website = @"http://www.ericzhang.me/projects/spotify-ad-blocker-ezblocker/";
+        [DllImport("user32.dll")]
+        public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
+
+        private const int WM_APPCOMMAND = 0x319;
+        private const int APPCOMMAND_VOLUME_MUTE = 0x80000;
+        private const int MEDIA_PLAYPAUSE = 0xE0000;
+        
+        private const String ua = "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1667.0 Safari/537.36";
+        private const String website = @"http://www.ericzhang.me/projects/spotify-ad-blocker-ezblocker/";
 
         public Main()
         {
@@ -73,6 +81,7 @@ namespace EZBlocker
                         if (!muted)
                             Mute(1); // Mute Spotify
                         ResumeTimer.Start();
+                        Console.WriteLine("Muted " + artist);
                         // Notify(artist + " is on your blocklist and has been muted.");
                     }
                     else // Should unmute
@@ -80,6 +89,7 @@ namespace EZBlocker
                         if (muted)
                             Mute(0); // Unmute Spotify
                         ResumeTimer.Stop();
+                        Console.WriteLine("Unmuted " + artist);
                         Notify(artist + " is not on your blocklist. Open EZBlocker to add it.");
                     }
                 }
@@ -94,7 +104,7 @@ namespace EZBlocker
             UpdateTitle();
             if (!IsPlaying())
             {
-                SendKeys.Send(Keys.MediaPlayPause.ToString());   
+                SendMessage(this.Handle, WM_APPCOMMAND, this.Handle, (IntPtr)MEDIA_PLAYPAUSE); // Play again   
             }
         }
 
@@ -115,6 +125,22 @@ namespace EZBlocker
                 }
             }
             return false;
+        }
+
+        /**
+         * Gets the Spotify process handle
+         **/
+        private IntPtr GetHandle()
+        {
+            Process[] p = Process.GetProcesses();
+            for (var i = 0; i < p.Length; i++)
+            {
+                if (p[i].ProcessName.Equals("spotify"))
+                {
+                    return p[i].Handle;
+                }
+            }
+            return IntPtr.Zero;
         }
 
         /**
@@ -288,9 +314,7 @@ namespace EZBlocker
 
         private void OpenButton_Click(object sender, EventArgs e)
         {
-            SendKeys.Send(Keys.MediaPlayPause.ToString());   
-
-//           TODO Process.Start("notepad.exe", blocklistPath);
+            Process.Start("notepad.exe", blocklistPath);
         }
 
         private void MuteButton_Click(object sender, EventArgs e)
