@@ -11,6 +11,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
 using Newtonsoft.Json;
+using System.Windows.Forms;
 
 namespace EZBlocker
 {
@@ -91,7 +92,10 @@ namespace EZBlocker
         private void ResumeTimer_Tick(object sender, EventArgs e)
         {
             UpdateTitle();
-            // TODO
+            if (!IsPlaying())
+            {
+                SendKeys.Send(Keys.MediaPlayPause.ToString());   
+            }
         }
 
         /**
@@ -269,6 +273,7 @@ namespace EZBlocker
         private void BlockButton_Click(object sender, EventArgs e)
         {
             AddToBlockList(GetArtist());
+            lastChecked = String.Empty; // Reset last checked so we can auto mute
         }
 
         private void AutoAddCheck_CheckedChanged(object sender, EventArgs e)
@@ -283,7 +288,9 @@ namespace EZBlocker
 
         private void OpenButton_Click(object sender, EventArgs e)
         {
-            Process.Start("notepad.exe", blocklistPath);
+            SendKeys.Send(Keys.MediaPlayPause.ToString());   
+
+//           TODO Process.Start("notepad.exe", blocklistPath);
         }
 
         private void MuteButton_Click(object sender, EventArgs e)
