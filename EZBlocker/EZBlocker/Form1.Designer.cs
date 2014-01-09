@@ -112,6 +112,7 @@
             this.NotifyCheckbox.TabIndex = 4;
             this.NotifyCheckbox.Text = "Enable Taskbar Notifications";
             this.NotifyCheckbox.UseVisualStyleBackColor = true;
+            this.NotifyCheckbox.CheckedChanged += new System.EventHandler(this.NotifyCheckbox_CheckedChanged);
             // 
             // Main
             // 

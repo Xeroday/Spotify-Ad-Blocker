@@ -19,10 +19,12 @@ namespace EZBlocker
         private String title = String.Empty; // Title of the Spotify window
         private String lastChecked = String.Empty; // Previous artist
         private Boolean autoAdd = true;
+        private Boolean notify = true;
         private Boolean muted = false;
 
         private String blocklistPath = Application.StartupPath + @"\blocklist.txt";
         private String nircmdPath = Application.StartupPath +@"\nircmdc.exe";
+        private String ua = "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1667.0 Safari/537.36";
 
         private String website = @"http://www.ericzhang.me/projects/spotify-ad-blocker-ezblocker/";
 
@@ -54,23 +56,30 @@ namespace EZBlocker
             if (IsPlaying())
             {
                 String artist = GetArtist();
-                if (autoAdd) // Auto add to block list
-                    if (IsAd(artist))
-                        AddToBlockList(artist);
                 if (!lastChecked.Equals(artist)) // Song has changed
                 {
                     lastChecked = artist;
+                    if (autoAdd) // Auto add to block list
+                    {
+                        if (IsAd(artist) && !IsInBlocklist(artist))
+                        {
+                            AddToBlockList(artist);
+                            Notify("Automatically added " + artist + " to your blocklist.");
+                        }
+                    }
                     if (IsInBlocklist(artist)) // Should mute
                     {
                         if (!muted)
                             Mute(1); // Mute Spotify
                         ResumeTimer.Start();
+                        // Notify(artist + " is on your blocklist and has been muted.");
                     }
                     else // Should unmute
                     {
                         if (muted)
                             Mute(0); // Unmute Spotify
                         ResumeTimer.Stop();
+                        Notify(artist + " is not on your blocklist. Open EZBlocker to add it.");
                     }
                 }
             }
@@ -82,6 +91,7 @@ namespace EZBlocker
         private void ResumeTimer_Tick(object sender, EventArgs e)
         {
             UpdateTitle();
+            // TODO
         }
 
         /**
@@ -176,7 +186,8 @@ namespace EZBlocker
          **/
         private Boolean IsAd(String artist)
         {
-            String json = GetPage("http://itunes.apple.com/search?entity=musicArtist&limit=20&term=" + artist.Replace(" ", "+")); // Ghetto URL encoding for .net 3.5
+            String url = "http://itunes.apple.com/search?entity=musicArtist&limit=20&term=" + artist.Replace(" ", "+"); // Ghetto URL encoding for .net 3.5
+            String json = GetPage(url, ua);
             JsonTextReader reader = new JsonTextReader(new StringReader(json));
             while (reader.Read())
             {
@@ -186,6 +197,7 @@ namespace EZBlocker
                         if (reader.Value.Equals("artistName")) // If key is artistName, read next value
                         {
                             reader.ReadAsString();
+                            Console.WriteLine(reader.Value);
                             if (reader.Value.Equals(artist)) return false; // An exact match on the artist == Not an ad
                         } 
                         else if (reader.Value.Equals("resultCount")) // If key is resultCount, read next value
@@ -202,17 +214,18 @@ namespace EZBlocker
         /**
          * Gets the source of a given URL
          **/
-        private String GetPage(String URL)
+        private String GetPage(String URL, String ua)
         {
             WebClient w = new WebClient();
-            w.Headers.Add("user-agent", "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1667.0 Safari/537.36");
+            w.Headers.Add("user-agent", ua);
             String s = w.DownloadString(URL);
             return s;
         }
 
         private void Notify(String message)
         {
-            NotifyIcon.ShowBalloonTip(10000, "EZBlocker", message, ToolTipIcon.None);
+            if (notify)
+                NotifyIcon.ShowBalloonTip(10000, "EZBlocker", message, ToolTipIcon.None);
         }
 
         /**
@@ -220,7 +233,7 @@ namespace EZBlocker
          **/
         private void CheckUpdate()
         {
-            int latest = Convert.ToInt32(GetPage("http://www.ericzhang.me/dl/?file=EZBlocker-version.txt"));
+            int latest = Convert.ToInt32(GetPage("http://www.ericzhang.me/dl/?file=EZBlocker-version.txt", "EZBlocker " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " " + System.Environment.OSVersion));
             int current = Convert.ToInt32(Assembly.GetExecutingAssembly().GetName().Version.ToString().Replace(".", ""));
             if (latest > current)
             {
@@ -263,11 +276,14 @@ namespace EZBlocker
             autoAdd = AutoAddCheckbox.Checked;
         }
 
+        private void NotifyCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            notify = NotifyCheckbox.Checked;
+        }
+
         private void OpenButton_Click(object sender, EventArgs e)
         {
-            Console.WriteLine(IsAd(GetArtist()));
-
-            // TODO Process.Start("notepad.exe", blocklistPath);
+            Process.Start("notepad.exe", blocklistPath);
         }
 
         private void MuteButton_Click(object sender, EventArgs e)
