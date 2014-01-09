@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
+using Newtonsoft.Json;
 
 namespace EZBlocker
 {
@@ -17,6 +18,7 @@ namespace EZBlocker
     {
         private String title = String.Empty; // Title of the Spotify window
         private Boolean autoAdd = true;
+        private Boolean muted = false;
 
         private String blocklistPath = Application.StartupPath + @"\blocklist.txt";
         private String nircmdPath = Application.StartupPath +@"\nircmdc.exe";
@@ -26,7 +28,7 @@ namespace EZBlocker
         public Main()
         {
             InitializeComponent();
-            CheckUpdate();
+            // CheckUpdate();
             if (!File.Exists(nircmdPath))
                 File.WriteAllBytes(nircmdPath, EZBlocker.Properties.Resources.nircmdc);
             if (!File.Exists(blocklistPath))
@@ -39,11 +41,18 @@ namespace EZBlocker
             {
                 // Ignore
             }
+            Mute(0); // Unmute Spotify, if muted
         }
 
+        /**
+         * Contains the logic for when to mute Spotify
+         **/
         private void MainTimer_Tick(object sender, EventArgs e)
         {
             UpdateTitle();
+            if (IsPlaying())
+            {
+            }
         }
 
         /**
@@ -109,6 +118,12 @@ namespace EZBlocker
             startInfo.Arguments = "/C nircmdc muteappvolume spotify.exe " + i.ToString();
             process.StartInfo = startInfo;
             process.Start();
+            if (i == 1)
+                muted = true;
+            else if (i == 0)
+                muted = false;
+            else
+                muted = !muted;
         }
 
         /**
@@ -132,7 +147,27 @@ namespace EZBlocker
          **/
         private Boolean IsAd(String artist)
         {
-            return GetPage("http://itunes.apple.com/search?entity=musicArtist&limit=1&term=" + artist.Replace(" ", "+")).Contains("\"resultCount\":0"); // Ghetto URL encoding for .net 3.5
+            String json = GetPage("http://itunes.apple.com/search?entity=musicArtist&limit=20&term=" + artist.Replace(" ", "+")); // Ghetto URL encoding for .net 3.5
+            JsonTextReader reader = new JsonTextReader(new StringReader(json));
+            while (reader.Read())
+            {
+                {
+                    if (reader.Value != null) 
+                    {
+                        if (reader.Value.Equals("artistName")) // If key is artistName, read next value
+                        {
+                            reader.ReadAsString();
+                            if (reader.Value.Equals(artist)) return false; // An exact match on the artist == Not an ad
+                        } 
+                        else if (reader.Value.Equals("resultCount")) // If key is resultCount, read next value
+                        {
+                            reader.ReadAsInt32();
+                            if (reader.Value.Equals(0)) return true; // No results == Ad
+                        }
+                    }
+                }
+            }
+            return true;
         }
 
         /**
@@ -175,7 +210,9 @@ namespace EZBlocker
 
         private void OpenButton_Click(object sender, EventArgs e)
         {
-            Process.Start("notepad.exe", blocklistPath);
+            Console.WriteLine(IsAd(GetArtist()));
+
+            // Process.Start("notepad.exe", blocklistPath);
         }
 
         private void MuteButton_Click(object sender, EventArgs e)
