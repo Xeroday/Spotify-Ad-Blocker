@@ -17,6 +17,7 @@ namespace EZBlocker
     public partial class Main : Form
     {
         private String title = String.Empty; // Title of the Spotify window
+        private String lastChecked = String.Empty; // Previous artist
         private Boolean autoAdd = true;
         private Boolean muted = false;
 
@@ -28,7 +29,7 @@ namespace EZBlocker
         public Main()
         {
             InitializeComponent();
-            // CheckUpdate();
+            // TODO CheckUpdate();
             if (!File.Exists(nircmdPath))
                 File.WriteAllBytes(nircmdPath, EZBlocker.Properties.Resources.nircmdc);
             if (!File.Exists(blocklistPath))
@@ -42,6 +43,7 @@ namespace EZBlocker
                 // Ignore
             }
             Mute(0); // Unmute Spotify, if muted
+            Notify("l");
         }
 
         /**
@@ -52,6 +54,15 @@ namespace EZBlocker
             UpdateTitle();
             if (IsPlaying())
             {
+                String artist = GetArtist();
+                if (autoAdd)
+                    if (IsAd(artist))
+                        AddToBlockList(artist);
+                if (!lastChecked.Equals(artist)) // Song has changed
+                {
+                    lastChecked = artist;
+                    
+                }
             }
         }
 
@@ -79,7 +90,7 @@ namespace EZBlocker
          **/
         private Boolean IsPlaying()
         {
-            return title.Contains(" - ");
+            return title.Contains("-");
         }
 
         /**
@@ -129,7 +140,7 @@ namespace EZBlocker
         /**
          * Checks if an artist is in the blocklist (Exact match only)
          **/
-        private Boolean IsBlocked(String artist)
+        private Boolean IsInBlocklist(String artist)
         {
             String[] lines = File.ReadAllLines(blocklistPath);
             for (var i = 0; i < lines.Length; i++)
@@ -181,6 +192,11 @@ namespace EZBlocker
             return s;
         }
 
+        private void Notify(String message)
+        {
+            NotifyIcon.ShowBalloonTip(10000, "EZBlocker", message, ToolTipIcon.None);
+        }
+
         /**
          * Checks if the current installation is the latest version. Prompts user if not.
          **/
@@ -212,12 +228,33 @@ namespace EZBlocker
         {
             Console.WriteLine(IsAd(GetArtist()));
 
-            // Process.Start("notepad.exe", blocklistPath);
+            // TODO Process.Start("notepad.exe", blocklistPath);
         }
 
         private void MuteButton_Click(object sender, EventArgs e)
         {
             Mute(2);
+        }
+
+        private void NotifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (this.ShowInTaskbar.Equals(false))
+            {
+                this.WindowState = FormWindowState.Normal;
+                this.ShowInTaskbar = true;
+            }
+            else
+            {
+                this.WindowState = FormWindowState.Minimized;
+                this.ShowInTaskbar = false;
+                Notify("EZBlocker is hidden. Double-click this icon to restore.");
+            }
+        }
+
+        private void NotifyIcon_BalloonTipClicked(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Normal;
+            this.ShowInTaskbar = true;
         }
 
     }

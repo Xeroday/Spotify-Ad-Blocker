@@ -35,6 +35,7 @@
             this.AutoAddCheck = new System.Windows.Forms.CheckBox();
             this.MainTimer = new System.Windows.Forms.Timer(this.components);
             this.MuteButton = new System.Windows.Forms.Button();
+            this.NotifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.SuspendLayout();
             // 
             // BlockButton
@@ -86,6 +87,13 @@
             this.MuteButton.UseVisualStyleBackColor = true;
             this.MuteButton.Click += new System.EventHandler(this.MuteButton_Click);
             // 
+            // NotifyIcon
+            // 
+            this.NotifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("NotifyIcon.Icon")));
+            this.NotifyIcon.Visible = true;
+            this.NotifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIcon_MouseDoubleClick);
+            this.NotifyIcon.BalloonTipClicked += new System.EventHandler(this.NotifyIcon_BalloonTipClicked);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -114,6 +122,7 @@
         private System.Windows.Forms.CheckBox AutoAddCheck;
         private System.Windows.Forms.Timer MainTimer;
         private System.Windows.Forms.Button MuteButton;
+        private System.Windows.Forms.NotifyIcon NotifyIcon;
     }
 }
 
