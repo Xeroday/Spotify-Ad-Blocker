@@ -61,7 +61,7 @@ namespace EZBlocker
                     lastChecked = artist;
                     if (autoAdd) // Auto add to block list
                     {
-                        if (IsAd(artist) && !IsInBlocklist(artist))
+                        if (!IsInBlocklist(artist) && IsAd(artist))
                         {
                             AddToBlockList(artist);
                             Notify("Automatically added " + artist + " to your blocklist.");
@@ -196,9 +196,9 @@ namespace EZBlocker
                     {
                         if (reader.Value.Equals("artistName")) // If key is artistName, read next value
                         {
-                            reader.ReadAsString();
-                            Console.WriteLine(reader.Value);
-                            if (reader.Value.Equals(artist)) return false; // An exact match on the artist == Not an ad
+                            reader.Read();
+                            String readerValue = Encoding.UTF8.GetString(Encoding.Default.GetBytes(reader.Value.ToString())); // Convert result to UTF-8 for people like Beyoncé
+                            if (readerValue.Equals(artist)) return false; // An exact match on the artist == Not an ad
                         } 
                         else if (reader.Value.Equals("resultCount")) // If key is resultCount, read next value
                         {
