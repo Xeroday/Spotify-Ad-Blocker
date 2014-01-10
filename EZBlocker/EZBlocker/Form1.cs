@@ -41,14 +41,18 @@ namespace EZBlocker
 
         public Main()
         {
-            InitializeComponent();
             CheckUpdate();
             if (!File.Exists(nircmdPath))
                 File.WriteAllBytes(nircmdPath, EZBlocker.Properties.Resources.nircmdc);
             if (!File.Exists(jsonPath))
                 File.WriteAllBytes(jsonPath, EZBlocker.Properties.Resources.Newtonsoft_Json);
             if (!File.Exists(blocklistPath))
-                new WebClient().DownloadFile("http://www.ericzhang.me/dl/?file=blocklist.txt", blocklistPath);
+            {
+                WebClient w = new WebClient();
+                w.Headers.Add("user-agent", "EZBlocker " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " " + System.Environment.OSVersion);
+                w.DownloadFile("http://www.ericzhang.me/dl/?file=blocklist.txt", blocklistPath);
+            }
+            InitializeComponent();
             try
             {
                 Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe");
