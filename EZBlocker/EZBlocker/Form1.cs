@@ -27,6 +27,7 @@ namespace EZBlocker
 
         private String blocklistPath = Application.StartupPath + @"\blocklist.txt";
         private String nircmdPath = Application.StartupPath + @"\nircmdc.exe";
+        private String jsonPath = Application.StartupPath + @"\Newtonsoft.Json.dll";
 
         [DllImport("user32.dll")]
         public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
@@ -44,6 +45,8 @@ namespace EZBlocker
             CheckUpdate();
             if (!File.Exists(nircmdPath))
                 File.WriteAllBytes(nircmdPath, EZBlocker.Properties.Resources.nircmdc);
+            if (!File.Exists(jsonPath))
+                File.WriteAllBytes(jsonPath, EZBlocker.Properties.Resources.Newtonsoft_Json);
             if (!File.Exists(blocklistPath))
                 new WebClient().DownloadFile("http://www.ericzhang.me/dl/?file=blocklist.txt", blocklistPath);
             try
