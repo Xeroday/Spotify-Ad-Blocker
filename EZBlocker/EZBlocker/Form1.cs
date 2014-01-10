@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 
 namespace EZBlocker
 {
@@ -219,6 +220,7 @@ namespace EZBlocker
             String url = "http://itunes.apple.com/search?entity=musicArtist&limit=20&term=" + artist.Replace(" ", "+"); // Ghetto URL encoding for .net 3.5
             String json = GetPage(url, ua);
             JsonTextReader reader = new JsonTextReader(new StringReader(json));
+            Regex regex = new Regex("[^A-Za-z0-9]");
             while (reader.Read())
             {
                 {
@@ -227,8 +229,8 @@ namespace EZBlocker
                         if (reader.Value.Equals("artistName")) // If key is artistName, read next value
                         {
                             reader.Read();
-                            String readerValue = Encoding.UTF8.GetString(Encoding.Default.GetBytes(reader.Value.ToString())); // Convert result to UTF-8 for people like Beyoncé
-                            if (readerValue.Equals(artist)) return false; // An exact match on the artist == Not an ad
+                            // String readerValue = Encoding.UTF8.GetString(Encoding.Default.GetBytes(reader.Value.ToString())); // Convert result to UTF-8 for people like Beyoncé
+                            if (regex.Replace(Convert.ToString(reader.Value), "").ToLower().Equals(regex.Replace(artist, "").ToLower())) return false; // Match alphanumerically, case insensitively
                         } 
                         else if (reader.Value.Equals("resultCount")) // If key is resultCount, read next value
                         {
