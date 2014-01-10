@@ -38,13 +38,14 @@
             this.NotifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.ResumeTimer = new System.Windows.Forms.Timer(this.components);
             this.NotifyCheckbox = new System.Windows.Forms.CheckBox();
+            this.WebsiteLink = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // BlockButton
             // 
-            this.BlockButton.Location = new System.Drawing.Point(12, 36);
+            this.BlockButton.Location = new System.Drawing.Point(12, 12);
             this.BlockButton.Name = "BlockButton";
-            this.BlockButton.Size = new System.Drawing.Size(138, 36);
+            this.BlockButton.Size = new System.Drawing.Size(212, 36);
             this.BlockButton.TabIndex = 0;
             this.BlockButton.Text = "Add Current to Blocklist";
             this.BlockButton.UseVisualStyleBackColor = true;
@@ -52,9 +53,9 @@
             // 
             // OpenButton
             // 
-            this.OpenButton.Location = new System.Drawing.Point(158, 36);
+            this.OpenButton.Location = new System.Drawing.Point(12, 54);
             this.OpenButton.Name = "OpenButton";
-            this.OpenButton.Size = new System.Drawing.Size(138, 36);
+            this.OpenButton.Size = new System.Drawing.Size(212, 36);
             this.OpenButton.TabIndex = 1;
             this.OpenButton.Text = "Open Blocklist";
             this.OpenButton.UseVisualStyleBackColor = true;
@@ -65,7 +66,7 @@
             this.AutoAddCheckbox.AutoSize = true;
             this.AutoAddCheckbox.Checked = true;
             this.AutoAddCheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.AutoAddCheckbox.Location = new System.Drawing.Point(12, 87);
+            this.AutoAddCheckbox.Location = new System.Drawing.Point(12, 140);
             this.AutoAddCheckbox.Name = "AutoAddCheckbox";
             this.AutoAddCheckbox.Size = new System.Drawing.Size(211, 17);
             this.AutoAddCheckbox.TabIndex = 2;
@@ -81,9 +82,9 @@
             // 
             // MuteButton
             // 
-            this.MuteButton.Location = new System.Drawing.Point(302, 36);
+            this.MuteButton.Location = new System.Drawing.Point(12, 96);
             this.MuteButton.Name = "MuteButton";
-            this.MuteButton.Size = new System.Drawing.Size(138, 36);
+            this.MuteButton.Size = new System.Drawing.Size(212, 36);
             this.MuteButton.TabIndex = 3;
             this.MuteButton.Text = "Mute/UnMute Spotify";
             this.MuteButton.UseVisualStyleBackColor = true;
@@ -106,7 +107,7 @@
             this.NotifyCheckbox.AutoSize = true;
             this.NotifyCheckbox.Checked = true;
             this.NotifyCheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.NotifyCheckbox.Location = new System.Drawing.Point(12, 110);
+            this.NotifyCheckbox.Location = new System.Drawing.Point(12, 163);
             this.NotifyCheckbox.Name = "NotifyCheckbox";
             this.NotifyCheckbox.Size = new System.Drawing.Size(162, 17);
             this.NotifyCheckbox.TabIndex = 4;
@@ -114,11 +115,23 @@
             this.NotifyCheckbox.UseVisualStyleBackColor = true;
             this.NotifyCheckbox.CheckedChanged += new System.EventHandler(this.NotifyCheckbox_CheckedChanged);
             // 
+            // WebsiteLink
+            // 
+            this.WebsiteLink.AutoSize = true;
+            this.WebsiteLink.Location = new System.Drawing.Point(9, 185);
+            this.WebsiteLink.Name = "WebsiteLink";
+            this.WebsiteLink.Size = new System.Drawing.Size(84, 13);
+            this.WebsiteLink.TabIndex = 5;
+            this.WebsiteLink.TabStop = true;
+            this.WebsiteLink.Text = "About/Info/FAQ";
+            this.WebsiteLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.WebsiteLink_LinkClicked);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(819, 373);
+            this.ClientSize = new System.Drawing.Size(235, 207);
+            this.Controls.Add(this.WebsiteLink);
             this.Controls.Add(this.NotifyCheckbox);
             this.Controls.Add(this.MuteButton);
             this.Controls.Add(this.AutoAddCheckbox);
@@ -146,6 +159,7 @@
         private System.Windows.Forms.NotifyIcon NotifyIcon;
         private System.Windows.Forms.Timer ResumeTimer;
         private System.Windows.Forms.CheckBox NotifyCheckbox;
+        private System.Windows.Forms.LinkLabel WebsiteLink;
     }
 }
 

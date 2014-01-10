@@ -26,7 +26,7 @@ namespace EZBlocker
         private Boolean muted = false;
 
         private String blocklistPath = Application.StartupPath + @"\blocklist.txt";
-        private String nircmdPath = Application.StartupPath +@"\nircmdc.exe";
+        private String nircmdPath = Application.StartupPath + @"\nircmdc.exe";
 
         [DllImport("user32.dll")]
         public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
@@ -35,13 +35,13 @@ namespace EZBlocker
         private const int APPCOMMAND_VOLUME_MUTE = 0x80000;
         private const int MEDIA_PLAYPAUSE = 0xE0000;
         
-        private const String ua = "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1667.0 Safari/537.36";
+        private const String ua = @"Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1667.0 Safari/537.36";
         private const String website = @"http://www.ericzhang.me/projects/spotify-ad-blocker-ezblocker/";
 
         public Main()
         {
             InitializeComponent();
-            // TODO CheckUpdate();
+            CheckUpdate();
             if (!File.Exists(nircmdPath))
                 File.WriteAllBytes(nircmdPath, EZBlocker.Properties.Resources.nircmdc);
             if (!File.Exists(blocklistPath))
@@ -322,6 +322,11 @@ namespace EZBlocker
         private void MuteButton_Click(object sender, EventArgs e)
         {
             Mute(2);
+        }
+
+        private void WebsiteLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start(website);
         }
 
     }
