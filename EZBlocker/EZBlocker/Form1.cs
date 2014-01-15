@@ -19,15 +19,15 @@ namespace EZBlocker
 
     public partial class Main : Form
     {
-        private String title = String.Empty; // Title of the Spotify window
-        private String lastChecked = String.Empty; // Previous artist
-        private Boolean autoAdd = true;
-        private Boolean notify = true;
-        private Boolean muted = false;
+        private string title = string.Empty; // Title of the Spotify window
+        private string lastChecked = string.Empty; // Previous artist
+        private bool autoAdd = true;
+        private bool notify = true;
+        private bool muted = false;
 
-        private String blocklistPath = Application.StartupPath + @"\blocklist.txt";
-        private String nircmdPath = Application.StartupPath + @"\nircmdc.exe";
-        private String jsonPath = Application.StartupPath + @"\Newtonsoft.Json.dll";
+        private string blocklistPath = Application.StartupPath + @"\blocklist.txt";
+        private string nircmdPath = Application.StartupPath + @"\nircmdc.exe";
+        private string jsonPath = Application.StartupPath + @"\Newtonsoft.Json.dll";
 
         [DllImport("user32.dll")]
         public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
@@ -36,8 +36,8 @@ namespace EZBlocker
         private const int APPCOMMAND_VOLUME_MUTE = 0x80000;
         private const int MEDIA_PLAYPAUSE = 0xE0000;
         
-        private const String ua = @"Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1667.0 Safari/537.36";
-        private const String website = @"http://www.ericzhang.me/projects/spotify-ad-blocker-ezblocker/";
+        private const string ua = @"Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1667.0 Safari/537.36";
+        private const string website = @"http://www.ericzhang.me/projects/spotify-ad-blocker-ezblocker/";
 
         public Main()
         {
@@ -70,36 +70,35 @@ namespace EZBlocker
         private void MainTimer_Tick(object sender, EventArgs e)
         {
             UpdateTitle();
-            if (IsPlaying())
+            if (!IsPlaying()) 
+                return;
+            string artist = GetArtist();
+            if (!lastChecked.Equals(artist)) // Song has changed
             {
-                String artist = GetArtist();
-                if (!lastChecked.Equals(artist)) // Song has changed
+                lastChecked = artist;
+                if (autoAdd) // Auto add to block list
                 {
-                    lastChecked = artist;
-                    if (autoAdd) // Auto add to block list
+                    if (!IsInBlocklist(artist) && IsAd(artist))
                     {
-                        if (!IsInBlocklist(artist) && IsAd(artist))
-                        {
-                            AddToBlockList(artist);
-                            Notify("Automatically added " + artist + " to your blocklist.");
-                        }
+                        AddToBlockList(artist);
+                        Notify("Automatically added " + artist + " to your blocklist.");
                     }
-                    if (IsInBlocklist(artist)) // Should mute
-                    {
-                        if (!muted)
-                            Mute(1); // Mute Spotify
-                        ResumeTimer.Start();
-                        Console.WriteLine("Muted " + artist);
-                        // Notify(artist + " is on your blocklist and has been muted.");
-                    }
-                    else // Should unmute
-                    {
-                        if (muted)
-                            Mute(0); // Unmute Spotify
-                        ResumeTimer.Stop();
-                        Console.WriteLine("Unmuted " + artist);
-                        Notify(artist + " is not on your blocklist. Open EZBlocker to add it.");
-                    }
+                }
+                if (IsInBlocklist(artist)) // Should mute
+                {
+                    if (!muted)
+                        Mute(1); // Mute Spotify
+                    ResumeTimer.Start();
+                    Console.WriteLine("Muted " + artist);
+                    // Notify(artist + " is on your blocklist and has been muted.");
+                }
+                else // Should unmute
+                {
+                    if (muted)
+                        Mute(0); // Unmute Spotify
+                    ResumeTimer.Stop();
+                    Console.WriteLine("Unmuted " + artist);
+                    Notify(artist + " is not on your blocklist. Open EZBlocker to add it.");
                 }
             }
         }
@@ -121,7 +120,7 @@ namespace EZBlocker
          * 
          * Returns true if title updated successfully, false if otherwise
          **/
-        private Boolean UpdateTitle()
+        private bool UpdateTitle()
         {
             Process[] p = Process.GetProcesses();
             for (var i = 0; i < p.Length; i++)
@@ -154,7 +153,7 @@ namespace EZBlocker
         /**
          * Determines whether or not Spotify is currently playing
          **/
-        private Boolean IsPlaying()
+        private bool IsPlaying()
         {
             return title.Contains("-");
         }
@@ -162,9 +161,9 @@ namespace EZBlocker
         /**
          * Returns the current artist
          **/
-        private String GetArtist()
+        private string GetArtist()
         {
-            if (!IsPlaying()) return String.Empty;
+            if (!IsPlaying()) return string.Empty;
             return title.Substring(10).Split('\u2013')[0].TrimEnd(); // Split at endash
         }
 
@@ -173,7 +172,7 @@ namespace EZBlocker
          * 
          * Returns false if Spotify is not playing.
          **/
-        private Boolean AddToBlockList(String artist)
+        private bool AddToBlockList(String artist)
         {
             if (!IsPlaying()) return false;
             File.AppendAllText(blocklistPath, artist + "\r\n");
@@ -206,9 +205,9 @@ namespace EZBlocker
         /**
          * Checks if an artist is in the blocklist (Exact match only)
          **/
-        private Boolean IsInBlocklist(String artist)
+        private bool IsInBlocklist(string artist)
         {
-            String[] lines = File.ReadAllLines(blocklistPath);
+            string[] lines = File.ReadAllLines(blocklistPath);
             for (var i = 0; i < lines.Length; i++)
             {
                 if (lines[i].Equals(artist))
@@ -222,42 +221,26 @@ namespace EZBlocker
          * 
          * Checks with iTunes API, can also use http://ws.spotify.com/search/1/artist?q=artist
          **/
-        private Boolean IsAd(String artist)
+        private bool IsAd(string artist)
         {
-            String url = "http://itunes.apple.com/search?entity=musicArtist&limit=20&term=" + artist.Replace(" ", "+"); // Ghetto URL encoding for .net 3.5
-            String json = GetPage(url, ua);
-            JsonTextReader reader = new JsonTextReader(new StringReader(json));
-            Regex regex = new Regex("[^A-Za-z0-9]");
-            while (reader.Read())
-            {
-                {
-                    if (reader.Value != null) 
-                    {
-                        if (reader.Value.Equals("artistName")) // If key is artistName, read next value
-                        {
-                            reader.Read();
-                            // String readerValue = Encoding.UTF8.GetString(Encoding.Default.GetBytes(reader.Value.ToString())); // Convert result to UTF-8 for people like Beyoncé
-                            if (regex.Replace(Convert.ToString(reader.Value), "").ToLower().Equals(regex.Replace(artist, "").ToLower())) return false; // Match alphanumerically, case insensitively
-                        } 
-                        else if (reader.Value.Equals("resultCount")) // If key is resultCount, read next value
-                        {
-                            reader.ReadAsInt32();
-                            if (reader.Value.Equals(0)) return true; // No results == Ad
-                        }
-                    }
-                }
-            }
+            //String url = "http://itunes.apple.com/search?entity=musicArtist&limit=20&term=" + artist.Replace(" ", "+"); // Ghetto URL encoding for .net 3.5
+            string url = "http://ws.spotify.com/search/1/artist.json?q=" + artist;
+            string json = GetPage(url, ua);
+            SpotAnswer a = JsonConvert.DeserializeObject<SpotAnswer>(json);
+
+            if (a.info.num_results > 0)
+                return false;
             return true;
         }
 
         /**
          * Gets the source of a given URL
          **/
-        private String GetPage(String URL, String ua)
+        private string GetPage(String URL, string ua)
         {
             WebClient w = new WebClient();
             w.Headers.Add("user-agent", ua);
-            String s = w.DownloadString(URL);
+            string s = w.DownloadString(URL);
             return s;
         }
 
@@ -274,13 +257,12 @@ namespace EZBlocker
         {
             int latest = Convert.ToInt32(GetPage("http://www.ericzhang.me/dl/?file=EZBlocker-version.txt", "EZBlocker " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " " + System.Environment.OSVersion));
             int current = Convert.ToInt32(Assembly.GetExecutingAssembly().GetName().Version.ToString().Replace(".", ""));
-            if (latest > current)
+            if (latest <= current) 
+                return;
+            if (MessageBox.Show("There is a newer version of EZBlocker available. Would you like to upgrade?", "EZBlocker", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                if (MessageBox.Show("There is a newer version of EZBlocker available. Would you like to upgrade?", "EZBlocker", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                {
-                    Process.Start(website);
-                    Application.Exit();   
-                }
+                Process.Start(website);
+                Application.Exit();   
             }
         }
 
