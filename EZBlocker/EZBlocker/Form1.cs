@@ -29,6 +29,7 @@ namespace EZBlocker
         private string nircmdPath = Application.StartupPath + @"\nircmdc.exe";
         private string jsonPath = Application.StartupPath + @"\Newtonsoft.Json.dll";
 
+
         [DllImport("user32.dll")]
         public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
 
@@ -38,7 +39,7 @@ namespace EZBlocker
         
         private const string ua = @"Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1667.0 Safari/537.36";
         private const string website = @"http://www.ericzhang.me/projects/spotify-ad-blocker-ezblocker/";
-
+        private Dictionary<string, int> m_blockList;
         public Main()
         {
             CheckUpdate();
@@ -52,6 +53,7 @@ namespace EZBlocker
                 w.Headers.Add("user-agent", "EZBlocker " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " " + System.Environment.OSVersion);
                 w.DownloadFile("http://www.ericzhang.me/dl/?file=blocklist.txt", blocklistPath);
             }
+            ReadBlockList();
             InitializeComponent();
             try
             {
@@ -172,11 +174,18 @@ namespace EZBlocker
          * 
          * Returns false if Spotify is not playing.
          **/
-        private bool AddToBlockList(String artist)
+        private bool AddToBlockList(string artist)
         {
-            if (!IsPlaying()) return false;
+            if (!IsPlaying()) 
+                return false;
+            m_blockList.Add(artist, 0);
             File.AppendAllText(blocklistPath, artist + "\r\n");
             return true;
+        }
+
+        private void ReadBlockList()
+        {
+            m_blockList = File.ReadAllLines(blocklistPath).Select((k, v) => new { Index = k, Value = v }).ToDictionary(v => v.Index, v => v.Value);
         }
 
         /**
@@ -207,13 +216,7 @@ namespace EZBlocker
          **/
         private bool IsInBlocklist(string artist)
         {
-            string[] lines = File.ReadAllLines(blocklistPath);
-            for (var i = 0; i < lines.Length; i++)
-            {
-                if (lines[i].Equals(artist))
-                    return true;
-            }
-            return false;
+            return m_blockList.ContainsKey(artist);
         }
 
         /**
