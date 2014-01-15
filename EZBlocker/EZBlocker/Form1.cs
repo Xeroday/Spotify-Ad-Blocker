@@ -3,16 +3,11 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
 
 namespace EZBlocker
 {
@@ -124,14 +119,10 @@ namespace EZBlocker
          **/
         private bool UpdateTitle()
         {
-            Process[] p = Process.GetProcesses();
-            for (var i = 0; i < p.Length; i++)
+            foreach (Process t in Process.GetProcesses().Where(t => t.ProcessName.Equals("spotify")))
             {
-                if (p[i].ProcessName.Equals("spotify"))
-                {
-                    title = p[i].MainWindowTitle;
-                    return true;
-                }
+                title = t.MainWindowTitle;
+                return true;
             }
             return false;
         }
@@ -141,13 +132,9 @@ namespace EZBlocker
          **/
         private IntPtr GetHandle()
         {
-            Process[] p = Process.GetProcesses();
-            for (var i = 0; i < p.Length; i++)
+            foreach (Process t in Process.GetProcesses().Where(t => t.ProcessName.Equals("spotify")))
             {
-                if (p[i].ProcessName.Equals("spotify"))
-                {
-                    return p[i].Handle;
-                }
+                return t.Handle;
             }
             return IntPtr.Zero;
         }
@@ -308,7 +295,7 @@ namespace EZBlocker
 
         private void OpenButton_Click(object sender, EventArgs e)
         {
-            Process.Start("notepad.exe", blocklistPath);
+            Process.Start(blocklistPath);
         }
 
         private void MuteButton_Click(object sender, EventArgs e)
