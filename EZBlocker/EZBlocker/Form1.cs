@@ -26,7 +26,7 @@ namespace EZBlocker
 
 
         [DllImport("user32.dll")]
-        public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
+        private static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
 
         private const int WM_APPCOMMAND = 0x319;
         private const int APPCOMMAND_VOLUME_MUTE = 0x80000;
@@ -70,33 +70,32 @@ namespace EZBlocker
             if (!IsPlaying()) 
                 return;
             string artist = GetArtist();
-            if (!lastChecked.Equals(artist)) // Song has changed
+            if (lastChecked.Equals(artist)) 
+                return;
+            lastChecked = artist;
+            if (autoAdd) // Auto add to block list
             {
-                lastChecked = artist;
-                if (autoAdd) // Auto add to block list
+                if (!IsInBlocklist(artist) && IsAd(artist))
                 {
-                    if (!IsInBlocklist(artist) && IsAd(artist))
-                    {
-                        AddToBlockList(artist);
-                        Notify("Automatically added " + artist + " to your blocklist.");
-                    }
+                    AddToBlockList(artist);
+                    Notify("Automatically added " + artist + " to your blocklist.");
                 }
-                if (IsInBlocklist(artist)) // Should mute
-                {
-                    if (!muted)
-                        Mute(1); // Mute Spotify
-                    ResumeTimer.Start();
-                    Console.WriteLine("Muted " + artist);
-                    // Notify(artist + " is on your blocklist and has been muted.");
-                }
-                else // Should unmute
-                {
-                    if (muted)
-                        Mute(0); // Unmute Spotify
-                    ResumeTimer.Stop();
-                    Console.WriteLine("Unmuted " + artist);
-                    Notify(artist + " is not on your blocklist. Open EZBlocker to add it.");
-                }
+            }
+            if (IsInBlocklist(artist)) // Should mute
+            {
+                if (!muted)
+                    Mute(1); // Mute Spotify
+                ResumeTimer.Start();
+                Console.WriteLine("Muted " + artist);
+                // Notify(artist + " is on your blocklist and has been muted.");
+            }
+            else // Should unmute
+            {
+                if (muted)
+                    Mute(0); // Unmute Spotify
+                ResumeTimer.Stop();
+                Console.WriteLine("Unmuted " + artist);
+                Notify(artist + " is not on your blocklist. Open EZBlocker to add it.");
             }
         }
 
@@ -218,15 +217,14 @@ namespace EZBlocker
             string json = GetPage(url, ua);
             SpotAnswer a = JsonConvert.DeserializeObject<SpotAnswer>(json);
 
-            if (a.info.num_results > 0)
-                return false;
-            return true;
+            
+            return a.info.num_results <= 0;
         }
 
         /**
          * Gets the source of a given URL
          **/
-        private string GetPage(String URL, string ua)
+        private string GetPage(string URL, string ua)
         {
             WebClient w = new WebClient();
             w.Headers.Add("user-agent", ua);
@@ -258,7 +256,7 @@ namespace EZBlocker
 
         private void NotifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (this.ShowInTaskbar.Equals(false))
+            if (!this.ShowInTaskbar)
             {
                 this.WindowState = FormWindowState.Normal;
                 this.ShowInTaskbar = true;
