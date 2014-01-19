@@ -39,7 +39,7 @@ namespace EZBlocker
 
         public Main()
         {
-            // CheckUpdate();
+            CheckUpdate();
             if (!File.Exists(nircmdPath))
                 File.WriteAllBytes(nircmdPath, EZBlocker.Properties.Resources.nircmdc);
             if (!File.Exists(jsonPath))
@@ -54,6 +54,7 @@ namespace EZBlocker
             InitializeComponent();
             try
             {
+                System.Diagnostics.Process.GetCurrentProcess().PriorityClass = System.Diagnostics.ProcessPriorityClass.High; // Windows throttles down when minimized to task tray, so make sure EZBlocker runs smoothly
                 Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe");
             }
             catch (Exception e)
@@ -304,13 +305,17 @@ namespace EZBlocker
                 this.WindowState = FormWindowState.Normal;
                 this.ShowInTaskbar = true;
             }
-            else
+        }
+
+        private void Form_Resize(object sender, EventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Minimized)
             {
-                this.WindowState = FormWindowState.Minimized;
                 this.ShowInTaskbar = false;
                 Notify("EZBlocker is hidden. Double-click this icon to restore.");
             }
         }
+
 
         private void NotifyIcon_BalloonTipClicked(object sender, EventArgs e)
         {
