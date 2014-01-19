@@ -21,7 +21,8 @@ namespace EZBlocker
         public string name;
         public float popularity;
     }
-    public class SpotAnswer
+
+    public class SpotifyAnswer
     {
         public Info info;
         public IList<Artist> artists;

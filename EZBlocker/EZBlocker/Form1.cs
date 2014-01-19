@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 
 namespace EZBlocker
 {
@@ -35,9 +36,10 @@ namespace EZBlocker
         private const string ua = @"Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1667.0 Safari/537.36";
         private const string website = @"http://www.ericzhang.me/projects/spotify-ad-blocker-ezblocker/";
         private Dictionary<string, int> m_blockList;
+
         public Main()
         {
-            CheckUpdate();
+            // CheckUpdate();
             if (!File.Exists(nircmdPath))
                 File.WriteAllBytes(nircmdPath, EZBlocker.Properties.Resources.nircmdc);
             if (!File.Exists(jsonPath))
@@ -207,18 +209,59 @@ namespace EZBlocker
 
         /**
          * Attempts to check if the current song is an ad
-         * 
-         * Checks with iTunes API, can also use http://ws.spotify.com/search/1/artist?q=artist
          **/
         private bool IsAd(string artist)
         {
-            //String url = "http://itunes.apple.com/search?entity=musicArtist&limit=20&term=" + artist.Replace(" ", "+"); // Ghetto URL encoding for .net 3.5
-            string url = "http://ws.spotify.com/search/1/artist.json?q=" + artist;
-            string json = GetPage(url, ua);
-            SpotAnswer a = JsonConvert.DeserializeObject<SpotAnswer>(json);
+            return (isAdSpotify(artist) && IsAdiTunes(artist));
+        }
 
-            
-            return a.info.num_results <= 0;
+        /**
+         * Checks Spotify Web API to see if artist is an ad
+         **/
+        private bool isAdSpotify(String artist)
+        {
+            string url = "http://ws.spotify.com/search/1/artist.json?q=" + FormEncode(artist);
+            string json = GetPage(url, ua);
+            SpotifyAnswer res = JsonConvert.DeserializeObject<SpotifyAnswer>(json);
+            foreach (Artist a in res.artists) 
+            {
+                if (SimpleCompare(artist, a.name))
+                    return false;
+            }
+            return true;
+        }
+
+        /**
+         * Checks iTunes Web API to see if artist is an ad
+         **/
+        private bool IsAdiTunes(String artist)
+        {
+            String url = "http://itunes.apple.com/search?entity=musicArtist&limit=20&term=" + FormEncode(artist);
+            String json = GetPage(url, ua);
+            ITunesAnswer res = JsonConvert.DeserializeObject<ITunesAnswer>(json);
+            foreach (Result r in res.results)
+            {
+                if (SimpleCompare(artist, r.artistName))
+                    return false;
+            }
+            return true;
+        }
+
+        /**
+         * Encodes an artist name to be compatible with web api's
+         **/
+        private string FormEncode(String param)
+        {
+            return param.Replace(" ", "+").Replace("&", "");
+        }
+
+        /**
+         * Compares two strings based on lowercase alphanumeric letters and numbers only.
+         **/
+        private bool SimpleCompare(String a, String b)
+        {
+            Regex regex = new Regex("[^a-z0-9]");
+            return String.Equals(regex.Replace(a.ToLower(), ""), regex.Replace(b.ToLower(), ""));
         }
 
         /**
