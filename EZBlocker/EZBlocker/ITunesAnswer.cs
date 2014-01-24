@@ -5,7 +5,6 @@ using System.Text;
 
 namespace EZBlocker
 {
-
     public class Result
     {
         public int artistId;
