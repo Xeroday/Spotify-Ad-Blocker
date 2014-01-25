@@ -144,6 +144,7 @@
             this.Name = "Main";
             this.RightToLeftLayout = true;
             this.Text = "EZBlocker";
+            this.Load += new System.EventHandler(this.Main_Load);
             this.Resize += new System.EventHandler(this.Form_Resize);
             this.ResumeLayout(false);
             this.PerformLayout();

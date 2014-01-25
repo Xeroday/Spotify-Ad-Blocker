@@ -39,29 +39,42 @@ namespace EZBlocker
 
         public Main()
         {
+            Console.WriteLine("Checking update");
             CheckUpdate();
             if (!File.Exists(nircmdPath))
+            {
+                Console.WriteLine("Writing nircmd");
                 File.WriteAllBytes(nircmdPath, EZBlocker.Properties.Resources.nircmdc);
+            }
             if (!File.Exists(jsonPath))
+            {
+                Console.WriteLine("Writing Json");
                 File.WriteAllBytes(jsonPath, EZBlocker.Properties.Resources.Newtonsoft_Json);
+            }
             if (!File.Exists(blocklistPath))
             {
+                Console.WriteLine("Downloading blocklist");
                 WebClient w = new WebClient();
                 w.Headers.Add("user-agent", "EZBlocker " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " " + System.Environment.OSVersion);
                 w.DownloadFile("http://www.ericzhang.me/dl/?file=blocklist.txt", blocklistPath);
             }
-            ReadBlockList();
+            Console.WriteLine("Initializing");
             InitializeComponent();
             try
             {
+                Console.WriteLine("Raising priority");
                 System.Diagnostics.Process.GetCurrentProcess().PriorityClass = System.Diagnostics.ProcessPriorityClass.High; // Windows throttles down when minimized to task tray, so make sure EZBlocker runs smoothly
+                Console.WriteLine("Starting Spotify");
                 Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe");
             }
             catch (Exception e)
             {
                 // Ignore
             }
+            Console.WriteLine("Unmuting");
             Mute(0); // Unmute Spotify, if muted
+            Console.WriteLine("Reading blocklist");
+            ReadBlockList();
         }
 
         /**
@@ -352,6 +365,11 @@ namespace EZBlocker
         private void WebsiteLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Process.Start(website);
+        }
+
+        private void Main_Load(object sender, EventArgs e)
+        {
+
         }
 
     }
