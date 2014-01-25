@@ -174,7 +174,7 @@ namespace EZBlocker
 
         private void ReadBlockList()
         {
-            m_blockList = File.ReadAllLines(blocklistPath).Select((k, v) => new { Index = k, Value = v }).ToDictionary(v => v.Index, v => v.Value);
+            m_blockList = File.ReadAllLines(blocklistPath).Distinct().Select((k, v) => new { Index = k, Value = v }).ToDictionary(v => v.Index, v => v.Value);
         }
 
         /**
