@@ -32,7 +32,7 @@
             If (settingsLine.StartsWith(":BL ")) Then
                 blocklist.Add(settingsLine.Substring(4).Trim())
             Else
-                settingsLine = sReader.ReadLine.ToLower()
+                settingsLine = settingsLine.ToLower()
                 'settings converted to lower
                 If (settingsLine.StartsWith("close to tray")) Then
                     closeTray = parseBool(settingsLine)

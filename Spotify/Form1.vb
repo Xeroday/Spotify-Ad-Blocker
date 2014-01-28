@@ -102,7 +102,7 @@ Public Class Form1
 
             Me.BringToFront()
         Catch ex As Exception
-
+            Me.Text = ex.Message
         End Try
 
     End Sub
