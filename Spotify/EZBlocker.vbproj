@@ -172,6 +172,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="my_music.ico" />
+    <None Include="Resources\background2.png" />
+    <None Include="Resources\background1.png" />
     <None Include="Resources\blockedImage.png" />
     <None Include="Resources\allowed.ico" />
     <None Include="Resources\blocked.ico" />

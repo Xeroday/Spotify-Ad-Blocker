@@ -24,7 +24,7 @@ Partial Class Form1
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.ButtonBlock = New System.Windows.Forms.Button()
         Me.MainTimer = New System.Windows.Forms.Timer(Me.components)
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.notifyIconMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
@@ -44,22 +44,23 @@ Partial Class Form1
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.ButtonRemoveEntry = New System.Windows.Forms.Button()
         Me.blocklistBox = New System.Windows.Forms.ListBox()
+        Me.StartupTimer = New System.Windows.Forms.Timer(Me.components)
         Me.notifyIconMenu.SuspendLayout()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
         Me.SuspendLayout()
         '
-        'Button1
+        'ButtonBlock
         '
-        Me.Button1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.ButtonBlock.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button1.Location = New System.Drawing.Point(12, 18)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(222, 29)
-        Me.Button1.TabIndex = 0
-        Me.Button1.Text = "&Block this song"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.ButtonBlock.Location = New System.Drawing.Point(12, 18)
+        Me.ButtonBlock.Name = "ButtonBlock"
+        Me.ButtonBlock.Size = New System.Drawing.Size(222, 29)
+        Me.ButtonBlock.TabIndex = 0
+        Me.ButtonBlock.Text = "&Block this song"
+        Me.ButtonBlock.UseVisualStyleBackColor = True
         '
         'MainTimer
         '
@@ -154,6 +155,7 @@ Partial Class Form1
         '
         Me.AutoAddCheckBox.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.AutoAddCheckBox.AutoSize = True
+        Me.AutoAddCheckBox.BackColor = System.Drawing.Color.Transparent
         Me.AutoAddCheckBox.Checked = True
         Me.AutoAddCheckBox.CheckState = System.Windows.Forms.CheckState.Checked
         Me.AutoAddCheckBox.Location = New System.Drawing.Point(12, 166)
@@ -162,13 +164,15 @@ Partial Class Form1
         Me.AutoAddCheckBox.TabIndex = 1
         Me.AutoAddCheckBox.Text = "Automatically block ads"
         Me.AutoAddCheckBox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.AutoAddCheckBox.UseVisualStyleBackColor = True
+        Me.AutoAddCheckBox.UseVisualStyleBackColor = False
         '
         'LinkLabel1
         '
         Me.LinkLabel1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.LinkLabel1.AutoSize = True
-        Me.LinkLabel1.Location = New System.Drawing.Point(215, 191)
+        Me.LinkLabel1.BackColor = System.Drawing.Color.Transparent
+        Me.LinkLabel1.LinkColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.LinkLabel1.Location = New System.Drawing.Point(497, 191)
         Me.LinkLabel1.Name = "LinkLabel1"
         Me.LinkLabel1.Size = New System.Drawing.Size(35, 13)
         Me.LinkLabel1.TabIndex = 2
@@ -179,32 +183,38 @@ Partial Class Form1
         '
         Me.TopMostCheckBox.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.TopMostCheckBox.AutoSize = True
-        Me.TopMostCheckBox.Checked = True
-        Me.TopMostCheckBox.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.TopMostCheckBox.BackColor = System.Drawing.Color.Transparent
         Me.TopMostCheckBox.Location = New System.Drawing.Point(12, 190)
         Me.TopMostCheckBox.Name = "TopMostCheckBox"
         Me.TopMostCheckBox.Size = New System.Drawing.Size(151, 17)
         Me.TopMostCheckBox.TabIndex = 3
         Me.TopMostCheckBox.Text = "Stay above other windows"
         Me.TopMostCheckBox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.TopMostCheckBox.UseVisualStyleBackColor = True
+        Me.TopMostCheckBox.UseVisualStyleBackColor = False
         '
         'SplitContainer1
         '
         Me.SplitContainer1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.SplitContainer1.BackColor = System.Drawing.Color.Transparent
         Me.SplitContainer1.Location = New System.Drawing.Point(0, 0)
         Me.SplitContainer1.Name = "SplitContainer1"
         '
         'SplitContainer1.Panel1
         '
-        Me.SplitContainer1.Panel1.Controls.Add(Me.Button1)
+        Me.SplitContainer1.Panel1.BackColor = System.Drawing.Color.Transparent
+        Me.SplitContainer1.Panel1.BackgroundImage = CType(resources.GetObject("SplitContainer1.Panel1.BackgroundImage"), System.Drawing.Image)
+        Me.SplitContainer1.Panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.SplitContainer1.Panel1.Controls.Add(Me.ButtonBlock)
         Me.SplitContainer1.Panel1.Controls.Add(Me.ButtonEdit)
         Me.SplitContainer1.Panel1.Controls.Add(Me.ButtonMute)
         '
         'SplitContainer1.Panel2
         '
+        Me.SplitContainer1.Panel2.BackColor = System.Drawing.Color.Transparent
+        Me.SplitContainer1.Panel2.BackgroundImage = CType(resources.GetObject("SplitContainer1.Panel2.BackgroundImage"), System.Drawing.Image)
+        Me.SplitContainer1.Panel2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.SplitContainer1.Panel2.Controls.Add(Me.ButtonRemoveEntry)
         Me.SplitContainer1.Panel2.Controls.Add(Me.blocklistBox)
         Me.SplitContainer1.Panel2.Enabled = False
@@ -228,16 +238,26 @@ Partial Class Form1
         Me.blocklistBox.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.blocklistBox.BackColor = System.Drawing.Color.White
+        Me.blocklistBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.blocklistBox.FormattingEnabled = True
         Me.blocklistBox.Location = New System.Drawing.Point(13, 18)
         Me.blocklistBox.Name = "blocklistBox"
-        Me.blocklistBox.Size = New System.Drawing.Size(269, 82)
+        Me.blocklistBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
+        Me.blocklistBox.Size = New System.Drawing.Size(269, 80)
         Me.blocklistBox.TabIndex = 5
+        '
+        'StartupTimer
+        '
+        Me.StartupTimer.Enabled = True
+        Me.StartupTimer.Interval = 10000
         '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.BackgroundImage = Global.EZBlocker.My.Resources.Resources.background1
+        Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.ClientSize = New System.Drawing.Size(544, 211)
         Me.Controls.Add(Me.TopMostCheckBox)
         Me.Controls.Add(Me.LinkLabel1)
@@ -249,7 +269,6 @@ Partial Class Form1
         Me.MaximumSize = New System.Drawing.Size(560, 600)
         Me.MinimumSize = New System.Drawing.Size(560, 250)
         Me.Name = "Form1"
-        Me.TopMost = True
         Me.notifyIconMenu.ResumeLayout(False)
         Me.SplitContainer1.Panel1.ResumeLayout(False)
         Me.SplitContainer1.Panel2.ResumeLayout(False)
@@ -269,7 +288,7 @@ Partial Class Form1
     Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
     Friend WithEvents blocklistBox As System.Windows.Forms.ListBox
     Friend WithEvents ButtonRemoveEntry As System.Windows.Forms.Button
-    Private WithEvents Button1 As System.Windows.Forms.Button
+    Private WithEvents ButtonBlock As System.Windows.Forms.Button
     Private WithEvents ButtonEdit As System.Windows.Forms.Button
     Private WithEvents ButtonMute As System.Windows.Forms.Button
     Private WithEvents LinkLabel1 As System.Windows.Forms.LinkLabel
@@ -278,5 +297,6 @@ Partial Class Form1
     Private WithEvents NotifyIcon1 As System.Windows.Forms.NotifyIcon
     Private WithEvents notifyIconMenu As System.Windows.Forms.ContextMenuStrip
     Private WithEvents BlockThisSongToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents StartupTimer As System.Windows.Forms.Timer
 
 End Class

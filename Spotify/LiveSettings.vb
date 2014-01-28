@@ -5,13 +5,18 @@
     'settings, it writes settings to My.Settings at exit.
 
 
-
-    Friend closeTray As Boolean = False
-    Friend minTray As Boolean = False
+    'behaviors
+    Friend closeTray As Boolean = True
+    Friend minTray As Boolean = True
+    'main form
     Friend autoAdd As Boolean = True
     Friend topmost As Boolean = True
-    Friend blocklist_path As String = System.IO.Path.Combine(Application.StartupPath, "blocklist.txt")
-    Dim settingPath As String = Application.StartupPath & "\settings.ini"
+    'paths
+    Dim settingPath As String = System.IO.Path.Combine(Application.StartupPath, "settings.ini")
+    'Friend blocklist_path As String = System.IO.Path.Combine(Application.StartupPath, "blocklist.txt")
+    Friend nircmd_path As String = System.IO.Path.Combine(Application.StartupPath, "nircmd.exe")
+    'block-list
+    Friend blocklist As List(Of String) = New List(Of String)()
 
     Public Sub readSettings()
         'create default settings file if doesn't exist
@@ -22,16 +27,24 @@
         Dim sReader As System.IO.StreamReader = New IO.StreamReader(settingPath)
 
         While (Not sReader.EndOfStream)
-            Dim settingsLine As String = sReader.ReadLine.ToLower()
-            If (settingsLine.StartsWith("close to tray")) Then
-                closeTray = parseBool(settingsLine)
-            ElseIf (settingsLine.StartsWith("minimize to tray")) Then
-                minTray = parseBool(settingsLine)
-            ElseIf (settingsLine.StartsWith("autoblock")) Then
-                autoAdd = parseBool(settingsLine)
-            ElseIf (settingsLine.StartsWith("topmost")) Then
-                topmost = parseBool(settingsLine)
-            End If
+            Dim settingsLine As String = sReader.ReadLine()
+
+            If (settingsLine.StartsWith(":BL ")) Then
+                blocklist.Add(settingsLine.Substring(4).Trim())
+            Else
+                settingsLine = sReader.ReadLine.ToLower()
+                'settings converted to lower
+                If (settingsLine.StartsWith("close to tray")) Then
+                    closeTray = parseBool(settingsLine)
+                ElseIf (settingsLine.StartsWith("minimize to tray")) Then
+                    minTray = parseBool(settingsLine)
+                ElseIf (settingsLine.StartsWith("autoblock")) Then
+                    autoAdd = parseBool(settingsLine)
+                ElseIf (settingsLine.StartsWith("topmost")) Then
+                    topmost = parseBool(settingsLine)
+                End If
+            End if
+
         End While
 
         sReader.Close()
@@ -45,6 +58,11 @@
         sWriter.WriteLine(outputBoolSetting("minimize to tray", minTray))
         sWriter.WriteLine(outputBoolSetting("autoblock", autoAdd))
         sWriter.WriteLine(outputBoolSetting("topmost", Form1.TopMostCheckBox.Checked))
+
+        For Each entry As String In blocklist
+            sWriter.WriteLine("BL: " + entry)
+        Next
+
         sWriter.Close()
     End Sub
 
