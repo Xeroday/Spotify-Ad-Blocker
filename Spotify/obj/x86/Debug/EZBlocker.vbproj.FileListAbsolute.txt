@@ -1,0 +1,10 @@
+D:\C_STORE\SkyDrive\Documents\GitHub\Spotify-Ad-Blocker\Spotify\bin\Debug\EZBlocker.exe.config
+D:\C_STORE\SkyDrive\Documents\GitHub\Spotify-Ad-Blocker\Spotify\obj\x86\Debug\EZBlocker.Form1.resources
+D:\C_STORE\SkyDrive\Documents\GitHub\Spotify-Ad-Blocker\Spotify\obj\x86\Debug\EZBlocker.Resources.resources
+D:\C_STORE\SkyDrive\Documents\GitHub\Spotify-Ad-Blocker\Spotify\obj\x86\Debug\EZBlocker.vbproj.GenerateResource.Cache
+D:\C_STORE\SkyDrive\Documents\GitHub\Spotify-Ad-Blocker\Spotify\bin\Debug\EZBlocker.exe
+D:\C_STORE\SkyDrive\Documents\GitHub\Spotify-Ad-Blocker\Spotify\bin\Debug\EZBlocker.pdb
+D:\C_STORE\SkyDrive\Documents\GitHub\Spotify-Ad-Blocker\Spotify\bin\Debug\EZBlocker.xml
+D:\C_STORE\SkyDrive\Documents\GitHub\Spotify-Ad-Blocker\Spotify\obj\x86\Debug\EZBlocker.exe
+D:\C_STORE\SkyDrive\Documents\GitHub\Spotify-Ad-Blocker\Spotify\obj\x86\Debug\EZBlocker.xml
+D:\C_STORE\SkyDrive\Documents\GitHub\Spotify-Ad-Blocker\Spotify\obj\x86\Debug\EZBlocker.pdb
