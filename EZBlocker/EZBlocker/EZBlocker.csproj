@@ -78,6 +78,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="ITunesAnswer.cs" />
+    <Compile Include="LiveSettings.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpotifyAnswer.cs" />
@@ -112,6 +113,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="my_music.ico" />
+    <None Include="Resources\blockedImage.png" />
+    <None Include="Resources\blocked.ico" />
+    <None Include="Resources\background1.png" />
+    <None Include="Resources\allowed.ico" />
     <None Include="Resources\Newtonsoft.Json.dll" />
   </ItemGroup>
   <ItemGroup>
