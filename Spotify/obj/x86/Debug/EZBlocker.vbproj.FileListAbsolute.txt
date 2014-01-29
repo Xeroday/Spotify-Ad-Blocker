@@ -8,3 +8,5 @@ D:\C_STORE\SkyDrive\Documents\GitHub\Spotify-Ad-Blocker\Spotify\bin\Debug\EZBloc
 D:\C_STORE\SkyDrive\Documents\GitHub\Spotify-Ad-Blocker\Spotify\obj\x86\Debug\EZBlocker.exe
 D:\C_STORE\SkyDrive\Documents\GitHub\Spotify-Ad-Blocker\Spotify\obj\x86\Debug\EZBlocker.xml
 D:\C_STORE\SkyDrive\Documents\GitHub\Spotify-Ad-Blocker\Spotify\obj\x86\Debug\EZBlocker.pdb
+D:\C_STORE\SkyDrive\Documents\GitHub\Spotify-Ad-Blocker\Spotify\obj\x86\Debug\EZBlocker.BLUI.resources
+D:\C_STORE\SkyDrive\Documents\GitHub\Spotify-Ad-Blocker\Spotify\obj\x86\Debug\EZBlocker.Flipbutton.resources

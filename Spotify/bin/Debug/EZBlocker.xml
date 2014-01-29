@@ -27,6 +27,10 @@ EZBlocker
 	<summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>
+</member><member name="P:EZBlocker.My.Resources.Resources.block">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
 </member><member name="P:EZBlocker.My.Resources.Resources.blocked">
 	<summary>
   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
@@ -35,9 +39,21 @@ EZBlocker
 	<summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>
+</member><member name="P:EZBlocker.My.Resources.Resources.close">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
 </member><member name="P:EZBlocker.My.Resources.Resources.nircmd">
 	<summary>
   Looks up a localized resource of type System.Byte[].
+</summary>
+</member><member name="P:EZBlocker.My.Resources.Resources.volumeOff">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:EZBlocker.My.Resources.Resources.volumeOn">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>
 </member><member name="T:EZBlocker.My.Resources.Resources">
 	<summary>
