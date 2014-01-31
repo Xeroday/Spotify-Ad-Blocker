@@ -97,6 +97,18 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BLUI.Designer.vb">
+      <DependentUpon>BLUI.vb</DependentUpon>
+    </Compile>
+    <Compile Include="BLUI.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Flipbutton.Designer.vb">
+      <DependentUpon>Flipbutton.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Flipbutton.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Form1.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -123,6 +135,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="BLUI.resx">
+      <DependentUpon>BLUI.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Flipbutton.resx">
+      <DependentUpon>Flipbutton.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.vb</DependentUpon>
     </EmbeddedResource>
@@ -172,6 +190,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="my_music.ico" />
+    <None Include="Resources\close.png" />
+    <None Include="Resources\block.png" />
+    <None Include="Resources\volumeOn.png" />
+    <None Include="Resources\volumeOff.png" />
     <None Include="Resources\background2.png" />
     <None Include="Resources\background1.png" />
     <None Include="Resources\blockedImage.png" />

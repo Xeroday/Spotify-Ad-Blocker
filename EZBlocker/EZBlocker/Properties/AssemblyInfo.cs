@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("EZBlocker")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("EZBlocker Improved")]
+[assembly: AssemblyDescription("moodspace.blog.com")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("http://www.ericzhang.me")]
-[assembly: AssemblyProduct("EZBlocker")]
-[assembly: AssemblyCopyright("Copyright ©  2012-2014 Eric Zhang")]
+[assembly: AssemblyCompany("MoodSpace")]
+[assembly: AssemblyProduct("EZBlocker Improved")]
+[assembly: AssemblyCopyright("Copyleft 2007-2014 MoodSpace")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
