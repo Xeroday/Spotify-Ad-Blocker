@@ -327,7 +327,7 @@ namespace EZBlocker
         {
             if (!IsPlaying())
                 return false;
-
+            BlockButton.TextAlign = ContentAlignment.MiddleRight;
             NotifyIcon.Icon = Properties.Resources.blocked;
             BlockButton.Text = BlockButton.Text.Replace("&Block", "Un&block");
             BlockThisSongToolStripMenuItem.Checked = true;
@@ -339,6 +339,7 @@ namespace EZBlocker
             {
                 setVolume(volume.m1uted);
                 MuteButton.Text = MuteButton.Text.Replace("&Mute", "Un&mute");
+                MuteButton.TextAlign = ContentAlignment.MiddleRight;
             }
 
             return true;
@@ -351,7 +352,7 @@ namespace EZBlocker
             BlockButton.Text = BlockButton.Text.Replace("Un&block", "&Block");
             //uncheck "block this song notify" menu item
             BlockThisSongToolStripMenuItem.Checked = false;
-
+            BlockButton.TextAlign = ContentAlignment.MiddleLeft;
             while (LiveSettings.blocklist.Contains(artist))
                 LiveSettings.blocklist.Remove(artist);
 
@@ -359,6 +360,7 @@ namespace EZBlocker
             {
                 setVolume(volume.u0nmuted);
                 MuteButton.Text = MuteButton.Text.Replace("Un&mute", "&Mute");
+                MuteButton.TextAlign = ContentAlignment.MiddleLeft;
             }
         }
 
@@ -372,12 +374,12 @@ namespace EZBlocker
             LiveSettings.notify = NotifyCheckbox.Checked;
         }
 
-        private void OpenButton_Click(object sender, EventArgs e)
+        private void EditButton_Click(object sender, EventArgs e)
         {
             if (EditButton.Text == "&Edit Blocklist")
             {
                 BlockButton.Enabled = false;
-
+                EditButton.TextAlign = ContentAlignment.MiddleRight;
                 blocklistBox.Items.Clear();
                 blocklistBox.BeginUpdate(); //prevent flicker
                 foreach (String s in LiveSettings.blocklist)
@@ -390,7 +392,7 @@ namespace EZBlocker
             else
             {
                 BlockButton.Enabled = true;
-
+                EditButton.TextAlign = ContentAlignment.MiddleLeft;
                 LiveSettings.blocklist.Clear();
                 foreach (ListViewItem item in blocklistBox.Items)
                 {
@@ -419,11 +421,13 @@ namespace EZBlocker
             {
                 setVolume(volume.u0nmuted);
                 MuteButton.Text = MuteButton.Text.Replace("Un&mute", "&Mute");
+                MuteButton.TextAlign = ContentAlignment.MiddleLeft;
             }
             else
             {
                 setVolume(volume.m1uted);
                 MuteButton.Text = MuteButton.Text.Replace("&Mute", "Un&mute");
+                MuteButton.TextAlign = ContentAlignment.MiddleRight;
             }
         }
 

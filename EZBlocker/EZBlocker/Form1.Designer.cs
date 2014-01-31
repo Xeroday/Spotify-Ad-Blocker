@@ -60,11 +60,13 @@
             // BlockButton
             // 
             this.BlockButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.BlockButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.BlockButton.Location = new System.Drawing.Point(12, 117);
             this.BlockButton.Name = "BlockButton";
             this.BlockButton.Size = new System.Drawing.Size(125, 25);
             this.BlockButton.TabIndex = 0;
             this.BlockButton.Text = "&Block this song";
+            this.BlockButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.BlockButton.UseVisualStyleBackColor = true;
             this.BlockButton.Click += new System.EventHandler(this.BlockButton_Click);
             // 
@@ -76,8 +78,9 @@
             this.EditButton.Size = new System.Drawing.Size(125, 25);
             this.EditButton.TabIndex = 1;
             this.EditButton.Text = "&Edit Blocklist";
+            this.EditButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.EditButton.UseVisualStyleBackColor = true;
-            this.EditButton.Click += new System.EventHandler(this.OpenButton_Click);
+            this.EditButton.Click += new System.EventHandler(this.EditButton_Click);
             // 
             // AutoAddCheckbox
             // 
@@ -106,6 +109,7 @@
             this.MuteButton.Size = new System.Drawing.Size(125, 25);
             this.MuteButton.TabIndex = 3;
             this.MuteButton.Text = "&Mute Spotify";
+            this.MuteButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.MuteButton.UseVisualStyleBackColor = true;
             this.MuteButton.Click += new System.EventHandler(this.MuteButton_Click);
             // 
@@ -127,7 +131,7 @@
             this.ToolStripSeparator2,
             this.ExitToolStripMenuItem});
             this.notifyIconMenu.Name = "notifyIconMenu";
-            this.notifyIconMenu.Size = new System.Drawing.Size(160, 122);
+            this.notifyIconMenu.Size = new System.Drawing.Size(160, 100);
             // 
             // BlockThisSongToolStripMenuItem
             // 
@@ -278,6 +282,7 @@
             // 
             this.blocklistBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.blocklistBox.BackgroundImage = global::EZBlocker.Properties.Resources.blockedImage;
             this.blocklistBox.Location = new System.Drawing.Point(12, 245);
             this.blocklistBox.Name = "blocklistBox";
             this.blocklistBox.Size = new System.Drawing.Size(447, 131);
