@@ -1,0 +1,12 @@
+D:\C_STORE\SkyDrive\Documents\GitHub\Spotify-Ad-Blocker\EZBlocker\EZBlocker\bin\Debug\EZBlocker.exe.config
+D:\C_STORE\SkyDrive\Documents\GitHub\Spotify-Ad-Blocker\EZBlocker\EZBlocker\bin\Debug\EZBlocker.exe
+D:\C_STORE\SkyDrive\Documents\GitHub\Spotify-Ad-Blocker\EZBlocker\EZBlocker\bin\Debug\EZBlocker.pdb
+D:\C_STORE\SkyDrive\Documents\GitHub\Spotify-Ad-Blocker\EZBlocker\EZBlocker\obj\Debug\EZBlocker.Main.resources
+D:\C_STORE\SkyDrive\Documents\GitHub\Spotify-Ad-Blocker\EZBlocker\EZBlocker\obj\Debug\EZBlocker.Properties.Resources.resources
+D:\C_STORE\SkyDrive\Documents\GitHub\Spotify-Ad-Blocker\EZBlocker\EZBlocker\obj\Debug\EZBlocker.csproj.GenerateResource.Cache
+D:\C_STORE\SkyDrive\Documents\GitHub\Spotify-Ad-Blocker\EZBlocker\EZBlocker\obj\Debug\EZBlocker.exe
+D:\C_STORE\SkyDrive\Documents\GitHub\Spotify-Ad-Blocker\EZBlocker\EZBlocker\obj\Debug\EZBlocker.pdb
+D:\C_STORE\SkyDrive\Documents\GitHub\Spotify-Ad-Blocker\EZBlocker\EZBlocker\bin\Debug\HtmlAgilityPack.dll
+D:\C_STORE\SkyDrive\Documents\GitHub\Spotify-Ad-Blocker\EZBlocker\EZBlocker\bin\Debug\HtmlAgilityPack.pdb
+D:\C_STORE\SkyDrive\Documents\GitHub\Spotify-Ad-Blocker\EZBlocker\EZBlocker\bin\Debug\HtmlAgilityPack.xml
+D:\C_STORE\SkyDrive\Documents\GitHub\Spotify-Ad-Blocker\EZBlocker\EZBlocker\obj\Debug\EZBlocker.csprojResolveAssemblyReference.cache
