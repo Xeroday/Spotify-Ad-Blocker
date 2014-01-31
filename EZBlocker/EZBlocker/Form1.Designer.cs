@@ -48,21 +48,21 @@
             this.NotifyCheckbox = new System.Windows.Forms.CheckBox();
             this.WebsiteLink = new System.Windows.Forms.LinkLabel();
             this.ButtonRemoveEntry = new System.Windows.Forms.Button();
-            this.blocklistBox = new System.Windows.Forms.ListBox();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.currentSongDisplay = new System.Windows.Forms.Label();
+            this.whoAmI = new System.Windows.Forms.Button();
             this.TopMostCheckbox = new System.Windows.Forms.CheckBox();
+            this.artistInfoLabel = new System.Windows.Forms.Label();
+            this.artistInfoPicture = new System.Windows.Forms.PictureBox();
+            this.blocklistBox = new System.Windows.Forms.ListView();
             this.notifyIconMenu.SuspendLayout();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.artistInfoPicture)).BeginInit();
             this.SuspendLayout();
             // 
             // BlockButton
             // 
-            this.BlockButton.Location = new System.Drawing.Point(10, 41);
+            this.BlockButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.BlockButton.Location = new System.Drawing.Point(12, 117);
             this.BlockButton.Name = "BlockButton";
-            this.BlockButton.Size = new System.Drawing.Size(212, 36);
+            this.BlockButton.Size = new System.Drawing.Size(125, 25);
             this.BlockButton.TabIndex = 0;
             this.BlockButton.Text = "&Block this song";
             this.BlockButton.UseVisualStyleBackColor = true;
@@ -70,9 +70,10 @@
             // 
             // EditButton
             // 
-            this.EditButton.Location = new System.Drawing.Point(12, 203);
+            this.EditButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.EditButton.Location = new System.Drawing.Point(12, 179);
             this.EditButton.Name = "EditButton";
-            this.EditButton.Size = new System.Drawing.Size(212, 36);
+            this.EditButton.Size = new System.Drawing.Size(125, 25);
             this.EditButton.TabIndex = 1;
             this.EditButton.Text = "&Edit Blocklist";
             this.EditButton.UseVisualStyleBackColor = true;
@@ -80,16 +81,14 @@
             // 
             // AutoAddCheckbox
             // 
-            this.AutoAddCheckbox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.AutoAddCheckbox.AutoSize = true;
             this.AutoAddCheckbox.BackColor = System.Drawing.Color.Transparent;
             this.AutoAddCheckbox.Checked = true;
             this.AutoAddCheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.AutoAddCheckbox.Location = new System.Drawing.Point(14, 144);
+            this.AutoAddCheckbox.Location = new System.Drawing.Point(12, 210);
             this.AutoAddCheckbox.Name = "AutoAddCheckbox";
-            this.AutoAddCheckbox.Size = new System.Drawing.Size(211, 17);
+            this.AutoAddCheckbox.Size = new System.Drawing.Size(125, 20);
             this.AutoAddCheckbox.TabIndex = 2;
-            this.AutoAddCheckbox.Text = "AutoAdd Ads to Blocklist (Experimental)";
+            this.AutoAddCheckbox.Text = "Help me decide";
             this.AutoAddCheckbox.UseVisualStyleBackColor = false;
             this.AutoAddCheckbox.CheckedChanged += new System.EventHandler(this.AutoAddCheck_CheckedChanged);
             // 
@@ -101,9 +100,10 @@
             // 
             // MuteButton
             // 
-            this.MuteButton.Location = new System.Drawing.Point(12, 90);
+            this.MuteButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.MuteButton.Location = new System.Drawing.Point(12, 148);
             this.MuteButton.Name = "MuteButton";
-            this.MuteButton.Size = new System.Drawing.Size(212, 36);
+            this.MuteButton.Size = new System.Drawing.Size(125, 25);
             this.MuteButton.TabIndex = 3;
             this.MuteButton.Text = "&Mute Spotify";
             this.MuteButton.UseVisualStyleBackColor = true;
@@ -127,10 +127,11 @@
             this.ToolStripSeparator2,
             this.ExitToolStripMenuItem});
             this.notifyIconMenu.Name = "notifyIconMenu";
-            this.notifyIconMenu.Size = new System.Drawing.Size(160, 100);
+            this.notifyIconMenu.Size = new System.Drawing.Size(160, 122);
             // 
             // BlockThisSongToolStripMenuItem
             // 
+            this.BlockThisSongToolStripMenuItem.CheckOnClick = true;
             this.BlockThisSongToolStripMenuItem.Image = global::EZBlocker.Properties.Resources.blockedImage;
             this.BlockThisSongToolStripMenuItem.Name = "BlockThisSongToolStripMenuItem";
             this.BlockThisSongToolStripMenuItem.Size = new System.Drawing.Size(159, 28);
@@ -157,6 +158,7 @@
             this.CloseToolStripMenuItem.Name = "CloseToolStripMenuItem";
             this.CloseToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.CloseToolStripMenuItem.Text = "Close to tray";
+            this.CloseToolStripMenuItem.CheckedChanged += new System.EventHandler(this.CloseToolStripMenuItem_CheckedChanged);
             // 
             // MinimizeToolStripMenuItem
             // 
@@ -164,6 +166,7 @@
             this.MinimizeToolStripMenuItem.Name = "MinimizeToolStripMenuItem";
             this.MinimizeToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.MinimizeToolStripMenuItem.Text = "Minimize to tray";
+            this.MinimizeToolStripMenuItem.CheckedChanged += new System.EventHandler(this.MinimizeToolStripMenuItem_CheckedChanged);
             // 
             // ToolStripSeparator2
             // 
@@ -189,11 +192,11 @@
             this.NotifyCheckbox.BackColor = System.Drawing.Color.Transparent;
             this.NotifyCheckbox.Checked = true;
             this.NotifyCheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.NotifyCheckbox.Location = new System.Drawing.Point(11, 295);
+            this.NotifyCheckbox.Location = new System.Drawing.Point(202, 377);
             this.NotifyCheckbox.Name = "NotifyCheckbox";
-            this.NotifyCheckbox.Size = new System.Drawing.Size(162, 17);
+            this.NotifyCheckbox.Size = new System.Drawing.Size(187, 21);
             this.NotifyCheckbox.TabIndex = 4;
-            this.NotifyCheckbox.Text = "Enable Taskbar Notifications";
+            this.NotifyCheckbox.Text = "Enable taskbar notifications";
             this.NotifyCheckbox.UseVisualStyleBackColor = false;
             this.NotifyCheckbox.CheckedChanged += new System.EventHandler(this.NotifyCheckbox_CheckedChanged);
             // 
@@ -202,109 +205,118 @@
             this.WebsiteLink.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.WebsiteLink.AutoSize = true;
             this.WebsiteLink.BackColor = System.Drawing.Color.Transparent;
-            this.WebsiteLink.Location = new System.Drawing.Point(385, 299);
+            this.WebsiteLink.Location = new System.Drawing.Point(404, 379);
             this.WebsiteLink.Name = "WebsiteLink";
-            this.WebsiteLink.Size = new System.Drawing.Size(84, 13);
+            this.WebsiteLink.Size = new System.Drawing.Size(99, 17);
             this.WebsiteLink.TabIndex = 5;
             this.WebsiteLink.TabStop = true;
             this.WebsiteLink.Text = "About/Info/FAQ";
+            this.WebsiteLink.Visible = false;
             this.WebsiteLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.WebsiteLink_LinkClicked);
             // 
             // ButtonRemoveEntry
             // 
-            this.ButtonRemoveEntry.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ButtonRemoveEntry.Location = new System.Drawing.Point(15, 203);
+            this.ButtonRemoveEntry.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ButtonRemoveEntry.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.ButtonRemoveEntry.Location = new System.Drawing.Point(465, 353);
             this.ButtonRemoveEntry.Name = "ButtonRemoveEntry";
-            this.ButtonRemoveEntry.Size = new System.Drawing.Size(212, 36);
+            this.ButtonRemoveEntry.Size = new System.Drawing.Size(23, 23);
             this.ButtonRemoveEntry.TabIndex = 8;
-            this.ButtonRemoveEntry.Text = "&Remove";
+            this.ButtonRemoveEntry.Text = "-";
             this.ButtonRemoveEntry.UseVisualStyleBackColor = true;
             this.ButtonRemoveEntry.Click += new System.EventHandler(this.ButtonRemoveEntry_Click);
             // 
-            // blocklistBox
+            // whoAmI
             // 
-            this.blocklistBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.blocklistBox.BackColor = System.Drawing.Color.White;
-            this.blocklistBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.blocklistBox.FormattingEnabled = true;
-            this.blocklistBox.Location = new System.Drawing.Point(15, 9);
-            this.blocklistBox.Name = "blocklistBox";
-            this.blocklistBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.blocklistBox.Size = new System.Drawing.Size(212, 184);
-            this.blocklistBox.TabIndex = 7;
-            // 
-            // splitContainer1
-            // 
-            this.splitContainer1.Location = new System.Drawing.Point(1, 3);
-            this.splitContainer1.Name = "splitContainer1";
-            // 
-            // splitContainer1.Panel1
-            // 
-            this.splitContainer1.Panel1.Controls.Add(this.currentSongDisplay);
-            this.splitContainer1.Panel1.Controls.Add(this.BlockButton);
-            this.splitContainer1.Panel1.Controls.Add(this.EditButton);
-            this.splitContainer1.Panel1.Controls.Add(this.MuteButton);
-            this.splitContainer1.Panel1.Controls.Add(this.AutoAddCheckbox);
-            // 
-            // splitContainer1.Panel2
-            // 
-            this.splitContainer1.Panel2.Controls.Add(this.blocklistBox);
-            this.splitContainer1.Panel2.Controls.Add(this.ButtonRemoveEntry);
-            this.splitContainer1.Size = new System.Drawing.Size(661, 253);
-            this.splitContainer1.SplitterDistance = 236;
-            this.splitContainer1.TabIndex = 9;
-            // 
-            // currentSongDisplay
-            // 
-            this.currentSongDisplay.AutoSize = true;
-            this.currentSongDisplay.Location = new System.Drawing.Point(11, 15);
-            this.currentSongDisplay.Name = "currentSongDisplay";
-            this.currentSongDisplay.Size = new System.Drawing.Size(90, 13);
-            this.currentSongDisplay.TabIndex = 4;
-            this.currentSongDisplay.Text = "Currently playing: ";
+            this.whoAmI.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.whoAmI.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.whoAmI.Location = new System.Drawing.Point(465, 324);
+            this.whoAmI.Name = "whoAmI";
+            this.whoAmI.Size = new System.Drawing.Size(23, 23);
+            this.whoAmI.TabIndex = 9;
+            this.whoAmI.Text = "?";
+            this.whoAmI.UseVisualStyleBackColor = true;
+            this.whoAmI.Click += new System.EventHandler(this.whoAmI_Click);
             // 
             // TopMostCheckbox
             // 
             this.TopMostCheckbox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.TopMostCheckbox.AutoSize = true;
             this.TopMostCheckbox.BackColor = System.Drawing.Color.Transparent;
-            this.TopMostCheckbox.Location = new System.Drawing.Point(11, 272);
+            this.TopMostCheckbox.Location = new System.Drawing.Point(12, 377);
             this.TopMostCheckbox.Name = "TopMostCheckbox";
-            this.TopMostCheckbox.Size = new System.Drawing.Size(151, 17);
+            this.TopMostCheckbox.Size = new System.Drawing.Size(180, 21);
             this.TopMostCheckbox.TabIndex = 10;
             this.TopMostCheckbox.Text = "Stay above other windows";
             this.TopMostCheckbox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.TopMostCheckbox.UseVisualStyleBackColor = false;
             this.TopMostCheckbox.CheckedChanged += new System.EventHandler(this.TopMostCheckbox_CheckedChanged);
             // 
+            // artistInfoLabel
+            // 
+            this.artistInfoLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.artistInfoLabel.AutoEllipsis = true;
+            this.artistInfoLabel.BackColor = System.Drawing.Color.Transparent;
+            this.artistInfoLabel.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.artistInfoLabel.Location = new System.Drawing.Point(143, 12);
+            this.artistInfoLabel.Name = "artistInfoLabel";
+            this.artistInfoLabel.Size = new System.Drawing.Size(345, 213);
+            this.artistInfoLabel.TabIndex = 11;
+            this.artistInfoLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // artistInfoPicture
+            // 
+            this.artistInfoPicture.BackColor = System.Drawing.Color.Transparent;
+            this.artistInfoPicture.Location = new System.Drawing.Point(12, 12);
+            this.artistInfoPicture.Name = "artistInfoPicture";
+            this.artistInfoPicture.Size = new System.Drawing.Size(125, 99);
+            this.artistInfoPicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.artistInfoPicture.TabIndex = 12;
+            this.artistInfoPicture.TabStop = false;
+            // 
+            // blocklistBox
+            // 
+            this.blocklistBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.blocklistBox.Location = new System.Drawing.Point(12, 245);
+            this.blocklistBox.Name = "blocklistBox";
+            this.blocklistBox.Size = new System.Drawing.Size(447, 131);
+            this.blocklistBox.TabIndex = 13;
+            this.blocklistBox.UseCompatibleStateImageBehavior = false;
+            this.blocklistBox.View = System.Windows.Forms.View.List;
+            // 
             // Main
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackgroundImage = global::EZBlocker.Properties.Resources.background1;
-            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(481, 321);
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.ClientSize = new System.Drawing.Size(500, 401);
+            this.Controls.Add(this.blocklistBox);
+            this.Controls.Add(this.artistInfoPicture);
+            this.Controls.Add(this.whoAmI);
+            this.Controls.Add(this.ButtonRemoveEntry);
+            this.Controls.Add(this.BlockButton);
+            this.Controls.Add(this.EditButton);
             this.Controls.Add(this.TopMostCheckbox);
-            this.Controls.Add(this.splitContainer1);
+            this.Controls.Add(this.MuteButton);
             this.Controls.Add(this.WebsiteLink);
             this.Controls.Add(this.NotifyCheckbox);
+            this.Controls.Add(this.artistInfoLabel);
+            this.Controls.Add(this.AutoAddCheckbox);
             this.Cursor = System.Windows.Forms.Cursors.Default;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.DoubleBuffered = true;
+            this.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "Main";
+            this.Opacity = 0.95D;
             this.RightToLeftLayout = true;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.Load += new System.EventHandler(this.Main_Load);
             this.Resize += new System.EventHandler(this.Main_Resize);
             this.notifyIconMenu.ResumeLayout(false);
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel1.PerformLayout();
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            this.splitContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.artistInfoPicture)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -322,9 +334,6 @@
         private System.Windows.Forms.CheckBox NotifyCheckbox;
         private System.Windows.Forms.LinkLabel WebsiteLink;
         internal System.Windows.Forms.Button ButtonRemoveEntry;
-        internal System.Windows.Forms.ListBox blocklistBox;
-        private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.Label currentSongDisplay;
         private System.Windows.Forms.ContextMenuStrip notifyIconMenu;
         private System.Windows.Forms.ToolStripMenuItem BlockThisSongToolStripMenuItem;
         internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator1;
@@ -334,6 +343,10 @@
         internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator2;
         internal System.Windows.Forms.ToolStripMenuItem ExitToolStripMenuItem;
         internal System.Windows.Forms.CheckBox TopMostCheckbox;
+        internal System.Windows.Forms.Button whoAmI;
+        private System.Windows.Forms.Label artistInfoLabel;
+        private System.Windows.Forms.PictureBox artistInfoPicture;
+        private System.Windows.Forms.ListView blocklistBox;
     }
 }
 

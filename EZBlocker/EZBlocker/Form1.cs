@@ -4,11 +4,12 @@ using System.Net;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
+using System.Drawing;
 
 namespace EZBlocker
 {
@@ -83,7 +84,7 @@ namespace EZBlocker
                 Console.WriteLine("Starting Spotify");
                 Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe");
             }
-            catch (Exception e)
+            catch
             {
                 // Ignore
             }
@@ -101,7 +102,7 @@ namespace EZBlocker
             UpdateTitle();
 
             if (IsPlaying() && title.IndexOf("-") + 2 < title.Length)
-                currentSongDisplay.Text = "Currently playing: " + this.title.Substring(title.IndexOf("-") + 2);
+                Text = "Currently playing: " + this.title.Substring(title.IndexOf("-") + 2);
 
             if (!IsPlaying())
                 return;
@@ -293,8 +294,9 @@ namespace EZBlocker
 
         private void NotifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            if (e.Button == MouseButtons.Left)
             {
+                
                 this.Visible = !this.Visible;
                 this.BringToFront();
             }
@@ -378,24 +380,24 @@ namespace EZBlocker
 
                 blocklistBox.Items.Clear();
                 blocklistBox.BeginUpdate(); //prevent flicker
-                blocklistBox.Items.AddRange(LiveSettings.blocklist.ToArray());
+                foreach (String s in LiveSettings.blocklist)
+                    blocklistBox.Items.Add(new ListViewItem(s));
+
                 blocklistBox.EndUpdate(); //restore layout
 
                 EditButton.Text = "Finish &Editing";
-                splitContainer1.Panel2.Enabled = true;
             }
             else
             {
                 BlockButton.Enabled = true;
 
                 LiveSettings.blocklist.Clear();
-                foreach (String line in blocklistBox.Items)
+                foreach (ListViewItem item in blocklistBox.Items)
                 {
-                    LiveSettings.blocklist.Add(line);
+                    LiveSettings.blocklist.Add(item.Text);
                 }
 
                 EditButton.Text = "&Edit Blocklist";
-                splitContainer1.Panel2.Enabled = false;
             }
         }
 
@@ -449,14 +451,14 @@ namespace EZBlocker
 
         private void ButtonRemoveEntry_Click(object sender, EventArgs e)
         {
-            Object[] selected = new Object[blocklistBox.SelectedItems.Count];
+            ListViewItem[] selected = new ListViewItem[blocklistBox.SelectedItems.Count];
 
             for (int x = 0; x < blocklistBox.SelectedIndices.Count; x++)
             {
                 selected.SetValue(blocklistBox.Items[x], x);
             }
 
-            foreach (Object item in selected)
+            foreach (ListViewItem item in selected)
                 blocklistBox.Items.Remove(item);
         }
 
@@ -481,6 +483,7 @@ namespace EZBlocker
         private void Main_Load(object sender, EventArgs e)
         {
             this.Text = Application.ProductName;
+            artistInfoLabel.BackColor = Color.FromArgb(150, Color.White);
         }
 
         private void BlockThisSongToolStripMenuItem_Click(object sender, EventArgs e)
@@ -493,6 +496,85 @@ namespace EZBlocker
         {
             if (this.WindowState == FormWindowState.Minimized && LiveSettings.minTray)
                 this.Hide();
+        }
+
+        private void whoAmI_Click(object sender, EventArgs e)
+        {
+            if (blocklistBox.SelectedItems.Count == 0)
+            {
+                String artist = GetArtist();
+                artistInfoLabel.Text = findDefine(artist);
+                artistInfoPicture.LoadAsync(getGGImageFirst(artist + " photo"));
+            }
+            else
+            {
+                String corp = blocklistBox.SelectedItems[0].Text;
+                artistInfoLabel.Text = findDefine(corp);
+                artistInfoPicture.LoadAsync(getGGImageFirst(corp + " logo"));
+            }
+
+            //*[@id="imgGrp"]/div[1]
+        }
+
+        private String findDefine(String artist)
+        {
+            HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+            try
+            {
+                String UA = @"Mozilla/5.0 (Linux; Android 4.4; Nexus 5 Build/BuildID) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/30.0.0.0 Mobile Safari/537.36";
+                doc.LoadHtml(getHTML("http://en.m.wikipedia.org/wiki/" + artist, UA));
+                HtmlAgilityPack.HtmlNode bodyNode = doc.DocumentNode.SelectSingleNode("//body");
+                HtmlAgilityPack.HtmlNode divContentNode = bodyNode.SelectSingleNode("//div[@id='mw-mf-viewport']/div[@id='mw-mf-page-center']/div[@id='content_wrapper']/div[@id='content']/div/div[@id='mw-content-text']/p");
+                String removeSpaces = Regex.Replace(divContentNode.InnerText, @"\s", " ");
+                return Regex.Replace(removeSpaces, @"\[[0-9]\]", "");
+            }
+            catch (Exception ex) { this.Text = ex.Message; }
+
+            return "Service unavailable";
+        }
+
+        private String getHTML(String url, String UA)
+        {
+            HttpWebRequest rq = (HttpWebRequest)HttpWebRequest.Create(url);
+            rq.UserAgent = UA; WebResponse rs = rq.GetResponse();
+
+            //byte[] bytes = new byte[rs.Length];
+            //while (rs.Position < rs.Length)
+            //{
+            //    bytes[rs.Position] = (byte)rs.ReadByte();
+            //}
+
+            StreamReader sr = new StreamReader(rs.GetResponseStream());
+            return sr.ReadToEnd();
+
+        }
+
+        private String getGGImageFirst(String keyword)
+        {
+            HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+            try
+            {
+                String UA = @"Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; IEMobile/9.0; SAMSUNG; SGH-i917)";
+                doc.LoadHtml(getHTML("http://www.bing.com/images/search?q=" + keyword, UA));
+                HtmlAgilityPack.HtmlNode linknode  = doc.DocumentNode.SelectSingleNode("//body").ChildNodes[3]
+                    .ChildNodes[2].ChildNodes[0].ChildNodes[0].ChildNodes[0].ChildNodes[0].ChildNodes[0];
+                HtmlAgilityPack.HtmlAttribute src = linknode.Attributes[3];
+
+                return src.Value;
+            }
+            catch (Exception ex) { this.Text = ex.Message; }
+
+            return @"http://upload.wikimedia.org/wikipedia/commons/5/52/Unknown.jpg";
+        }
+
+        private void CloseToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            LiveSettings.closeTray = CloseToolStripMenuItem.Checked;
+        }
+
+        private void MinimizeToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            LiveSettings.minTray = MinimizeToolStripMenuItem.Checked;
         }
     }
 }
