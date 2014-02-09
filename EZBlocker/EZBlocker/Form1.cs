@@ -178,7 +178,7 @@ namespace EZBlocker
          **/
         private bool AddToBlockList(string artist)
         {
-            if (!IsPlaying()) 
+            if (!IsPlaying() || IsInBlocklist(artist)) 
                 return false;
             m_blockList.Add(artist, 0);
             File.AppendAllText(blocklistPath, artist + "\r\n");
