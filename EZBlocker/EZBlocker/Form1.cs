@@ -197,20 +197,31 @@ namespace EZBlocker
          **/
         private void Mute(int i)
         {
-            // http://stackoverflow.com/questions/1469764/run-command-prompt-commands
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            startInfo.FileName = "cmd.exe";
-            startInfo.Arguments = "/C nircmdc muteappvolume Spotify.exe " + i.ToString();
-            process.StartInfo = startInfo;
-            process.Start();
+            if (i == 2) // Toggle mute
+            {
+                if (muted)
+                    i = 0;
+                else
+                    i = 1;
+            }
             if (i == 1)
                 muted = true;
             else if (i == 0)
                 muted = false;
             else
                 muted = !muted;
+            // http://stackoverflow.com/questions/1469764/run-command-prompt-commands
+            System.Diagnostics.Process process = new System.Diagnostics.Process();
+            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+            startInfo.FileName = "cmd.exe";
+            startInfo.Arguments = "/C nircmdc muteappvolume spotify.exe " + i.ToString();
+            process.StartInfo = startInfo;
+            process.Start();
+            // Run again for some users
+            startInfo.Arguments = "/C nircmdc muteappvolume Spotify.exe " + i.ToString();
+            process.StartInfo = startInfo;
+            process.Start();
         }
 
         /**
