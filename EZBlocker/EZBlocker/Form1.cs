@@ -237,7 +237,15 @@ namespace EZBlocker
          **/
         private bool IsAd(string artist)
         {
-            return (isAdSpotify(artist) && IsAdiTunes(artist));
+            try
+            {
+                return (isAdSpotify(artist) && IsAdiTunes(artist));
+            }
+            catch (Exception e)
+            {
+                Notify("Error occurred trying to connect to ad-detection servers.");
+                return false;
+            }
         }
 
         /**
