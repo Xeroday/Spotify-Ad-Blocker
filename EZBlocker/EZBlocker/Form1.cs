@@ -9,6 +9,7 @@ using System.Diagnostics;
 using Newtonsoft.Json;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace EZBlocker
 {
@@ -25,56 +26,64 @@ namespace EZBlocker
         private string nircmdPath = Application.StartupPath + @"\nircmdc.exe";
         private string jsonPath = Application.StartupPath + @"\Newtonsoft.Json.dll";
 
-
         [DllImport("user32.dll")]
         private static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
 
         private const int WM_APPCOMMAND = 0x319;
         private const int APPCOMMAND_VOLUME_MUTE = 0x80000;
         private const int MEDIA_PLAYPAUSE = 0xE0000;
-        
+
         private const string ua = @"Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1667.0 Safari/537.36";
+        private string EZBlockerUA = "EZBlocker " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " " + System.Environment.OSVersion;
         private const string website = @"http://www.ericzhang.me/projects/spotify-ad-blocker-ezblocker/";
         private Dictionary<string, int> m_blockList;
 
+        // Google Analytics Stuff
+        private Random rnd;
+        private long starttime, lasttime;
+        private int visitorId;
+        private int runs = 1;
+        private string domainHash = "69214020";
+        private string source = "EZBlocker";
+        private string medium = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        private string sessionNumber = "1";
+        private string campaignNumber = "1";
+        private string language = Thread.CurrentThread.CurrentCulture.Name;
+        private string screenRes = Screen.PrimaryScreen.Bounds.Width + "x" + Screen.PrimaryScreen.Bounds.Height;
+
         public Main()
         {
-            Console.WriteLine("Checking update");
-            CheckUpdate();
+            // CheckUpdate();
             if (!File.Exists(nircmdPath))
             {
-                Console.WriteLine("Writing nircmd");
                 File.WriteAllBytes(nircmdPath, EZBlocker.Properties.Resources.nircmdc);
             }
             if (!File.Exists(jsonPath))
             {
-                Console.WriteLine("Writing Json");
                 File.WriteAllBytes(jsonPath, EZBlocker.Properties.Resources.Newtonsoft_Json);
             }
             if (!File.Exists(blocklistPath))
             {
-                Console.WriteLine("Downloading blocklist");
                 WebClient w = new WebClient();
-                w.Headers.Add("user-agent", "EZBlocker " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " " + System.Environment.OSVersion);
+                w.Headers.Add("user-agent", EZBlockerUA);
                 w.DownloadFile("http://www.ericzhang.me/dl/?file=blocklist.txt", blocklistPath);
             }
-            Console.WriteLine("Initializing");
             InitializeComponent();
             try
             {
-                Console.WriteLine("Raising priority");
                 System.Diagnostics.Process.GetCurrentProcess().PriorityClass = System.Diagnostics.ProcessPriorityClass.High; // Windows throttles down when minimized to task tray, so make sure EZBlocker runs smoothly
-                Console.WriteLine("Starting Spotify");
                 Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe");
             }
             catch (Exception e)
             {
                 // Ignore
             }
-            Console.WriteLine("Unmuting");
             Mute(0); // Unmute Spotify, if muted
-            Console.WriteLine("Reading blocklist");
             ReadBlockList();
+            rnd = new Random();
+            starttime = DateTime.Now.Ticks;
+            visitorId = rnd.Next(100000000, 999999999); // Build unique visitorId for duration of use
+            LogAction("/launch");
         }
 
         /**
@@ -102,15 +111,12 @@ namespace EZBlocker
                 if (!muted)
                     Mute(1); // Mute Spotify
                 ResumeTimer.Start();
-                Console.WriteLine("Muted " + artist);
-                // Notify(artist + " is on your blocklist and has been muted.");
             }
             else // Should unmute
             {
                 if (muted)
                     Mute(0); // Unmute Spotify
                 ResumeTimer.Stop();
-                Console.WriteLine("Unmuted " + artist);
                 Notify(artist + " is not on your blocklist. Open EZBlocker to add it.");
             }
         }
@@ -319,7 +325,7 @@ namespace EZBlocker
          **/
         private void CheckUpdate()
         {
-            int latest = Convert.ToInt32(GetPage("http://www.ericzhang.me/dl/?file=EZBlocker-version.txt", "EZBlocker " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " " + System.Environment.OSVersion));
+            int latest = Convert.ToInt32(GetPage("http://www.ericzhang.me/dl/?file=EZBlocker-version.txt", EZBlockerUA));
             int current = Convert.ToInt32(Assembly.GetExecutingAssembly().GetName().Version.ToString().Replace(".", ""));
             if (latest <= current) 
                 return;
@@ -328,6 +334,38 @@ namespace EZBlocker
                 Process.Start(website);
                 Application.Exit();   
             }
+        }
+
+        private void LogAction(string pagename)
+        {
+            try
+            {
+                lasttime = DateTime.Now.Ticks;
+                string statsRequest = "http://www.google-analytics.com/__utm.gif" +
+                    "?utmwv=4.6.5" +
+                    "&utmn=" + rnd.Next(100000000, 999999999) +
+                    "&utmcs=-" +
+                    "&utmsr=" + screenRes +
+                    "&utmsc=-" +
+                    "&utmul=" + language +
+                    "&utmje=-" +
+                    "&utmfl=-" +
+                    "&utmdt=" + pagename +
+                    "&utmp=" + pagename +
+                    "&utmac=" + "UA-42480515-3" + // Account number
+                    "&utmcc=" +
+                        "__utma%3D" + domainHash + "." + visitorId + "." + starttime + "." + lasttime + "." + starttime + "." + (runs++) +
+                        "%3B%2B__utmz%3D" + domainHash + "." + lasttime + "." + sessionNumber + "." + campaignNumber + ".utmcsr%3D" + source + "%7Cutmccn%3D(" + medium + ")%7Cutmcmd%3D" + medium + "%7Cutmcct%3D%2Fd31AaOM%3B";
+                using (var client = new WebClient())
+                {
+                    client.DownloadData(statsRequest);
+                }
+            }
+            catch (Exception e)
+            {
+                // Ignore
+            }
+
         }
 
         private void NotifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -347,7 +385,6 @@ namespace EZBlocker
                 Notify("EZBlocker is hidden. Double-click this icon to restore.");
             }
         }
-
 
         private void NotifyIcon_BalloonTipClicked(object sender, EventArgs e)
         {
@@ -373,6 +410,7 @@ namespace EZBlocker
 
         private void OpenButton_Click(object sender, EventArgs e)
         {
+            LogAction("/open");
             Process.Start(blocklistPath);
         }
 
