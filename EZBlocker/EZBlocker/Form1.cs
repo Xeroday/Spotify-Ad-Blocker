@@ -38,18 +38,19 @@ namespace EZBlocker
         private const string website = @"http://www.ericzhang.me/projects/spotify-ad-blocker-ezblocker/";
         private Dictionary<string, int> m_blockList;
 
-        // Google Analytics Stuff
+        // Google Analytics stuff
         private Random rnd;
         private long starttime, lasttime;
         private int visitorId;
         private int runs = 1;
-        private string domainHash = "69214020";
-        private string source = "EZBlocker";
+        private const string domainHash = "69214020";
+        private const string source = "EZBlocker";
         private string medium = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-        private string sessionNumber = "1";
-        private string campaignNumber = "1";
+        private const string sessionNumber = "1";
+        private const string campaignNumber = "1";
         private string language = Thread.CurrentThread.CurrentCulture.Name;
         private string screenRes = Screen.PrimaryScreen.Bounds.Width + "x" + Screen.PrimaryScreen.Bounds.Height;
+        private const string trackingId = "UA-42480515-3";
 
         public Main()
         {
@@ -111,6 +112,7 @@ namespace EZBlocker
                 if (!muted)
                     Mute(1); // Mute Spotify
                 ResumeTimer.Start();
+                LogAction("/mute/" + artist);
             }
             else // Should unmute
             {
@@ -188,6 +190,7 @@ namespace EZBlocker
                 return false;
             m_blockList.Add(artist, 0);
             File.AppendAllText(blocklistPath, artist + "\r\n");
+            LogAction("/block/" + artist);
             return true;
         }
 
@@ -221,11 +224,11 @@ namespace EZBlocker
             System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
             startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
             startInfo.FileName = "cmd.exe";
-            startInfo.Arguments = "/C nircmdc muteappvolume spotify.exe " + i.ToString();
+            startInfo.Arguments = "/C nircmdc muteappvolume Spotify.exe " + i.ToString();
             process.StartInfo = startInfo;
             process.Start();
             // Run again for some users
-            startInfo.Arguments = "/C nircmdc muteappvolume Spotify.exe " + i.ToString();
+            startInfo.Arguments = "/C nircmdc muteappvolume spotify.exe " + i.ToString();
             process.StartInfo = startInfo;
             process.Start();
         }
@@ -336,6 +339,11 @@ namespace EZBlocker
             }
         }
 
+        /**
+         * Based off of: http://stackoverflow.com/questions/12851868/how-to-send-request-to-google-analytics-in-non-web-based-app
+         * 
+         * Logs actions using Google Analytics
+         **/
         private void LogAction(string pagename)
         {
             try
@@ -352,7 +360,7 @@ namespace EZBlocker
                     "&utmfl=-" +
                     "&utmdt=" + pagename +
                     "&utmp=" + pagename +
-                    "&utmac=" + "UA-42480515-3" + // Account number
+                    "&utmac=" + trackingId + // Account number
                     "&utmcc=" +
                         "__utma%3D" + domainHash + "." + visitorId + "." + starttime + "." + lasttime + "." + starttime + "." + (runs++) +
                         "%3B%2B__utmz%3D" + domainHash + "." + lasttime + "." + sessionNumber + "." + campaignNumber + ".utmcsr%3D" + source + "%7Cutmccn%3D(" + medium + ")%7Cutmcmd%3D" + medium + "%7Cutmcct%3D%2Fd31AaOM%3B";
@@ -396,32 +404,37 @@ namespace EZBlocker
         {
             AddToBlockList(GetArtist());
             lastChecked = String.Empty; // Reset last checked so we can auto mute
+            LogAction("/button/block/" + GetArtist());
         }
 
         private void AutoAddCheck_CheckedChanged(object sender, EventArgs e)
         {
             autoAdd = AutoAddCheckbox.Checked;
+            LogAction("/settings/autoAdd/" + autoAdd.ToString());
         }
 
         private void NotifyCheckbox_CheckedChanged(object sender, EventArgs e)
         {
             notify = NotifyCheckbox.Checked;
+            LogAction("/settings/notify/" + notify.ToString());
         }
 
         private void OpenButton_Click(object sender, EventArgs e)
         {
-            LogAction("/open");
             Process.Start(blocklistPath);
+            LogAction("/button/openBlocklist");
         }
 
         private void MuteButton_Click(object sender, EventArgs e)
         {
             Mute(2);
+            LogAction("/button/mute/" + muted.ToString());
         }
 
         private void WebsiteLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Process.Start(website);
+            LogAction("/button/website");
         }
 
         private void Main_Load(object sender, EventArgs e)
