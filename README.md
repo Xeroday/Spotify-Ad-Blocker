@@ -12,6 +12,10 @@ For more info, visit the [EZBlocker project page][2].
 To download a pre-compiled binary of the latest version, click [here][1].
 
 Changelog (Major releases only):
+ - V 1.3 (Feb 8, 2014):
+  - Fix muting for some users
+  - Fix crashing for adding to blocklist
+  - Added Google Analytics
  - V 1.2.2 (Jan 24, 2014):
   - More improvements on ad detection (Many less false-positives)
   - Fix not muting when minimized bug
@@ -31,8 +35,13 @@ Changelog (Major releases only):
 
 Additional Contributors:
  - [naspert][3]
+ - [andreabresolin][5]
+ - [pmorissette][4]
+ - To contribute, just send a pull a request or raise an issue. Plase follow standard open-source contributing guidelines.
 
 
   [1]: http://www.ericzhang.me/dl/?file=EZBlocker.php
   [2]: http://www.ericzhang.me/projects/spotify-ad-blocker-ezblocker/
   [3]: https://github.com/naspert
+  [4]: https://github.com/pmorissette
+  [5]: https://github.com/andreabresolin
