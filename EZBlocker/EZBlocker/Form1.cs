@@ -202,7 +202,7 @@ namespace EZBlocker
             System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
             startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
             startInfo.FileName = "cmd.exe";
-            startInfo.Arguments = "/C nircmdc muteappvolume spotify.exe " + i.ToString();
+            startInfo.Arguments = "/C nircmdc muteappvolume Spotify.exe " + i.ToString();
             process.StartInfo = startInfo;
             process.Start();
             if (i == 1)
