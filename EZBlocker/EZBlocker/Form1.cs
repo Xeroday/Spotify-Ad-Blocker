@@ -54,7 +54,7 @@ namespace EZBlocker
 
         public Main()
         {
-            // CheckUpdate();
+            CheckUpdate();
             if (!File.Exists(nircmdPath))
             {
                 File.WriteAllBytes(nircmdPath, EZBlocker.Properties.Resources.nircmdc);
@@ -219,8 +219,7 @@ namespace EZBlocker
                 muted = false;
             else
                 muted = !muted;
-            // http://stackoverflow.com/questions/1469764/run-command-prompt-commands
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
+            System.Diagnostics.Process process = new System.Diagnostics.Process(); // http://stackoverflow.com/questions/1469764/run-command-prompt-commands
             System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
             startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
             startInfo.FileName = "cmd.exe";
@@ -337,6 +336,14 @@ namespace EZBlocker
                 Process.Start(website);
                 Application.Exit();   
             }
+        }
+
+        /**
+         * Send a request every 5 minutes to Google Analytics
+         **/
+        private void Heartbeat_Tick(object sender, EventArgs e)
+        {
+            LogAction("/heartbeat");
         }
 
         /**

@@ -39,6 +39,7 @@
             this.ResumeTimer = new System.Windows.Forms.Timer(this.components);
             this.NotifyCheckbox = new System.Windows.Forms.CheckBox();
             this.WebsiteLink = new System.Windows.Forms.LinkLabel();
+            this.Heartbeat = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // BlockButton
@@ -126,6 +127,12 @@
             this.WebsiteLink.Text = "About/Info/FAQ";
             this.WebsiteLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.WebsiteLink_LinkClicked);
             // 
+            // Heartbeat
+            // 
+            this.Heartbeat.Enabled = true;
+            this.Heartbeat.Interval = 295000;
+            this.Heartbeat.Tick += new System.EventHandler(this.Heartbeat_Tick);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -162,6 +169,7 @@
         private System.Windows.Forms.Timer ResumeTimer;
         private System.Windows.Forms.CheckBox NotifyCheckbox;
         private System.Windows.Forms.LinkLabel WebsiteLink;
+        private System.Windows.Forms.Timer Heartbeat;
     }
 }
 
