@@ -83,7 +83,7 @@ namespace EZBlocker
             ReadBlockList();
             rnd = new Random();
             starttime = DateTime.Now.Ticks;
-            if (Properties.Settings.Default.UID == null || Properties.Settings.Default.UID.Length < 1)
+            if (String.IsNullOrEmpty(Properties.Settings.Default.UID))
             {
                 Properties.Settings.Default.UID = rnd.Next(100000000, 999999999).ToString(); // Build unique visitorId;
                 Properties.Settings.Default.Save();
@@ -334,6 +334,12 @@ namespace EZBlocker
          **/
         private void CheckUpdate()
         {
+            if (Properties.Settings.Default.UpdateSettings)
+            {
+                Properties.Settings.Default.Upgrade();
+                Properties.Settings.Default.UpdateSettings = false;
+                Properties.Settings.Default.Save();
+            }
             int latest = Convert.ToInt32(GetPage("http://www.ericzhang.me/dl/?file=EZBlocker-version.txt", EZBlockerUA));
             int current = Convert.ToInt32(Assembly.GetExecutingAssembly().GetName().Version.ToString().Replace(".", ""));
             if (latest <= current) 
@@ -388,6 +394,15 @@ namespace EZBlocker
                 // Ignore
             }
 
+        }
+
+        /**
+         * http://andrewensley.com/2009/06/c-detect-windows-os-part-1/
+         **/
+        int getOSArchitecture()
+        {
+            string pa = Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE");
+            return ((String.IsNullOrEmpty(pa) || String.Compare(pa, 0, "x86", 0, 3, true) == 0) ? 32 : 64);
         }
 
         private void NotifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
