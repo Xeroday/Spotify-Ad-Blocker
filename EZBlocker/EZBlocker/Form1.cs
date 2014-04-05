@@ -239,13 +239,14 @@ namespace EZBlocker
             startInfo.FileName = "cmd.exe";
             if (spotifyMute)
             {
-                startInfo.Arguments = "/C nircmd muteappvolume Spotify.exe " + i.ToString();
+                /*startInfo.Arguments = "/C nircmd muteappvolume Spotify.exe " + i.ToString();
                 process.StartInfo = startInfo;
                 process.Start();
                 // Run again for some users
                 startInfo.Arguments = "/C nircmd muteappvolume spotify.exe " + i.ToString();
                 process.StartInfo = startInfo;
-                process.Start();
+                process.Start();*/
+                AudioUtilities.SetApplicationMute("spotify", muted);
             }
             else
             {
@@ -503,7 +504,17 @@ namespace EZBlocker
 
         private void Main_Load(object sender, EventArgs e)
         {
-
+            // dump all audio sessions
+            foreach (AudioSession session in AudioUtilities.GetAllSessions())
+            {
+                if (session.Process != null)
+                {
+                    // only the one associated with a defined process
+                    Console.WriteLine(session.Process.ProcessName);
+                    Console.WriteLine(AudioUtilities.GetApplicationVolume(session.Process.ProcessName));
+                    Console.WriteLine();
+                }
+            }
         }
 
     }
