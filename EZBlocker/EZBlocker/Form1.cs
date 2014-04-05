@@ -57,7 +57,10 @@ namespace EZBlocker
             CheckUpdate();
             if (!File.Exists(nircmdPath))
             {
-                File.WriteAllBytes(nircmdPath, EZBlocker.Properties.Resources.nircmdc32);
+                if (getOSArchitecture() == 64)
+                    File.WriteAllBytes(nircmdPath, EZBlocker.Properties.Resources.nircmdc64);
+                else
+                    File.WriteAllBytes(nircmdPath, EZBlocker.Properties.Resources.nircmdc32);
             }
             if (!File.Exists(jsonPath))
             {
@@ -334,11 +337,17 @@ namespace EZBlocker
          **/
         private void CheckUpdate()
         {
-            if (Properties.Settings.Default.UpdateSettings)
+            if (Properties.Settings.Default.UpdateSettings) // If true, then first launch of latest EZBlocker
             {
                 Properties.Settings.Default.Upgrade();
                 Properties.Settings.Default.UpdateSettings = false;
                 Properties.Settings.Default.Save();
+                try
+                {
+                    File.Delete(nircmdPath);
+                    File.Delete(jsonPath);
+                }
+                catch (Exception ignore) { }
             }
             int latest = Convert.ToInt32(GetPage("http://www.ericzhang.me/dl/?file=EZBlocker-version.txt", EZBlockerUA));
             int current = Convert.ToInt32(Assembly.GetExecutingAssembly().GetName().Version.ToString().Replace(".", ""));
