@@ -40,6 +40,7 @@
             this.NotifyCheckbox = new System.Windows.Forms.CheckBox();
             this.WebsiteLink = new System.Windows.Forms.LinkLabel();
             this.Heartbeat = new System.Windows.Forms.Timer(this.components);
+            this.SpotifyMuteCheckbox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // BlockButton
@@ -115,7 +116,7 @@
             // WebsiteLink
             // 
             this.WebsiteLink.AutoSize = true;
-            this.WebsiteLink.Location = new System.Drawing.Point(9, 185);
+            this.WebsiteLink.Location = new System.Drawing.Point(9, 204);
             this.WebsiteLink.Name = "WebsiteLink";
             this.WebsiteLink.Size = new System.Drawing.Size(84, 13);
             this.WebsiteLink.TabIndex = 5;
@@ -129,11 +130,23 @@
             this.Heartbeat.Interval = 295000;
             this.Heartbeat.Tick += new System.EventHandler(this.Heartbeat_Tick);
             // 
+            // SpotifyMuteCheckbox
+            // 
+            this.SpotifyMuteCheckbox.AutoSize = true;
+            this.SpotifyMuteCheckbox.Location = new System.Drawing.Point(12, 184);
+            this.SpotifyMuteCheckbox.Name = "SpotifyMuteCheckbox";
+            this.SpotifyMuteCheckbox.Size = new System.Drawing.Size(178, 17);
+            this.SpotifyMuteCheckbox.TabIndex = 6;
+            this.SpotifyMuteCheckbox.Text = "Mute Only Spotify (Experimental)";
+            this.SpotifyMuteCheckbox.UseVisualStyleBackColor = true;
+            this.SpotifyMuteCheckbox.CheckedChanged += new System.EventHandler(this.SpotifyMuteCheckBox_CheckedChanged);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(235, 207);
+            this.ClientSize = new System.Drawing.Size(235, 226);
+            this.Controls.Add(this.SpotifyMuteCheckbox);
             this.Controls.Add(this.WebsiteLink);
             this.Controls.Add(this.NotifyCheckbox);
             this.Controls.Add(this.MuteButton);
@@ -166,6 +179,7 @@
         private System.Windows.Forms.CheckBox NotifyCheckbox;
         private System.Windows.Forms.LinkLabel WebsiteLink;
         private System.Windows.Forms.Timer Heartbeat;
+        private System.Windows.Forms.CheckBox SpotifyMuteCheckbox;
     }
 }
 

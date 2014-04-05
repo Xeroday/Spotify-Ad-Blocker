@@ -108,12 +108,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\nircmdc.exe" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="my_music.ico" />
-    <None Include="Resources\nircmdc64.exe" />
-    <None Include="Resources\nircmdc32.exe" />
+    <None Include="Resources\nircmd64.exe" />
+    <None Include="Resources\nircmd32.exe" />
     <None Include="Resources\Newtonsoft.Json.dll" />
   </ItemGroup>
   <ItemGroup>

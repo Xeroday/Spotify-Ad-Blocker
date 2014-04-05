@@ -21,9 +21,10 @@ namespace EZBlocker
         private bool autoAdd = false;
         private bool notify = false;
         private bool muted = false;
+        private bool spotifyMute = false;
 
         private string blocklistPath = Application.StartupPath + @"\blocklist.txt";
-        private string nircmdPath = Application.StartupPath + @"\nircmdc.exe";
+        private string nircmdPath = Application.StartupPath + @"\nircmd.exe";
         private string jsonPath = Application.StartupPath + @"\Newtonsoft.Json.dll";
 
         [DllImport("user32.dll")]
@@ -58,9 +59,9 @@ namespace EZBlocker
             if (!File.Exists(nircmdPath))
             {
                 if (getOSArchitecture() == 64)
-                    File.WriteAllBytes(nircmdPath, EZBlocker.Properties.Resources.nircmdc64);
+                    File.WriteAllBytes(nircmdPath, EZBlocker.Properties.Resources.nircmd64);
                 else
-                    File.WriteAllBytes(nircmdPath, EZBlocker.Properties.Resources.nircmdc32);
+                    File.WriteAllBytes(nircmdPath, EZBlocker.Properties.Resources.nircmd32);
             }
             if (!File.Exists(jsonPath))
             {
@@ -73,15 +74,17 @@ namespace EZBlocker
                 w.DownloadFile("http://www.ericzhang.me/dl/?file=blocklist.txt", blocklistPath);
             }
             InitializeComponent();
+
             try
             {
-                System.Diagnostics.Process.GetCurrentProcess().PriorityClass = System.Diagnostics.ProcessPriorityClass.High; // Windows throttles down when minimized to task tray, so make sure EZBlocker runs smoothly
                 Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe");
+                System.Diagnostics.Process.GetCurrentProcess().PriorityClass = System.Diagnostics.ProcessPriorityClass.High; // Windows throttles down when minimized to task tray, so make sure EZBlocker runs smoothly
             }
             catch (Exception e)
             {
-                // Ignore
+                Console.WriteLine(e);
             }
+
             Mute(0); // Unmute Spotify, if muted
             ReadBlockList();
             rnd = new Random();
@@ -94,6 +97,7 @@ namespace EZBlocker
             visitorId = Properties.Settings.Default.UID;
             AutoAddCheckbox.Checked = Properties.Settings.Default.AutoAdd;
             NotifyCheckbox.Checked = Properties.Settings.Default.Notifications;
+            SpotifyMuteCheckbox.Checked = Properties.Settings.Default.SpotifyMute;
             LogAction("/launch");
         }
 
@@ -233,13 +237,23 @@ namespace EZBlocker
             System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
             startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
             startInfo.FileName = "cmd.exe";
-            startInfo.Arguments = "/C nircmdc muteappvolume Spotify.exe " + i.ToString();
-            process.StartInfo = startInfo;
-            process.Start();
-            // Run again for some users
-            startInfo.Arguments = "/C nircmdc muteappvolume spotify.exe " + i.ToString();
-            process.StartInfo = startInfo;
-            process.Start();
+            if (spotifyMute)
+            {
+                startInfo.Arguments = "/C nircmd muteappvolume Spotify.exe " + i.ToString();
+                process.StartInfo = startInfo;
+                process.Start();
+                // Run again for some users
+                startInfo.Arguments = "/C nircmd muteappvolume spotify.exe " + i.ToString();
+                process.StartInfo = startInfo;
+                process.Start();
+            }
+            else
+            {
+                startInfo.Arguments = "/C nircmd mutesysvolume " + i.ToString();
+                process.StartInfo = startInfo;
+                process.Start();
+            }
+            Console.WriteLine(muted);
         }
 
         /**
@@ -458,6 +472,14 @@ namespace EZBlocker
             notify = NotifyCheckbox.Checked;
             LogAction("/settings/notify/" + notify.ToString());
             Properties.Settings.Default.Notifications = notify;
+            Properties.Settings.Default.Save();
+        }
+
+        private void SpotifyMuteCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            spotifyMute = SpotifyMuteCheckbox.Checked;
+            LogAction("/settings/spotifyMute/" + spotifyMute.ToString());
+            Properties.Settings.Default.SpotifyMute = spotifyMute;
             Properties.Settings.Default.Save();
         }
 
