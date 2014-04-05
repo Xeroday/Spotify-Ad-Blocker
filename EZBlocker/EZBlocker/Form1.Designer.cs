@@ -65,8 +65,6 @@
             // AutoAddCheckbox
             // 
             this.AutoAddCheckbox.AutoSize = true;
-            this.AutoAddCheckbox.Checked = true;
-            this.AutoAddCheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.AutoAddCheckbox.Location = new System.Drawing.Point(12, 140);
             this.AutoAddCheckbox.Name = "AutoAddCheckbox";
             this.AutoAddCheckbox.Size = new System.Drawing.Size(211, 17);
@@ -106,8 +104,6 @@
             // NotifyCheckbox
             // 
             this.NotifyCheckbox.AutoSize = true;
-            this.NotifyCheckbox.Checked = true;
-            this.NotifyCheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.NotifyCheckbox.Location = new System.Drawing.Point(12, 163);
             this.NotifyCheckbox.Name = "NotifyCheckbox";
             this.NotifyCheckbox.Size = new System.Drawing.Size(162, 17);

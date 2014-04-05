@@ -22,5 +22,41 @@ namespace EZBlocker.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string UID {
+            get {
+                return ((string)(this["UID"]));
+            }
+            set {
+                this["UID"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AutoAdd {
+            get {
+                return ((bool)(this["AutoAdd"]));
+            }
+            set {
+                this["AutoAdd"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Notifications {
+            get {
+                return ((bool)(this["Notifications"]));
+            }
+            set {
+                this["Notifications"] = value;
+            }
+        }
     }
 }

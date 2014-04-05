@@ -73,9 +73,19 @@ namespace EZBlocker.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] nircmdc {
+        internal static byte[] nircmdc32 {
             get {
-                object obj = ResourceManager.GetObject("nircmdc", resourceCulture);
+                object obj = ResourceManager.GetObject("nircmdc32", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] nircmdc64 {
+            get {
+                object obj = ResourceManager.GetObject("nircmdc64", resourceCulture);
                 return ((byte[])(obj));
             }
         }

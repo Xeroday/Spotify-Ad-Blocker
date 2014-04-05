@@ -18,8 +18,8 @@ namespace EZBlocker
     {
         private string title = string.Empty; // Title of the Spotify window
         private string lastChecked = string.Empty; // Previous artist
-        private bool autoAdd = true;
-        private bool notify = true;
+        private bool autoAdd = false;
+        private bool notify = false;
         private bool muted = false;
 
         private string blocklistPath = Application.StartupPath + @"\blocklist.txt";
@@ -36,12 +36,12 @@ namespace EZBlocker
         private const string ua = @"Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1667.0 Safari/537.36";
         private string EZBlockerUA = "EZBlocker " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " " + System.Environment.OSVersion;
         private const string website = @"http://www.ericzhang.me/projects/spotify-ad-blocker-ezblocker/";
-        private Dictionary<string, int> m_blockList;
+        Dictionary<string, int> m_blockList;
 
         // Google Analytics stuff
         private Random rnd;
         private long starttime, lasttime;
-        private int visitorId;
+        private string visitorId;
         private int runs = 1;
         private const string domainHash = "69214020";
         private const string source = "EZBlocker";
@@ -57,7 +57,7 @@ namespace EZBlocker
             CheckUpdate();
             if (!File.Exists(nircmdPath))
             {
-                File.WriteAllBytes(nircmdPath, EZBlocker.Properties.Resources.nircmdc);
+                File.WriteAllBytes(nircmdPath, EZBlocker.Properties.Resources.nircmdc32);
             }
             if (!File.Exists(jsonPath))
             {
@@ -83,7 +83,14 @@ namespace EZBlocker
             ReadBlockList();
             rnd = new Random();
             starttime = DateTime.Now.Ticks;
-            visitorId = rnd.Next(100000000, 999999999); // Build unique visitorId for duration of use
+            if (Properties.Settings.Default.UID == null || Properties.Settings.Default.UID.Length < 1)
+            {
+                Properties.Settings.Default.UID = rnd.Next(100000000, 999999999).ToString(); // Build unique visitorId;
+                Properties.Settings.Default.Save();
+            }
+            visitorId = Properties.Settings.Default.UID;
+            AutoAddCheckbox.Checked = Properties.Settings.Default.AutoAdd;
+            NotifyCheckbox.Checked = Properties.Settings.Default.Notifications;
             LogAction("/launch");
         }
 
@@ -418,12 +425,16 @@ namespace EZBlocker
         {
             autoAdd = AutoAddCheckbox.Checked;
             LogAction("/settings/autoAdd/" + autoAdd.ToString());
+            Properties.Settings.Default.AutoAdd = autoAdd;
+            Properties.Settings.Default.Save();
         }
 
         private void NotifyCheckbox_CheckedChanged(object sender, EventArgs e)
         {
             notify = NotifyCheckbox.Checked;
             LogAction("/settings/notify/" + notify.ToString());
+            Properties.Settings.Default.Notifications = notify;
+            Properties.Settings.Default.Save();
         }
 
         private void OpenButton_Click(object sender, EventArgs e)

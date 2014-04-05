@@ -112,6 +112,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="my_music.ico" />
+    <None Include="Resources\nircmdc64.exe" />
+    <None Include="Resources\nircmdc32.exe" />
     <None Include="Resources\Newtonsoft.Json.dll" />
   </ItemGroup>
   <ItemGroup>
