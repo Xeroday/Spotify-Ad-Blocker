@@ -13,7 +13,6 @@ using System.Threading;
 
 namespace EZBlocker
 {
-
     public partial class Main : Form
     {
         private string title = string.Empty; // Title of the Spotify window
@@ -37,7 +36,7 @@ namespace EZBlocker
         private const string ua = @"Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1667.0 Safari/537.36";
         private string EZBlockerUA = "EZBlocker " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " " + System.Environment.OSVersion;
         private const string website = @"http://www.ericzhang.me/projects/spotify-ad-blocker-ezblocker/";
-        Dictionary<string, int> m_blockList;
+        private Dictionary<string, int> m_blockList;
 
         // Google Analytics stuff
         private Random rnd;
@@ -74,7 +73,6 @@ namespace EZBlocker
                 w.DownloadFile("http://www.ericzhang.me/dl/?file=blocklist.txt", blocklistPath);
             }
             InitializeComponent();
-
             try
             {
                 Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe");
@@ -486,7 +484,11 @@ namespace EZBlocker
 
         private void OpenButton_Click(object sender, EventArgs e)
         {
-            Process.Start(blocklistPath);
+            // Process.Start(blocklistPath);
+            Blocklist bl = new Blocklist();
+            bl.ShowDialog();
+            ReadBlockList();
+            lastChecked = String.Empty; // Reset last checked so we can auto mute
             LogAction("/button/openBlocklist");
         }
 
@@ -504,17 +506,6 @@ namespace EZBlocker
 
         private void Main_Load(object sender, EventArgs e)
         {
-            // dump all audio sessions
-            foreach (AudioSession session in AudioUtilities.GetAllSessions())
-            {
-                if (session.Process != null)
-                {
-                    // only the one associated with a defined process
-                    Console.WriteLine(session.Process.ProcessName);
-                    Console.WriteLine(AudioUtilities.GetApplicationVolume(session.Process.ProcessName));
-                    Console.WriteLine();
-                }
-            }
         }
 
     }

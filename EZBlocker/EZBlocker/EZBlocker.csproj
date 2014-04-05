@@ -71,6 +71,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Blocklist.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Blocklist.Designer.cs">
+      <DependentUpon>Blocklist.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -83,6 +89,9 @@
     <Compile Include="SpotifyAnswer.cs" />
     <Compile Include="AudioUtilities.cs" />
     <Compile Include="Volume.cs" />
+    <EmbeddedResource Include="Blocklist.resx">
+      <DependentUpon>Blocklist.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
