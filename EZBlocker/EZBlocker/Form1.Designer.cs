@@ -105,7 +105,7 @@
             // NotifyCheckbox
             // 
             this.NotifyCheckbox.AutoSize = true;
-            this.NotifyCheckbox.Location = new System.Drawing.Point(12, 163);
+            this.NotifyCheckbox.Location = new System.Drawing.Point(12, 184);
             this.NotifyCheckbox.Name = "NotifyCheckbox";
             this.NotifyCheckbox.Size = new System.Drawing.Size(162, 17);
             this.NotifyCheckbox.TabIndex = 4;
@@ -133,7 +133,7 @@
             // SpotifyMuteCheckbox
             // 
             this.SpotifyMuteCheckbox.AutoSize = true;
-            this.SpotifyMuteCheckbox.Location = new System.Drawing.Point(12, 184);
+            this.SpotifyMuteCheckbox.Location = new System.Drawing.Point(12, 163);
             this.SpotifyMuteCheckbox.Name = "SpotifyMuteCheckbox";
             this.SpotifyMuteCheckbox.Size = new System.Drawing.Size(178, 17);
             this.SpotifyMuteCheckbox.TabIndex = 6;

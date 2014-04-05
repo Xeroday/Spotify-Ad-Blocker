@@ -237,6 +237,7 @@ namespace EZBlocker
             startInfo.FileName = "cmd.exe";
             if (spotifyMute)
             {
+                AudioUtilities.SetApplicationMute("spotify", muted);
                 /*startInfo.Arguments = "/C nircmd muteappvolume Spotify.exe " + i.ToString();
                 process.StartInfo = startInfo;
                 process.Start();
@@ -244,7 +245,6 @@ namespace EZBlocker
                 startInfo.Arguments = "/C nircmd muteappvolume spotify.exe " + i.ToString();
                 process.StartInfo = startInfo;
                 process.Start();*/
-                AudioUtilities.SetApplicationMute("spotify", muted);
             }
             else
             {
@@ -477,6 +477,7 @@ namespace EZBlocker
         private void SpotifyMuteCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             spotifyMute = SpotifyMuteCheckbox.Checked;
+            if (!spotifyMute) MessageBox.Show("You may need to restart Spotify for this to take affect", "EZBlocker");
             LogAction("/settings/spotifyMute/" + spotifyMute.ToString());
             Properties.Settings.Default.SpotifyMute = spotifyMute;
             Properties.Settings.Default.Save();
