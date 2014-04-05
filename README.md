@@ -12,6 +12,12 @@ For more info, visit the [EZBlocker project page][2].
 To download a pre-compiled binary of the latest version, click [here][1].
 
 Changelog (Major releases only):
+ - V 1.3.6 (April 5, 2014):
+  - Fix for new Spotify update (sneaky update broke most ad blockers)
+  - Settings are now auto-saved
+  - Option to mute whole computer for those w/ issues muting just Spotify
+  - Blocklist now opens in an easier to use form
+  - Better support for 64-bit systems
  - V 1.3 (Feb 8, 2014):
   - Fix muting for some users
   - Fix crashing for adding to blocklist
