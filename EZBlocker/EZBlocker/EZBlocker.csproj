@@ -120,7 +120,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="my_music.ico" />
-    <None Include="Resources\nircmd64.exe" />
     <None Include="Resources\nircmd32.exe" />
     <None Include="Resources\Newtonsoft.Json.dll" />
   </ItemGroup>

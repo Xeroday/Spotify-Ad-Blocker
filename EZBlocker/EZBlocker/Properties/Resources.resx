@@ -124,7 +124,4 @@
   <data name="nircmd32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\nircmd32.exe;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="nircmd64" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\nircmd64.exe;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
 </root>

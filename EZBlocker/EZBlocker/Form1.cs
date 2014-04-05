@@ -60,10 +60,10 @@ namespace EZBlocker
             CheckUpdate();
             if (!File.Exists(nircmdPath))
             {
-                if (getOSArchitecture() == 64)
+                /*if (getOSArchitecture() == 64)
                     File.WriteAllBytes(nircmdPath, EZBlocker.Properties.Resources.nircmd64);
-                else
-                    File.WriteAllBytes(nircmdPath, EZBlocker.Properties.Resources.nircmd32);
+                else*/
+                File.WriteAllBytes(nircmdPath, EZBlocker.Properties.Resources.nircmd32);
             }
             if (!File.Exists(jsonPath))
             {
