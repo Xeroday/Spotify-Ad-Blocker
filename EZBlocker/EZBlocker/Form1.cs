@@ -28,6 +28,9 @@ namespace EZBlocker
 
         [DllImport("user32.dll")]
         private static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
+        //public static extern int SendMessage(IntPtr hWnd, int uMsg, int wParam, string lParam);
+        [DllImport("user32.dll", EntryPoint = "FindWindowEx")]
+        public static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
 
         private const int WM_APPCOMMAND = 0x319;
         private const int APPCOMMAND_VOLUME_MUTE = 0x80000;
@@ -143,7 +146,7 @@ namespace EZBlocker
             UpdateTitle();
             if (!IsPlaying())
             {
-                SendMessage(this.Handle, WM_APPCOMMAND, this.Handle, (IntPtr)MEDIA_PLAYPAUSE); // Play again   
+                SendMessage(GetHandle(), WM_APPCOMMAND, this.Handle, (IntPtr)MEDIA_PLAYPAUSE); // Play again   
             }
         }
 
@@ -169,7 +172,7 @@ namespace EZBlocker
         {
             foreach (Process t in Process.GetProcesses().Where(t => t.ProcessName.Equals("spotify")))
             {
-                return t.Handle;
+                return FindWindowEx(t.MainWindowHandle, new IntPtr(0), "SpotifyWindow", null);
             }
             return IntPtr.Zero;
         }
