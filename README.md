@@ -5,7 +5,7 @@ EZBlocker is a Spotify Ad Blocker. It started as a program that I quickly put to
 
 It uses non-intrusive methods to read the Spotify client to extract song information. This information is then cross-checked with the iTunes and Spotify libraries to detect whether or not the song is an advertisement. When an advertisement is playing, EZBlocker will mute Spotify and automatically resume playing regular music when the ad is over.
 
-Because EZBlocker does not modify the Spotify client in any ways, it is less buggy compared to other ad blockers. The goal for EZBlocker is to be the most reliable and stable ad blocker for Spotify.
+Because EZBlocker does not modify the Spotify client in any way, it is less buggy compared to other ad blockers. The goal for EZBlocker is to be the most reliable and stable ad blocker for Spotify.
 
 For more info, visit the [EZBlocker project page][2].
 
@@ -43,7 +43,7 @@ Additional Contributors:
  - [naspert][3]
  - [andreabresolin][5]
  - [pmorissette][4]
- - To contribute, just send a pull a request or raise an issue. Plase follow standard open-source contributing guidelines.
+ - To contribute, just send a pull a request or raise an issue. Please follow standard open-source contributing guidelines.
 
 
   [1]: http://www.ericzhang.me/dl/?file=EZBlocker.php

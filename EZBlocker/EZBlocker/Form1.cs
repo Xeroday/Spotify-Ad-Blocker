@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Text;
 
 namespace EZBlocker
 {
@@ -108,6 +109,7 @@ namespace EZBlocker
         private void MainTimer_Tick(object sender, EventArgs e)
         {
             UpdateTitle();
+            Console.WriteLine(title);
             if (!IsPlaying()) 
                 return;
             string artist = GetArtist();
@@ -146,7 +148,7 @@ namespace EZBlocker
             UpdateTitle();
             if (!IsPlaying())
             {
-                SendMessage(GetHandle(), WM_APPCOMMAND, this.Handle, (IntPtr)MEDIA_PLAYPAUSE); // Play again   
+                SendMessage(GetHandle("SpotifyWindow"), WM_APPCOMMAND, this.Handle, (IntPtr)MEDIA_PLAYPAUSE); // Play again   
             }
         }
 
@@ -157,22 +159,23 @@ namespace EZBlocker
          **/
         private bool UpdateTitle()
         {
-            foreach (Process t in Process.GetProcesses().Where(t => t.ProcessName.Equals("spotify")))
+            /*foreach (Process t in Process.GetProcesses().Where(t => t.ProcessName.Equals("spotify")))
             {
                 title = t.MainWindowTitle;
                 return true;
-            }
+            }*/
+            title = WindowUtilities.GetWindowTitles(false).OrderByDescending(s => s.Length).First();
             return false;
         }
 
         /**
          * Gets the Spotify process handle
          **/
-        private IntPtr GetHandle()
+        private IntPtr GetHandle(String classname)
         {
             foreach (Process t in Process.GetProcesses().Where(t => t.ProcessName.Equals("spotify")))
             {
-                return FindWindowEx(t.MainWindowHandle, new IntPtr(0), "SpotifyWindow", null);
+                return FindWindowEx(t.MainWindowHandle, new IntPtr(0), classname, null);
             }
             return IntPtr.Zero;
         }
@@ -255,7 +258,6 @@ namespace EZBlocker
                 process.StartInfo = startInfo;
                 process.Start();
             }
-            Console.WriteLine(muted);
         }
 
         /**
@@ -511,6 +513,5 @@ namespace EZBlocker
         private void Main_Load(object sender, EventArgs e)
         {
         }
-
     }
 }

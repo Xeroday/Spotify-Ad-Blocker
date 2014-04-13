@@ -21,7 +21,7 @@ namespace EZBlocker
         {
             try
             {
-                foreach (String line in File.ReadAllLines("blocklist.txt").Distinct())
+                foreach (String line in File.ReadAllLines("blocklist.txt").Distinct().Reverse())
                 {
                     AdsList.Items.Add(line);
                 }
