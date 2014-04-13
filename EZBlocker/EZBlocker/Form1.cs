@@ -158,7 +158,14 @@ namespace EZBlocker
             UpdateTitle();
             if (!IsPlaying())
             {
-                SendMessage(GetHandle("SpotifyWindow"), WM_APPCOMMAND, this.Handle, (IntPtr)MEDIA_PLAYPAUSE); // Play again   
+                if (spotifyMute)
+                {
+                    SendMessage(GetHandle("SpotifyWindow"), WM_APPCOMMAND, this.Handle, (IntPtr)MEDIA_PLAYPAUSE); // Play again   
+                }
+                else
+                {
+                    SendMessage(this.Handle, WM_APPCOMMAND, this.Handle, (IntPtr)MEDIA_PLAYPAUSE);
+                }
             }
         }
 
@@ -191,6 +198,7 @@ namespace EZBlocker
                     return false;
                 }
                 title = results.OrderByDescending(s => s.Length).First();
+                Console.WriteLine(title);
                 return true;
             }
             catch (Exception e)
