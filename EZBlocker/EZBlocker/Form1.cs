@@ -22,6 +22,7 @@ namespace EZBlocker
         private bool notify = false;
         private bool muted = false;
         private bool spotifyMute = false;
+        private uint pid = 0;
 
         private string blocklistPath = Application.StartupPath + @"\blocklist.txt";
         private string nircmdPath = Application.StartupPath + @"\nircmd.exe";
@@ -59,6 +60,8 @@ namespace EZBlocker
         public Main()
         {
             CheckUpdate();
+            if (!HasNet35())
+                MessageBox.Show(".Net Framework 3.5 not found. EZBlocker may not work properly.", "EZBlocker");
             if (!File.Exists(nircmdPath))
             {
                 /*if (getOSArchitecture() == 64)
@@ -108,14 +111,8 @@ namespace EZBlocker
          **/
         private void MainTimer_Tick(object sender, EventArgs e)
         {
-            if (!UpdateTitle() || title.Length < 3)
-            {
-                try
-                {
-                    Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe");
-                }
-                catch (Exception ignore) { };
-            }
+            if (pid == 0) SetProcessId();
+            UpdateTitle();
             Console.WriteLine(title);
             if (!IsPlaying()) 
                 return;
@@ -166,22 +163,29 @@ namespace EZBlocker
          **/
         private bool UpdateTitle()
         {
-            List<string> titles = new List<string>();
+            /*foreach (Process t in Process.GetProcesses().Where(t => t.ProcessName.Equals("spotify")))
+            {
+                title = t.MainWindowTitle;
+                return true;
+            }
+            return false;*/
+            /*
+             List<string> titles = new List<string>();
             foreach (Process t in Process.GetProcesses().Where(t => t.ProcessName.Equals("spotify")))
             {
                 titles.Add(t.MainWindowTitle);
             }
             title = titles.OrderByDescending(s => s.Length).First();
-            return true;
-            /*try
+            return true; */
+            try
             {
-                title = WindowUtilities.GetWindowTitles(false).OrderByDescending(s => s.Length).First();
+                title = WindowUtilities.GetWindowTitles(false, pid).OrderByDescending(s => s.Length).First();
                 return true;
             }
             catch (Exception e)
             {
                 return false;
-            } */
+            } 
         }
 
         /**
@@ -194,6 +198,19 @@ namespace EZBlocker
                 return FindWindowEx(t.MainWindowHandle, new IntPtr(0), classname, null);
             }
             return IntPtr.Zero;
+        }
+
+        /**
+         * Set's Spotify's process ID
+         **/
+        private bool SetProcessId()
+        {
+            foreach (Process t in Process.GetProcesses().Where(t => t.ProcessName.Equals("spotify")))
+            {
+                pid = Convert.ToUInt32(t.Id);
+                return true;
+            }
+            return false;
         }
 
         /**
@@ -446,6 +463,20 @@ namespace EZBlocker
         {
             string pa = Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE");
             return ((String.IsNullOrEmpty(pa) || String.Compare(pa, 0, "x86", 0, 3, true) == 0) ? 32 : 64);
+        }
+
+        bool HasNet35()
+        {
+            try
+            {
+                AppDomain.CurrentDomain.Load(
+                    "System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089");
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         private void NotifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)

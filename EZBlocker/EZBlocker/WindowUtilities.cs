@@ -18,11 +18,17 @@ namespace EZBlocker
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern IntPtr SendMessageTimeout(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam, uint fuFlags, uint uTimeout, out IntPtr lpdwResult);
+        
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
         private static List<string> windowTitles = new List<string>();
 
-        public static List<string> GetWindowTitles(bool includeChildren)
+        private static uint pid;
+
+        public static List<string> GetWindowTitles(bool includeChildren, uint processId)
         {
+            pid = processId;
             EnumWindows(EnumWindowsCallback, includeChildren ? (IntPtr)1 : IntPtr.Zero);
             return windowTitles;
         }
@@ -32,7 +38,10 @@ namespace EZBlocker
             string title = GetWindowTitle(testWindowHandle);
             if (TitleMatches(title))
             {
-                windowTitles.Add(title);
+                uint pid;
+                GetWindowThreadProcessId(testWindowHandle, out pid);
+                if (pid == WindowUtilities.pid)
+                    windowTitles.Add(title);
             }
             if (includeChildren.Equals(IntPtr.Zero) == false)
             {
