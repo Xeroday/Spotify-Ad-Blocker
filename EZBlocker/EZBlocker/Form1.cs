@@ -166,11 +166,13 @@ namespace EZBlocker
          **/
         private bool UpdateTitle()
         {
+            List<string> titles = new List<string>();
             foreach (Process t in Process.GetProcesses().Where(t => t.ProcessName.Equals("spotify")))
             {
-                title = t.MainWindowTitle;
-                return true;
+                titles.Add(t.MainWindowTitle);
             }
+            title = titles.OrderByDescending(s => s.Length).First();
+            return true;
             /*try
             {
                 title = WindowUtilities.GetWindowTitles(false).OrderByDescending(s => s.Length).First();
@@ -179,9 +181,7 @@ namespace EZBlocker
             catch (Exception e)
             {
                 return false;
-            }
-             * */
-            return false;
+            } */
         }
 
         /**
