@@ -89,8 +89,6 @@ namespace EZBlocker
             {
                 Console.WriteLine(e);
             }
-
-            Mute(0); // Unmute Spotify, if muted
             ReadBlockList();
             rnd = new Random();
             starttime = DateTime.Now.Ticks;
@@ -578,6 +576,7 @@ namespace EZBlocker
 
         private void Main_Load(object sender, EventArgs e)
         {
+            Mute(0); // Unmute Spotify, if muted
         }
     }
 }
