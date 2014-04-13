@@ -28,6 +28,7 @@ namespace EZBlocker
 
         public static List<string> GetWindowTitles(bool includeChildren, uint processId)
         {
+            windowTitles.Clear();
             pid = processId;
             EnumWindows(EnumWindowsCallback, includeChildren ? (IntPtr)1 : IntPtr.Zero);
             return windowTitles;

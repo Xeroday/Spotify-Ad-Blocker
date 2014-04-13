@@ -16,7 +16,7 @@ namespace EZBlocker
 {
     public partial class Main : Form
     {
-        private string title = string.Empty; // Title of the Spotify window
+        private string title = "Unset"; // Title of the Spotify window
         private string lastChecked = string.Empty; // Previous artist
         private bool autoAdd = false;
         private bool notify = false;
@@ -111,9 +111,15 @@ namespace EZBlocker
          **/
         private void MainTimer_Tick(object sender, EventArgs e)
         {
-            if (pid == 0) SetProcessId();
-            UpdateTitle();
-            Console.WriteLine(title);
+            if ((pid == 0 && !SetProcessId()))
+            {
+                try
+                {
+                    Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe");
+                }
+                 catch (Exception ignore) { };
+            }
+            if (!UpdateTitle()) { pid = 0; }
             if (!IsPlaying()) 
                 return;
             string artist = GetArtist();
@@ -179,7 +185,12 @@ namespace EZBlocker
             return true; */
             try
             {
-                title = WindowUtilities.GetWindowTitles(false, pid).OrderByDescending(s => s.Length).First();
+                List<string> results = WindowUtilities.GetWindowTitles(false, pid);
+                if (results.Count < 1)
+                {
+                    return false;
+                }
+                title = results.OrderByDescending(s => s.Length).First();
                 return true;
             }
             catch (Exception e)
