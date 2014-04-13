@@ -79,7 +79,7 @@ namespace EZBlocker
             InitializeComponent();
             try
             {
-                Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe");
+                // Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe");
                 System.Diagnostics.Process.GetCurrentProcess().PriorityClass = System.Diagnostics.ProcessPriorityClass.High; // Windows throttles down when minimized to task tray, so make sure EZBlocker runs smoothly
             }
             catch (Exception e)
@@ -108,7 +108,14 @@ namespace EZBlocker
          **/
         private void MainTimer_Tick(object sender, EventArgs e)
         {
-            UpdateTitle();
+            if (!UpdateTitle() || title.Length < 3)
+            {
+                try
+                {
+                    Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe");
+                }
+                catch (Exception ignore) { };
+            }
             Console.WriteLine(title);
             if (!IsPlaying()) 
                 return;
@@ -159,12 +166,21 @@ namespace EZBlocker
          **/
         private bool UpdateTitle()
         {
-            /*foreach (Process t in Process.GetProcesses().Where(t => t.ProcessName.Equals("spotify")))
+            foreach (Process t in Process.GetProcesses().Where(t => t.ProcessName.Equals("spotify")))
             {
                 title = t.MainWindowTitle;
                 return true;
-            }*/
-            title = WindowUtilities.GetWindowTitles(false).OrderByDescending(s => s.Length).First();
+            }
+            /*try
+            {
+                title = WindowUtilities.GetWindowTitles(false).OrderByDescending(s => s.Length).First();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+             * */
             return false;
         }
 
