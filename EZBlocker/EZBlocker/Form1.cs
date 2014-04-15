@@ -82,7 +82,7 @@ namespace EZBlocker
             InitializeComponent();
             try
             {
-                // Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe");
+                Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe");
                 System.Diagnostics.Process.GetCurrentProcess().PriorityClass = System.Diagnostics.ProcessPriorityClass.High; // Windows throttles down when minimized to task tray, so make sure EZBlocker runs smoothly
             }
             catch (Exception e)
@@ -109,14 +109,14 @@ namespace EZBlocker
          **/
         private void MainTimer_Tick(object sender, EventArgs e)
         {
-            if ((pid == 0 && !SetProcessId()))
+            /*if ((pid == 0 && !SetProcessId()))
             {
                 try
                 {
                     Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe");
                 }
                  catch (Exception ignore) { };
-            }
+            }*/
             if (!UpdateTitle()) { pid = 0; }
             if (!IsPlaying()) 
                 return;
