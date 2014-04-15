@@ -174,12 +174,12 @@ namespace EZBlocker
          **/
         private bool UpdateTitle()
         {
-            /*foreach (Process t in Process.GetProcesses().Where(t => t.ProcessName.Equals("spotify")))
+            foreach (Process t in Process.GetProcesses().Where(t => t.ProcessName.Equals("spotify")))
             {
                 title = t.MainWindowTitle;
                 return true;
             }
-            return false;*/
+            return false;
             /*
              List<string> titles = new List<string>();
             foreach (Process t in Process.GetProcesses().Where(t => t.ProcessName.Equals("spotify")))
@@ -188,7 +188,7 @@ namespace EZBlocker
             }
             title = titles.OrderByDescending(s => s.Length).First();
             return true; */
-            try
+            /*try
             {
                 List<string> results = WindowUtilities.GetWindowTitles(false, pid);
                 if (results.Count < 1)
@@ -202,7 +202,7 @@ namespace EZBlocker
             catch (Exception e)
             {
                 return false;
-            } 
+            } */
         }
 
         /**
