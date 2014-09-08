@@ -88,8 +88,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpotifyAnswer.cs" />
-    <Compile Include="AudioUtilities.cs" />
-    <Compile Include="Volume.cs" />
     <EmbeddedResource Include="Blocklist.resx">
       <DependentUpon>Blocklist.cs</DependentUpon>
     </EmbeddedResource>

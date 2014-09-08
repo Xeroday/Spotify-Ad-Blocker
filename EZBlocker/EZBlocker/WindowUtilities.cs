@@ -8,6 +8,10 @@ namespace EZBlocker
 {
     public static class WindowUtilities
     {
+        private const int HWND_BROADCAST = 0xffff;
+        public static readonly int WM_SHOWAPP =
+            RegisterWindowMessage("WM_SHOWAPP|{0}", Program.appGuid); // register unique window message
+
         private delegate bool EnumWindowsProc(IntPtr windowHandle, IntPtr lParam);
 
         [DllImport("user32")]
@@ -19,6 +23,12 @@ namespace EZBlocker
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern IntPtr SendMessageTimeout(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam, uint fuFlags, uint uTimeout, out IntPtr lpdwResult);
         
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern bool SendNotifyMessage(IntPtr hWnd, uint Msg, UIntPtr wParam, IntPtr lParam);
+
+        [DllImport("user32")]
+        private static extern int RegisterWindowMessage(string message);
+
         [DllImport("user32.dll", SetLastError = true)]
         static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
@@ -72,5 +82,19 @@ namespace EZBlocker
             return match;
         }
 
+        private static int RegisterWindowMessage(string format, params object[] args)
+        {
+            string message = String.Format(format, args);
+            return RegisterWindowMessage(message);
+        }
+
+        public static void ShowFirstInstance()
+        {
+            SendNotifyMessage(
+                (IntPtr)HWND_BROADCAST,
+                (uint)WM_SHOWAPP,
+                UIntPtr.Zero,
+                IntPtr.Zero);
+        }
     }
 }

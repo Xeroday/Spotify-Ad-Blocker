@@ -293,14 +293,14 @@ namespace EZBlocker
             startInfo.FileName = "cmd.exe";
             if (spotifyMute)
             {
-                AudioUtilities.SetApplicationMute("spotify", muted);
-                /*startInfo.Arguments = "/C nircmd muteappvolume Spotify.exe " + i.ToString();
+                //AudioUtilities.SetApplicationMute("spotify", muted);
+                startInfo.Arguments = "/C nircmd muteappvolume Spotify.exe " + i.ToString();
                 process.StartInfo = startInfo;
                 process.Start();
                 // Run again for some users
                 startInfo.Arguments = "/C nircmd muteappvolume spotify.exe " + i.ToString();
                 process.StartInfo = startInfo;
-                process.Start();*/
+                process.Start();
             }
             else
             {
@@ -494,6 +494,26 @@ namespace EZBlocker
             {
                 return false;
             }
+        }
+
+        /**
+         * Processes window message and shows EZBlocker when attempting to launch a second instance.
+         **/
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == WindowUtilities.WM_SHOWAPP)
+            {
+                if (!this.ShowInTaskbar)
+                {
+                    this.WindowState = FormWindowState.Normal;
+                    this.ShowInTaskbar = true;
+                }
+                else
+                {
+                    this.Activate();
+                }
+            }
+            base.WndProc(ref m);
         }
 
         private void NotifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
