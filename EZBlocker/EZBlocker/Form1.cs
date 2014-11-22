@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Diagnostics;
 using Newtonsoft.Json;
+using CoreAudio;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -27,12 +28,15 @@ namespace EZBlocker
         private string blocklistPath = Application.StartupPath + @"\blocklist.txt";
         private string nircmdPath = Application.StartupPath + @"\nircmd.exe";
         private string jsonPath = Application.StartupPath + @"\Newtonsoft.Json.dll";
+        private string coreaudioPath = Application.StartupPath + @"\CoreAudio.dll";
 
         [DllImport("user32.dll")]
         private static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
         //public static extern int SendMessage(IntPtr hWnd, int uMsg, int wParam, string lParam);
         [DllImport("user32.dll", EntryPoint = "FindWindowEx")]
         public static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
+        [DllImport("user32.dll")]
+        public static extern IntPtr SendMessageW(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
 
         private const int WM_APPCOMMAND = 0x319;
         private const int APPCOMMAND_VOLUME_MUTE = 0x80000;
@@ -73,6 +77,10 @@ namespace EZBlocker
             {
                 File.WriteAllBytes(jsonPath, EZBlocker.Properties.Resources.Newtonsoft_Json);
             }
+            if (!File.Exists(coreaudioPath))
+            {
+                File.WriteAllBytes(coreaudioPath, EZBlocker.Properties.Resources.CoreAudio);
+            }
             if (!File.Exists(blocklistPath))
             {
                 WebClient w = new WebClient();
@@ -90,7 +98,7 @@ namespace EZBlocker
                 Console.WriteLine(e);
             }
             ReadBlockList();
-            rnd = new Random(Environment.TickCount); //make sure to seed the random number generator.
+            rnd = new Random(Environment.TickCount);
             starttime = DateTime.Now.Ticks;
             if (String.IsNullOrEmpty(Properties.Settings.Default.UID))
             {
@@ -101,6 +109,9 @@ namespace EZBlocker
             AutoAddCheckbox.Checked = Properties.Settings.Default.AutoAdd;
             NotifyCheckbox.Checked = Properties.Settings.Default.Notifications;
             SpotifyMuteCheckbox.Checked = Properties.Settings.Default.SpotifyMute;
+
+            Mute(0);
+
             LogAction("/launch");
         }
 
@@ -109,14 +120,6 @@ namespace EZBlocker
          **/
         private void MainTimer_Tick(object sender, EventArgs e)
         {
-            /*if ((pid == 0 && !SetProcessId()))
-            {
-                try
-                {
-                    Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe");
-                }
-                 catch (Exception ignore) { };
-            }*/
             if (!UpdateTitle()) { pid = 0; }
             if (!IsPlaying()) 
                 return;
@@ -180,29 +183,6 @@ namespace EZBlocker
                 return true;
             }
             return false;
-            /*
-             List<string> titles = new List<string>();
-            foreach (Process t in Process.GetProcesses().Where(t => t.ProcessName.Equals("spotify")))
-            {
-                titles.Add(t.MainWindowTitle);
-            }
-            title = titles.OrderByDescending(s => s.Length).First();
-            return true; */
-            /*try
-            {
-                List<string> results = WindowUtilities.GetWindowTitles(false, pid);
-                if (results.Count < 1)
-                {
-                    return false;
-                }
-                title = results.OrderByDescending(s => s.Length).First();
-                Console.WriteLine(title);
-                return true;
-            }
-            catch (Exception e)
-            {
-                return false;
-            } */
         }
 
         /**
@@ -269,7 +249,7 @@ namespace EZBlocker
 
         /**
          * Mutes/Unmutes Spotify.
-         * 
+         
          * i: 0 = unmute, 1 = mute, 2 = toggle
          **/
         private void Mute(int i)
@@ -282,23 +262,29 @@ namespace EZBlocker
             System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
             startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
             startInfo.FileName = "cmd.exe";
-            if (spotifyMute)
+            if (spotifyMute) // Mute only Spotify process
             {
                 //AudioUtilities.SetApplicationMute("spotify", muted);
-                startInfo.Arguments = "/C nircmd muteappvolume Spotify.exe " + i.ToString();
-                process.StartInfo = startInfo;
-                process.Start();
-                // Run again for some users
-                startInfo.Arguments = "/C nircmd muteappvolume spotify.exe " + i.ToString();
-                process.StartInfo = startInfo;
-                process.Start();
+                MMDeviceEnumerator DevEnum = new MMDeviceEnumerator();
+                MMDevice device = DevEnum.GetDefaultAudioEndpoint(EDataFlow.eRender, ERole.eMultimedia);
+                AudioSessionManager2 asm = device.AudioSessionManager2;
+                SessionCollection sessions = asm.Sessions;
+                for (int sid = 0; sid < sessions.Count; sid++)
+                {
+                    string id = sessions[sid].GetSessionIdentifier;
+                    if (id.ToLower().IndexOf("spotify.exe") > -1)
+                    {
+                        sessions[sid].SimpleAudioVolume.Mute = muted;
+                    }
+                }
             }
-            else
+            else // Mute all of Windows
             {
                 startInfo.Arguments = "/C nircmd mutesysvolume " + i.ToString();
                 process.StartInfo = startInfo;
                 process.Start();
             }
+
         }
 
         /**
@@ -408,14 +394,21 @@ namespace EZBlocker
                 }
                 catch { }
             }
-            int latest = Convert.ToInt32(GetPage("http://www.ericzhang.me/dl/?file=EZBlocker-version.txt", EZBlockerUA));
-            int current = Convert.ToInt32(Assembly.GetExecutingAssembly().GetName().Version.ToString().Replace(".", ""));
-            if (latest <= current) 
-                return;
-            if (MessageBox.Show("There is a newer version of EZBlocker available. Would you like to upgrade?", "EZBlocker", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            try
             {
-                Process.Start(website);
-                Application.Exit();   
+                int latest = Convert.ToInt32(GetPage("http://www.ericzhang.me/dl/?file=EZBlocker-version.txt", EZBlockerUA));
+                int current = Convert.ToInt32(Assembly.GetExecutingAssembly().GetName().Version.ToString().Replace(".", ""));
+                if (latest <= current)
+                    return;
+                if (MessageBox.Show("There is a newer version of EZBlocker available. Would you like to upgrade?", "EZBlocker", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    Process.Start(website);
+                    Application.Exit();
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Error checking for update.", "EZBlocker");
             }
         }
 
