@@ -151,5 +151,5 @@ $RECYCLE.BIN/
 .DS_Store
 
 #Private files
-EZBlocker/EZBlocker/AudioUtilities.cs
+#EZBlocker/EZBlocker/AudioUtilities.cs
 EZBlocker/EZBlocker/Volume.cs

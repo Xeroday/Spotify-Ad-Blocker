@@ -277,7 +277,7 @@ namespace EZBlocker
             if (i > 2 || i < 0) return; //filter out invalid arguments
             else if (i == 2) // Toggle mute
                 i = (muted ? 0 : 1);
-            muted = (bool)i; //Or use Convert.ToBoolean if you'd prefer.
+            muted = Convert.ToBoolean(i); //Or use Convert.ToBoolean if you'd prefer.
             System.Diagnostics.Process process = new System.Diagnostics.Process(); // http://stackoverflow.com/questions/1469764/run-command-prompt-commands
             System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
             startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
