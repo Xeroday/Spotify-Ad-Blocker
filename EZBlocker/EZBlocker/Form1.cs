@@ -42,7 +42,7 @@ namespace EZBlocker
         private const int APPCOMMAND_VOLUME_MUTE = 0x80000;
         private const int MEDIA_PLAYPAUSE = 0xE0000;
 
-        private const string ua = @"Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1667.0 Safari/537.36";
+        private const string ua = @"Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.65 Safari/537.36";
         private string EZBlockerUA = "EZBlocker " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " " + System.Environment.OSVersion;
         private const string website = @"http://www.ericzhang.me/projects/spotify-ad-blocker-ezblocker/";
         private Dictionary<string, int> m_blockList;
@@ -302,11 +302,28 @@ namespace EZBlocker
         {
             try
             {
-                return (isAdSpotify(artist) && IsAdiTunes(artist));
+                int WebHelperResult = WebHelperHook.isAd();
+                Console.WriteLine("WebHelperResult " + WebHelperResult.ToString());
+                if (WebHelperResult > -1)
+                {
+                    if (WebHelperResult == 0)
+                        return false;
+                    else
+                        return true;
+                }
+                else
+                {
+                    return (isAdSpotify(artist) && IsAdiTunes(artist));
+                }
             }
             catch (Exception e)
             {
                 Notify("Error occurred trying to connect to ad-detection servers.");
+                try // Try again
+                {
+                    return (isAdSpotify(artist) && IsAdiTunes(artist));
+                }
+                catch { }
                 return false;
             }
         }
