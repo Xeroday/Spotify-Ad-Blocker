@@ -43,6 +43,9 @@ Additional Contributors:
  - [naspert][3]
  - [andreabresolin][5]
  - [pmorissette][4]
+ - [Trafalg][6]
+ - [zoef][8]
+ - [ThrDev][7]
  - To contribute, just send a pull a request or raise an issue. Please follow standard open-source contributing guidelines.
 
 
@@ -51,3 +54,6 @@ Additional Contributors:
   [3]: https://github.com/naspert
   [4]: https://github.com/pmorissette
   [5]: https://github.com/andreabresolin
+  [6]: https://github.com/Trafalg
+  [7]: https://github.com/ThrDev
+  [8]: https://github.com/zoef
