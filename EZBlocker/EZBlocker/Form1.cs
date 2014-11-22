@@ -24,6 +24,7 @@ namespace EZBlocker
         private bool muted = false;
         private bool spotifyMute = false;
         private uint pid = 0;
+        private float volume = 0.9f;
 
         private string blocklistPath = Application.StartupPath + @"\blocklist.txt";
         private string nircmdPath = Application.StartupPath + @"\nircmd.exe";
@@ -109,8 +110,6 @@ namespace EZBlocker
             AutoAddCheckbox.Checked = Properties.Settings.Default.AutoAdd;
             NotifyCheckbox.Checked = Properties.Settings.Default.Notifications;
             SpotifyMuteCheckbox.Checked = Properties.Settings.Default.SpotifyMute;
-
-            Mute(0);
 
             LogAction("/launch");
         }
@@ -264,7 +263,8 @@ namespace EZBlocker
             startInfo.FileName = "cmd.exe";
             if (spotifyMute) // Mute only Spotify process
             {
-                //AudioUtilities.SetApplicationMute("spotify", muted);
+                // EZBlocker2.AudioUtilities.SetApplicationMute("spotify", muted);
+
                 MMDeviceEnumerator DevEnum = new MMDeviceEnumerator();
                 MMDevice device = DevEnum.GetDefaultAudioEndpoint(EDataFlow.eRender, ERole.eMultimedia);
                 AudioSessionManager2 asm = device.AudioSessionManager2;
@@ -274,7 +274,16 @@ namespace EZBlocker
                     string id = sessions[sid].GetSessionIdentifier;
                     if (id.ToLower().IndexOf("spotify.exe") > -1)
                     {
-                        sessions[sid].SimpleAudioVolume.Mute = muted;
+                        if (muted)
+                        {
+                            volume = sessions[sid].SimpleAudioVolume.MasterVolume;
+                            sessions[sid].SimpleAudioVolume.MasterVolume = 0;
+                        }
+                        else
+                        {
+                            sessions[sid].SimpleAudioVolume.MasterVolume = volume;
+                        }
+                        //sessions[sid].SimpleAudioVolume.Mute = muted;
                     }
                 }
             }

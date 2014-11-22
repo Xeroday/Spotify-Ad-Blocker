@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace EZBlocker
+namespace EZBlocker2
 {
     class AudioUtilities
     {

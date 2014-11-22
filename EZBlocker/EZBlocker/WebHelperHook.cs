@@ -66,7 +66,7 @@ namespace EZBlocker
             {
                 return;
             }
-            MessageBox.Show("It is recommended that you enable 'Allow Spotify to be started from the Web' in your Spotify preferences.", "EZBlocker");
+            // MessageBox.Show("It is recommended that you enable 'Allow Spotify to be started from the Web' in your Spotify preferences.", "EZBlocker");
             try
             {
                 Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\Data\SpotifyWebHelper.exe");
