@@ -6,6 +6,8 @@ using System.Net.Security;
 using System.Text;
 using Newtonsoft.Json;
 using System.IO;
+using System.Diagnostics;
+using System.Windows.Forms;
 
 
 namespace EZBlocker
@@ -58,8 +60,24 @@ namespace EZBlocker
             return -1;
         }
 
+        private static void CheckWebHelper()
+        {
+            foreach (Process t in Process.GetProcesses().Where(t => t.ProcessName.ToLower().Equals("spotifywebhelper"))) // Check that SpotifyWebHelper.exe is running
+            {
+                return;
+            }
+            MessageBox.Show("It is recommended that you enable 'Allow Spotify to be started from the Web' in your Spotify preferences.", "EZBlocker");
+            try
+            {
+                Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\Data\SpotifyWebHelper.exe");
+            }
+            catch { }
+
+        }
+
         private static void SetOAuth()
         {
+            CheckWebHelper();
             String url = "http://open.spotify.com/token";
             String json = GetPage(url);
             OAuth res = JsonConvert.DeserializeObject<OAuth>(json);
