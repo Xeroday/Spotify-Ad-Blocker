@@ -12,6 +12,10 @@ For more info, visit the [EZBlocker project page][2].
 To download a pre-compiled binary of the latest version, click [here][1].
 
 Changelog (Major releases only):
+ - V 1.4 (November 22, 2014):
+  - Huge improvements to ad-detection
+  - More stable muting/unmuting of Spotify process
+  - Minor bug fixes
  - V 1.3.6 (April 5, 2014):
   - Fix for new Spotify update (sneaky update broke most ad blockers)
   - Settings are now auto-saved
