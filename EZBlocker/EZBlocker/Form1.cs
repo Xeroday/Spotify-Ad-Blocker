@@ -90,7 +90,7 @@ namespace EZBlocker
                 Console.WriteLine(e);
             }
             ReadBlockList();
-            rnd = new Random();
+            rnd = new Random(Environment.TickCount); //make sure to seed the random number generator.
             starttime = DateTime.Now.Ticks;
             if (String.IsNullOrEmpty(Properties.Settings.Default.UID))
             {
@@ -274,19 +274,10 @@ namespace EZBlocker
          **/
         private void Mute(int i)
         {
-            if (i == 2) // Toggle mute
-            {
-                if (muted)
-                    i = 0;
-                else
-                    i = 1;
-            }
-            if (i == 1)
-                muted = true;
-            else if (i == 0)
-                muted = false;
-            else
-                muted = !muted;
+            if (i > 2 || i < 0) return; //filter out invalid arguments
+            else if (i == 2) // Toggle mute
+                i = (muted ? 0 : 1);
+            muted = (bool)i; //Or use Convert.ToBoolean if you'd prefer.
             System.Diagnostics.Process process = new System.Diagnostics.Process(); // http://stackoverflow.com/questions/1469764/run-command-prompt-commands
             System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
             startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
@@ -415,7 +406,7 @@ namespace EZBlocker
                     File.Delete(nircmdPath);
                     File.Delete(jsonPath);
                 }
-                catch (Exception ignore) { }
+                catch { }
             }
             int latest = Convert.ToInt32(GetPage("http://www.ericzhang.me/dl/?file=EZBlocker-version.txt", EZBlockerUA));
             int current = Convert.ToInt32(Assembly.GetExecutingAssembly().GetName().Version.ToString().Replace(".", ""));
@@ -466,11 +457,7 @@ namespace EZBlocker
                     client.DownloadData(statsRequest);
                 }
             }
-            catch (Exception e)
-            {
-                // Ignore
-            }
-
+            catch { /*ignore*/ }
         }
 
         /**
