@@ -30,49 +30,16 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
-            this.BlockButton = new System.Windows.Forms.Button();
-            this.OpenButton = new System.Windows.Forms.Button();
-            this.AutoAddCheckbox = new System.Windows.Forms.CheckBox();
             this.MainTimer = new System.Windows.Forms.Timer(this.components);
             this.MuteButton = new System.Windows.Forms.Button();
             this.NotifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
-            this.ResumeTimer = new System.Windows.Forms.Timer(this.components);
-            this.NotifyCheckbox = new System.Windows.Forms.CheckBox();
             this.WebsiteLink = new System.Windows.Forms.LinkLabel();
             this.Heartbeat = new System.Windows.Forms.Timer(this.components);
             this.SpotifyMuteCheckbox = new System.Windows.Forms.CheckBox();
+            this.VolumeMixerButton = new System.Windows.Forms.Button();
+            this.StatusNameLabel = new System.Windows.Forms.Label();
+            this.StatusLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
-            // BlockButton
-            // 
-            this.BlockButton.Location = new System.Drawing.Point(12, 12);
-            this.BlockButton.Name = "BlockButton";
-            this.BlockButton.Size = new System.Drawing.Size(212, 36);
-            this.BlockButton.TabIndex = 0;
-            this.BlockButton.Text = "Add Current to Blocklist";
-            this.BlockButton.UseVisualStyleBackColor = true;
-            this.BlockButton.Click += new System.EventHandler(this.BlockButton_Click);
-            // 
-            // OpenButton
-            // 
-            this.OpenButton.Location = new System.Drawing.Point(12, 54);
-            this.OpenButton.Name = "OpenButton";
-            this.OpenButton.Size = new System.Drawing.Size(212, 36);
-            this.OpenButton.TabIndex = 1;
-            this.OpenButton.Text = "Open Blocklist";
-            this.OpenButton.UseVisualStyleBackColor = true;
-            this.OpenButton.Click += new System.EventHandler(this.OpenButton_Click);
-            // 
-            // AutoAddCheckbox
-            // 
-            this.AutoAddCheckbox.AutoSize = true;
-            this.AutoAddCheckbox.Location = new System.Drawing.Point(12, 140);
-            this.AutoAddCheckbox.Name = "AutoAddCheckbox";
-            this.AutoAddCheckbox.Size = new System.Drawing.Size(211, 17);
-            this.AutoAddCheckbox.TabIndex = 2;
-            this.AutoAddCheckbox.Text = "AutoAdd Ads to Blocklist (Experimental)";
-            this.AutoAddCheckbox.UseVisualStyleBackColor = true;
-            this.AutoAddCheckbox.CheckedChanged += new System.EventHandler(this.AutoAddCheck_CheckedChanged);
             // 
             // MainTimer
             // 
@@ -82,12 +49,13 @@
             // 
             // MuteButton
             // 
-            this.MuteButton.Location = new System.Drawing.Point(12, 96);
+            this.MuteButton.Location = new System.Drawing.Point(12, 162);
             this.MuteButton.Name = "MuteButton";
-            this.MuteButton.Size = new System.Drawing.Size(212, 36);
+            this.MuteButton.Size = new System.Drawing.Size(59, 27);
             this.MuteButton.TabIndex = 3;
             this.MuteButton.Text = "Mute/UnMute Spotify";
             this.MuteButton.UseVisualStyleBackColor = true;
+            this.MuteButton.Visible = false;
             this.MuteButton.Click += new System.EventHandler(this.MuteButton_Click);
             // 
             // NotifyIcon
@@ -97,26 +65,10 @@
             this.NotifyIcon.BalloonTipClicked += new System.EventHandler(this.NotifyIcon_BalloonTipClicked);
             this.NotifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIcon_MouseDoubleClick);
             // 
-            // ResumeTimer
-            // 
-            this.ResumeTimer.Interval = 1000;
-            this.ResumeTimer.Tick += new System.EventHandler(this.ResumeTimer_Tick);
-            // 
-            // NotifyCheckbox
-            // 
-            this.NotifyCheckbox.AutoSize = true;
-            this.NotifyCheckbox.Location = new System.Drawing.Point(12, 184);
-            this.NotifyCheckbox.Name = "NotifyCheckbox";
-            this.NotifyCheckbox.Size = new System.Drawing.Size(162, 17);
-            this.NotifyCheckbox.TabIndex = 4;
-            this.NotifyCheckbox.Text = "Enable Taskbar Notifications";
-            this.NotifyCheckbox.UseVisualStyleBackColor = true;
-            this.NotifyCheckbox.CheckedChanged += new System.EventHandler(this.NotifyCheckbox_CheckedChanged);
-            // 
             // WebsiteLink
             // 
             this.WebsiteLink.AutoSize = true;
-            this.WebsiteLink.Location = new System.Drawing.Point(9, 204);
+            this.WebsiteLink.Location = new System.Drawing.Point(140, 68);
             this.WebsiteLink.Name = "WebsiteLink";
             this.WebsiteLink.Size = new System.Drawing.Size(84, 13);
             this.WebsiteLink.TabIndex = 5;
@@ -133,7 +85,7 @@
             // SpotifyMuteCheckbox
             // 
             this.SpotifyMuteCheckbox.AutoSize = true;
-            this.SpotifyMuteCheckbox.Location = new System.Drawing.Point(12, 163);
+            this.SpotifyMuteCheckbox.Location = new System.Drawing.Point(12, 48);
             this.SpotifyMuteCheckbox.Name = "SpotifyMuteCheckbox";
             this.SpotifyMuteCheckbox.Size = new System.Drawing.Size(178, 17);
             this.SpotifyMuteCheckbox.TabIndex = 6;
@@ -141,18 +93,47 @@
             this.SpotifyMuteCheckbox.UseVisualStyleBackColor = true;
             this.SpotifyMuteCheckbox.CheckedChanged += new System.EventHandler(this.SpotifyMuteCheckBox_CheckedChanged);
             // 
+            // VolumeMixerButton
+            // 
+            this.VolumeMixerButton.Location = new System.Drawing.Point(12, 6);
+            this.VolumeMixerButton.Name = "VolumeMixerButton";
+            this.VolumeMixerButton.Size = new System.Drawing.Size(212, 36);
+            this.VolumeMixerButton.TabIndex = 7;
+            this.VolumeMixerButton.Text = "Open Volume Mixer";
+            this.VolumeMixerButton.UseVisualStyleBackColor = true;
+            this.VolumeMixerButton.Click += new System.EventHandler(this.VolumeMixerButton_Click);
+            // 
+            // StatusNameLabel
+            // 
+            this.StatusNameLabel.AutoSize = true;
+            this.StatusNameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.StatusNameLabel.Location = new System.Drawing.Point(9, 68);
+            this.StatusNameLabel.Name = "StatusNameLabel";
+            this.StatusNameLabel.Size = new System.Drawing.Size(43, 13);
+            this.StatusNameLabel.TabIndex = 8;
+            this.StatusNameLabel.Text = "Status: ";
+            // 
+            // StatusLabel
+            // 
+            this.StatusLabel.AutoSize = true;
+            this.StatusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.StatusLabel.Location = new System.Drawing.Point(48, 68);
+            this.StatusLabel.Name = "StatusLabel";
+            this.StatusLabel.Size = new System.Drawing.Size(54, 13);
+            this.StatusLabel.TabIndex = 9;
+            this.StatusLabel.Text = "Loading...";
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(235, 226);
+            this.ClientSize = new System.Drawing.Size(230, 88);
+            this.Controls.Add(this.StatusLabel);
+            this.Controls.Add(this.StatusNameLabel);
+            this.Controls.Add(this.VolumeMixerButton);
             this.Controls.Add(this.SpotifyMuteCheckbox);
             this.Controls.Add(this.WebsiteLink);
-            this.Controls.Add(this.NotifyCheckbox);
             this.Controls.Add(this.MuteButton);
-            this.Controls.Add(this.AutoAddCheckbox);
-            this.Controls.Add(this.OpenButton);
-            this.Controls.Add(this.BlockButton);
             this.Cursor = System.Windows.Forms.Cursors.Default;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -169,17 +150,15 @@
 
         #endregion
 
-        private System.Windows.Forms.Button BlockButton;
-        private System.Windows.Forms.Button OpenButton;
-        private System.Windows.Forms.CheckBox AutoAddCheckbox;
         private System.Windows.Forms.Timer MainTimer;
         private System.Windows.Forms.Button MuteButton;
         private System.Windows.Forms.NotifyIcon NotifyIcon;
-        private System.Windows.Forms.Timer ResumeTimer;
-        private System.Windows.Forms.CheckBox NotifyCheckbox;
         private System.Windows.Forms.LinkLabel WebsiteLink;
         private System.Windows.Forms.Timer Heartbeat;
         private System.Windows.Forms.CheckBox SpotifyMuteCheckbox;
+        private System.Windows.Forms.Button VolumeMixerButton;
+        private System.Windows.Forms.Label StatusNameLabel;
+        private System.Windows.Forms.Label StatusLabel;
     }
 }
 

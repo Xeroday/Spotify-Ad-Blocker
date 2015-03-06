@@ -17,27 +17,20 @@ namespace EZBlocker
 {
     public partial class Main : Form
     {
-        private string title = "Unset"; // Title of the Spotify window
         private string lastChecked = string.Empty; // Previous artist
-        private bool autoAdd = false;
-        private bool notify = false;
         private bool muted = false;
         private bool spotifyMute = false;
-        private uint pid = 0;
         private float volume = 0.9f;
 
-        private string blocklistPath = Application.StartupPath + @"\blocklist.txt";
         private string nircmdPath = Application.StartupPath + @"\nircmd.exe";
         private string jsonPath = Application.StartupPath + @"\Newtonsoft.Json.dll";
         private string coreaudioPath = Application.StartupPath + @"\CoreAudio.dll";
 
         [DllImport("user32.dll")]
         private static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
-        //public static extern int SendMessage(IntPtr hWnd, int uMsg, int wParam, string lParam);
-        [DllImport("user32.dll", EntryPoint = "FindWindowEx")]
-        public static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
-        [DllImport("user32.dll")]
-        public static extern IntPtr SendMessageW(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+        
 
         private const int WM_APPCOMMAND = 0x319;
         private const int APPCOMMAND_VOLUME_MUTE = 0x80000;
@@ -46,7 +39,6 @@ namespace EZBlocker
         private const string ua = @"Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.65 Safari/537.36";
         private string EZBlockerUA = "EZBlocker " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " " + System.Environment.OSVersion;
         private const string website = @"http://www.ericzhang.me/projects/spotify-ad-blocker-ezblocker/";
-        private Dictionary<string, int> m_blockList;
 
         // Google Analytics stuff
         private Random rnd;
@@ -64,14 +56,10 @@ namespace EZBlocker
 
         public Main()
         {
-            CheckUpdate();
             if (!HasNet35())
                 MessageBox.Show(".Net Framework 3.5 not found. EZBlocker may not work properly.", "EZBlocker");
             if (!File.Exists(nircmdPath))
             {
-                /*if (getOSArchitecture() == 64)
-                    File.WriteAllBytes(nircmdPath, EZBlocker.Properties.Resources.nircmd64);
-                else*/
                 File.WriteAllBytes(nircmdPath, EZBlocker.Properties.Resources.nircmd32);
             }
             if (!File.Exists(jsonPath))
@@ -82,13 +70,8 @@ namespace EZBlocker
             {
                 File.WriteAllBytes(coreaudioPath, EZBlocker.Properties.Resources.CoreAudio);
             }
-            if (!File.Exists(blocklistPath))
-            {
-                WebClient w = new WebClient();
-                w.Headers.Add("user-agent", EZBlockerUA);
-                w.DownloadFile("http://www.ericzhang.me/dl/?file=blocklist.txt", blocklistPath);
-            }
             InitializeComponent();
+            CheckUpdate();
             try
             {
                 Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe");
@@ -98,7 +81,6 @@ namespace EZBlocker
             {
                 Console.WriteLine(e);
             }
-            ReadBlockList();
             rnd = new Random(Environment.TickCount);
             starttime = DateTime.Now.Ticks;
             if (String.IsNullOrEmpty(Properties.Settings.Default.UID))
@@ -107,8 +89,6 @@ namespace EZBlocker
                 Properties.Settings.Default.Save();
             }
             visitorId = Properties.Settings.Default.UID;
-            AutoAddCheckbox.Checked = Properties.Settings.Default.AutoAdd;
-            NotifyCheckbox.Checked = Properties.Settings.Default.Notifications;
             SpotifyMuteCheckbox.Checked = Properties.Settings.Default.SpotifyMute;
 
             LogAction("/launch");
@@ -119,139 +99,40 @@ namespace EZBlocker
          **/
         private void MainTimer_Tick(object sender, EventArgs e)
         {
-            Console.WriteLine(WebHelperHook.isAd());
-        }
-        /*
-        // Pre 1.0 Spotify
-        private void MainTimer_Tick(object sender, EventArgs e)
-        {
-            if (!UpdateTitle()) { pid = 0; }
-            if (!IsPlaying()) 
-                return;
-            string artist = GetArtist();
-            if (lastChecked.Equals(artist)) 
-                return;
-            lastChecked = artist;
-            if (autoAdd) // Auto add to block list
+            try
             {
-                if (!IsInBlocklist(artist) && IsAd(artist))
+                int WebHelperResult = WebHelperHook.isAd();
+                Console.WriteLine("WebHelperResult " + WebHelperResult.ToString());
+                if (WebHelperResult == 0) // Not an ad
                 {
-                    AddToBlockList(artist);
-                    Notify("Automatically added " + artist + " to your blocklist.");
+                    if (muted) Mute(0);
+                    StatusLabel.Text = "Playing music";
+                }
+                else if (WebHelperResult == 1) // Is an ad
+                {
+                    if (!muted) Mute(1); // Mute if not muted
+                    StatusLabel.Text = "Playing muted ad";
+                }
+                else if (WebHelperResult == 2) // Is an ad, paused
+                {
+                    Resume();
+                    StatusLabel.Text = "Playing muted ad";
+                }
+                else if (WebHelperResult == -1) // Spotify is paused
+                {
+                    StatusLabel.Text = "Spotify is paused";
+                } else if (WebHelperResult == -2) // Spotify is not running
+                {
+                    StatusLabel.Text = "Spotify not running";
                 }
             }
-            if (IsInBlocklist(artist)) // Should mute
+            catch (Exception except)
             {
-                if (!muted)
-                    Mute(1); // Mute Spotify
-                ResumeTimer.Start();
-                LogAction("/mute/" + artist);
-            }
-            else // Should unmute
-            {
-                if (muted)
-                    Mute(0); // Unmute Spotify
-                ResumeTimer.Stop();
-                Notify(artist + " is not on your blocklist. Open EZBlocker to add it.");
-            }
-        }*/
-
-        /**
-         * Will attempt to play ad while muted
-         **/
-        private void ResumeTimer_Tick(object sender, EventArgs e)
-        {
-            UpdateTitle();
-            if (!IsPlaying())
-            {
-                if (spotifyMute)
-                {
-                    SendMessage(GetHandle("SpotifyWindow"), WM_APPCOMMAND, this.Handle, (IntPtr)MEDIA_PLAYPAUSE); // Play again   
-                }
-                else
-                {
-                    SendMessage(this.Handle, WM_APPCOMMAND, this.Handle, (IntPtr)MEDIA_PLAYPAUSE);
-                }
+                Notify("Error occurred trying to connect to ad-detection servers.");
+                Console.WriteLine(except);
             }
         }
-
-        /**
-         * Updates the title of the Spotify window.
-         * 
-         * Returns true if title updated successfully, false if otherwise
-         **/
-        private bool UpdateTitle()
-        {
-            foreach (Process t in Process.GetProcesses().Where(t => t.ProcessName.Equals("spotify")))
-            {
-                title = t.MainWindowTitle;
-                return true;
-            }
-            return false;
-        }
-
-        /**
-         * Gets the Spotify process handle
-         **/
-        private IntPtr GetHandle(String classname)
-        {
-            foreach (Process t in Process.GetProcesses().Where(t => t.ProcessName.Equals("spotify")))
-            {
-                return FindWindowEx(t.MainWindowHandle, new IntPtr(0), classname, null);
-            }
-            return IntPtr.Zero;
-        }
-
-        /**
-         * Set's Spotify's process ID
-         **/
-        private bool SetProcessId()
-        {
-            foreach (Process t in Process.GetProcesses().Where(t => t.ProcessName.Equals("spotify")))
-            {
-                pid = Convert.ToUInt32(t.Id);
-                return true;
-            }
-            return false;
-        }
-
-        /**
-         * Determines whether or not Spotify is currently playing
-         **/
-        private bool IsPlaying()
-        {
-            return title.Contains("-");
-        }
-
-        /**
-         * Returns the current artist
-         **/
-        private string GetArtist()
-        {
-            if (!IsPlaying()) return string.Empty;
-            return title.Substring(10).Split('\u2013')[0].TrimEnd(); // Split at endash
-        }
-
-        /**
-         * Adds an artist to the blocklist.
-         * 
-         * Returns false if Spotify is not playing.
-         **/
-        private bool AddToBlockList(string artist)
-        {
-            if (!IsPlaying() || IsInBlocklist(artist)) 
-                return false;
-            m_blockList.Add(artist, 0);
-            File.AppendAllText(blocklistPath, artist + "\r\n");
-            LogAction("/block/" + artist);
-            return true;
-        }
-
-        private void ReadBlockList()
-        {
-            m_blockList = File.ReadAllLines(blocklistPath).Distinct().Select((k, v) => new { Index = k, Value = v }).ToDictionary(v => v.Index, v => v.Value);
-        }
-
+       
         /**
          * Mutes/Unmutes Spotify.
          
@@ -259,14 +140,11 @@ namespace EZBlocker
          **/
         private void Mute(int i)
         {
-            if (i > 2 || i < 0) return; //filter out invalid arguments
-            else if (i == 2) // Toggle mute
+            if (i == 2) // Toggle mute
                 i = (muted ? 0 : 1);
-            muted = Convert.ToBoolean(i); //Or use Convert.ToBoolean if you'd prefer.
-            System.Diagnostics.Process process = new System.Diagnostics.Process(); // http://stackoverflow.com/questions/1469764/run-command-prompt-commands
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            startInfo.FileName = "cmd.exe";
+
+            muted = Convert.ToBoolean(i);
+
             if (spotifyMute) // Mute only Spotify process
             {
                 // EZBlocker2.AudioUtilities.SetApplicationMute("spotify", muted);
@@ -295,6 +173,10 @@ namespace EZBlocker
             }
             else // Mute all of Windows
             {
+                System.Diagnostics.Process process = new System.Diagnostics.Process();
+                System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+                startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                startInfo.FileName = "cmd.exe";
                 startInfo.Arguments = "/C nircmd mutesysvolume " + i.ToString();
                 process.StartInfo = startInfo;
                 process.Start();
@@ -303,94 +185,30 @@ namespace EZBlocker
         }
 
         /**
-         * Checks if an artist is in the blocklist (Exact match only)
+         * Resumes playing Spotify
          **/
-        private bool IsInBlocklist(string artist)
+        private void Resume()
         {
-            return m_blockList.ContainsKey(artist);
-        }
-
-        /**
-         * Attempts to check if the current song is an ad
-         **/
-        private bool IsAd(string artist)
-        {
-            Console.WriteLine("IsAd: " + artist);
-            try
+            if (spotifyMute)
             {
-                int WebHelperResult = WebHelperHook.isAd();
-                Console.WriteLine("WebHelperResult " + WebHelperResult.ToString());
-                if (WebHelperResult > -1)
-                {
-                    if (WebHelperResult == 0)
-                        return false;
-                    else
-                        return true;
-                }
-                else
-                {
-                    return (isAdSpotify(artist) && IsAdiTunes(artist));
-                }
+                SendMessage(GetHandle(), WM_APPCOMMAND, this.Handle, (IntPtr)MEDIA_PLAYPAUSE);
             }
-            catch (Exception e)
+            else
             {
-                Notify("Error occurred trying to connect to ad-detection servers.");
-                try // Try again
-                {
-                    return (isAdSpotify(artist) && IsAdiTunes(artist));
-                }
-                catch { }
-                return false;
+                SendMessage(this.Handle, WM_APPCOMMAND, this.Handle, (IntPtr)MEDIA_PLAYPAUSE);
             }
         }
 
         /**
-         * Checks Spotify Web API to see if artist is an ad
+         * Gets the Spotify process handle
          **/
-        private bool isAdSpotify(String artist)
+        private IntPtr GetHandle()
         {
-            string url = "http://ws.spotify.com/search/1/artist.json?q=" + FormEncode(artist);
-            string json = GetPage(url, ua);
-            SpotifyAnswer res = JsonConvert.DeserializeObject<SpotifyAnswer>(json);
-            foreach (Artist a in res.artists) 
+            foreach (Process t in Process.GetProcesses().Where(t => t.ProcessName.ToLower().Contains("spotify")))
             {
-                if (SimpleCompare(artist, a.name))
-                    return false;
+                return FindWindow(null, "Spotify Free");
             }
-            return true;
-        }
-
-        /**
-         * Checks iTunes Web API to see if artist is an ad
-         **/
-        private bool IsAdiTunes(String artist)
-        {
-            String url = "http://itunes.apple.com/search?entity=musicArtist&limit=20&term=" + FormEncode(artist);
-            String json = GetPage(url, ua);
-            ITunesAnswer res = JsonConvert.DeserializeObject<ITunesAnswer>(json);
-            foreach (Result r in res.results)
-            {
-                if (SimpleCompare(artist, r.artistName))
-                    return false;
-            }
-            return true;
-        }
-
-        /**
-         * Encodes an artist name to be compatible with web api's
-         **/
-        private string FormEncode(String param)
-        {
-            return param.Replace(" ", "+").Replace("&", "");
-        }
-
-        /**
-         * Compares two strings based on lowercase alphanumeric letters and numbers only.
-         **/
-        private bool SimpleCompare(String a, String b)
-        {
-            Regex regex = new Regex("[^a-z0-9]");
-            return String.Equals(regex.Replace(a.ToLower(), ""), regex.Replace(b.ToLower(), ""));
+            return IntPtr.Zero;
         }
 
         /**
@@ -402,12 +220,6 @@ namespace EZBlocker
             w.Headers.Add("user-agent", ua);
             string s = w.DownloadString(URL);
             return s;
-        }
-
-        private void Notify(String message)
-        {
-            if (notify)
-                NotifyIcon.ShowBalloonTip(10000, "EZBlocker", message, ToolTipIcon.None);
         }
 
         /**
@@ -486,15 +298,6 @@ namespace EZBlocker
             catch { /*ignore*/ }
         }
 
-        /**
-         * http://andrewensley.com/2009/06/c-detect-windows-os-part-1/
-         **/
-        int getOSArchitecture()
-        {
-            string pa = Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE");
-            return ((String.IsNullOrEmpty(pa) || String.Compare(pa, 0, "x86", 0, 3, true) == 0) ? 32 : 64);
-        }
-
         bool HasNet35()
         {
             try
@@ -529,6 +332,11 @@ namespace EZBlocker
             base.WndProc(ref m);
         }
 
+        private void Notify(String message)
+        {
+            NotifyIcon.ShowBalloonTip(10000, "EZBlocker", message, ToolTipIcon.None);
+        }
+
         private void NotifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             if (!this.ShowInTaskbar)
@@ -536,6 +344,12 @@ namespace EZBlocker
                 this.WindowState = FormWindowState.Normal;
                 this.ShowInTaskbar = true;
             }
+        }
+
+        private void NotifyIcon_BalloonTipClicked(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Normal;
+            this.ShowInTaskbar = true;
         }
 
         private void Form_Resize(object sender, EventArgs e)
@@ -547,35 +361,6 @@ namespace EZBlocker
             }
         }
 
-        private void NotifyIcon_BalloonTipClicked(object sender, EventArgs e)
-        {
-            this.WindowState = FormWindowState.Normal;
-            this.ShowInTaskbar = true;
-        }
-
-        private void BlockButton_Click(object sender, EventArgs e)
-        {
-            AddToBlockList(GetArtist());
-            lastChecked = String.Empty; // Reset last checked so we can auto mute
-            LogAction("/button/block/" + GetArtist());
-        }
-
-        private void AutoAddCheck_CheckedChanged(object sender, EventArgs e)
-        {
-            autoAdd = AutoAddCheckbox.Checked;
-            LogAction("/settings/autoAdd/" + autoAdd.ToString());
-            Properties.Settings.Default.AutoAdd = autoAdd;
-            Properties.Settings.Default.Save();
-        }
-
-        private void NotifyCheckbox_CheckedChanged(object sender, EventArgs e)
-        {
-            notify = NotifyCheckbox.Checked;
-            LogAction("/settings/notify/" + notify.ToString());
-            Properties.Settings.Default.Notifications = notify;
-            Properties.Settings.Default.Save();
-        }
-
         private void SpotifyMuteCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             spotifyMute = SpotifyMuteCheckbox.Checked;
@@ -584,15 +369,17 @@ namespace EZBlocker
             Properties.Settings.Default.SpotifyMute = spotifyMute;
             Properties.Settings.Default.Save();
         }
-
-        private void OpenButton_Click(object sender, EventArgs e)
+        
+        private void VolumeMixerButton_Click(object sender, EventArgs e)
         {
-            // Process.Start(blocklistPath);
-            Blocklist bl = new Blocklist();
-            bl.ShowDialog();
-            ReadBlockList();
-            lastChecked = String.Empty; // Reset last checked so we can auto mute
-            LogAction("/button/openBlocklist");
+            try
+            {
+                Process.Start(Environment.GetEnvironmentVariable("WINDIR") + @"\System32\SndVol.exe");
+            }
+            catch (Exception ignore)
+            {
+                MessageBox.Show("Could not open Volume Mixer. This is only available on Windows 7/8/10", "EZBlocker");
+            }
         }
 
         private void MuteButton_Click(object sender, EventArgs e)
@@ -611,5 +398,6 @@ namespace EZBlocker
         {
             Mute(0); // Unmute Spotify, if muted
         }
+
     }
 }

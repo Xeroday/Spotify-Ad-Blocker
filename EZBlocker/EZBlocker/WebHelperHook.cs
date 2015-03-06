@@ -23,7 +23,12 @@ namespace EZBlocker
 
         /**
          * Checks if currently playing song is an ad.
-         * Returns 1 if is an ad, 2 if is an ad but paused, 0 if not an ad, -1 if error.
+         * Returns:
+         * 0 if not an ad
+         * 1 if is an ad
+         * 2 if is an ad but paused
+         * -1 if not playing
+         * -2 if Spotify is not running
          **/
         public static int isAd()
         {
@@ -35,27 +40,27 @@ namespace EZBlocker
             {
                 SetCSRF();
             }
+            
             string result = GetPage(GetURL("/remote/status.json" + "?oauth=" + oauthToken + "&csrf=" + csrfToken));
             Console.WriteLine(result);
+            
+            bool isRunning = false;
+            bool isPlaying = false;
+            bool isTrackAd = false;
+
+            // Process data
             using (StringReader reader = new StringReader(result))
             {
                 string line;
-                Boolean isPlaying = false;
                 while ((line = reader.ReadLine()) != null)
                 {
-                    if (line.Contains("\"track_type\":"))
+                    if (line.Contains("\"running\":"))
                     {
-                        if (line.Contains("\"ad\""))
-                        {
-                            if (isPlaying)
-                                return 1;
-                            else
-                                return 2;
-                        }
-                        else
-                        {
-                            return 0;
-                        }
+                        isRunning = line.Contains("true");
+                    }
+                    else if (line.Contains("\"track_type\":"))
+                    {
+                        isTrackAd = line.Contains("\"ad\"");
                     }
                     else if (line.Contains("\"playing\":"))
                     {
@@ -63,10 +68,24 @@ namespace EZBlocker
                     }
                 }
             }
-            // If we're here, there was no track_type, so error in query?
-            oauthToken = null;
-            csrfToken = null;
-            return -1;
+
+            // Ad checking logic
+            if (isTrackAd)
+            {
+                if (isPlaying)
+                    return 1;
+                else // Spotify is paused
+                    return 2;
+            }
+            if (!isPlaying)
+            {
+                return -1;
+            }
+            if (!isRunning)
+            {
+                return -2;
+            }
+            return 0;
         }
 
         private static void CheckWebHelper()
@@ -75,12 +94,14 @@ namespace EZBlocker
             {
                 return;
             }
-            // MessageBox.Show("It is recommended that you enable 'Allow Spotify to be started from the Web' in your Spotify preferences.", "EZBlocker");
             try
             {
+                Console.WriteLine("Starting SpotifyWebHelper");
                 Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\Data\SpotifyWebHelper.exe");
             }
-            catch { }
+            catch {
+                MessageBox.Show("Please check 'Allow Spotify to be started from the Web' in your Spotify preferences.", "EZBlocker");
+            }
 
         }
 
