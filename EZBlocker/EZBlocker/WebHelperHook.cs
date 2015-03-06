@@ -19,10 +19,11 @@ namespace EZBlocker
 
         private static string oauthToken;
         private static string csrfToken;
+        private static string hostname;
 
         /**
          * Checks if currently playing song is an ad.
-         * Returns 1 if is an ad, 0 if not an ad, -1 if error.
+         * Returns 1 if is an ad, 2 if is an ad but paused, 0 if not an ad, -1 if error.
          **/
         public static int isAd()
         {
@@ -39,18 +40,26 @@ namespace EZBlocker
             using (StringReader reader = new StringReader(result))
             {
                 string line;
+                Boolean isPlaying = false;
                 while ((line = reader.ReadLine()) != null)
                 {
-                    if (line.Contains("\"track_type\""))
+                    if (line.Contains("\"track_type\":"))
                     {
                         if (line.Contains("\"ad\""))
                         {
-                            return 1;
+                            if (isPlaying)
+                                return 1;
+                            else
+                                return 2;
                         }
                         else
                         {
                             return 0;
                         }
+                    }
+                    else if (line.Contains("\"playing\":"))
+                    {
+                        isPlaying = line.Contains("true");
                     }
                 }
             }
@@ -77,6 +86,7 @@ namespace EZBlocker
 
         private static void SetOAuth()
         {
+            Console.WriteLine("Getting OAuth Token");
             CheckWebHelper();
             String url = "http://open.spotify.com/token";
             String json = GetPage(url);
@@ -86,6 +96,7 @@ namespace EZBlocker
 
         private static void SetCSRF()
         {
+            Console.WriteLine("Getting CSRF Token");
             String url = GetURL("/simplecsrf/token.json");
             String json = GetPage(url);
             CSRF res = JsonConvert.DeserializeObject<CSRF>(json);
@@ -94,7 +105,11 @@ namespace EZBlocker
 
         private static string GetURL(string path)
         {
-            return "http://" + new Random(Environment.TickCount).Next(100000, 100000000).ToString() + ".spotilocal.com" + port + path;
+            if (hostname == null)
+            {
+                hostname = new Random(Environment.TickCount).Next(100000, 100000000).ToString();
+            }
+            return "http://" + hostname + ".spotilocal.com" + port + path;
         }
 
         private static string GetPage(string URL)

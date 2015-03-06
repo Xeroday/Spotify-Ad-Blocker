@@ -119,6 +119,12 @@ namespace EZBlocker
          **/
         private void MainTimer_Tick(object sender, EventArgs e)
         {
+            Console.WriteLine(WebHelperHook.isAd());
+        }
+        /*
+        // Pre 1.0 Spotify
+        private void MainTimer_Tick(object sender, EventArgs e)
+        {
             if (!UpdateTitle()) { pid = 0; }
             if (!IsPlaying()) 
                 return;
@@ -148,7 +154,7 @@ namespace EZBlocker
                 ResumeTimer.Stop();
                 Notify(artist + " is not on your blocklist. Open EZBlocker to add it.");
             }
-        }
+        }*/
 
         /**
          * Will attempt to play ad while muted
@@ -309,6 +315,7 @@ namespace EZBlocker
          **/
         private bool IsAd(string artist)
         {
+            Console.WriteLine("IsAd: " + artist);
             try
             {
                 int WebHelperResult = WebHelperHook.isAd();
