@@ -1,9 +1,9 @@
 EZBlocker
 =========
 
-EZBlocker is a Spotify Ad Blocker. It started as a program that I quickly put together with VB.NET. The latest version is written in C#.
+EZBlocker is a Spotify Ad Blocker written in C# for Windows 7/8.
 
-It uses non-intrusive methods to read the Spotify client to extract song information. This information is then cross-checked with the iTunes and Spotify libraries to detect whether or not the song is an advertisement. When an advertisement is playing, EZBlocker will mute Spotify and automatically resume playing regular music when the ad is over.
+It uses non-intrusive methods to read the Spotify client to extract song information. When an advertisement is playing, EZBlocker will mute Spotify and automatically resume playing regular music when the ad is over.
 
 Because EZBlocker does not modify the Spotify client in any way, it is less buggy compared to other ad blockers. The goal for EZBlocker is to be the most reliable and stable ad blocker for Spotify.
 
@@ -12,6 +12,11 @@ For more info, visit the [EZBlocker project page][2].
 To download a pre-compiled binary of the latest version, click [here][1].
 
 Changelog (Major releases only):
+ - V 1.5 (March 6, 2014):
+  - Support for Spotify versions 1.0 and above
+  - Support for blocking banner advertisements and muting video advertisements
+  - Adblocking is now fully automated and not dependent on any blocklists
+  - UI revamped from user feedback
  - V 1.4 (November 22, 2014):
   - Huge improvements to ad-detection
   - More stable muting/unmuting of Spotify process
