@@ -25,6 +25,7 @@ namespace EZBlocker
         private string nircmdPath = Application.StartupPath + @"\nircmd.exe";
         private string jsonPath = Application.StartupPath + @"\Newtonsoft.Json.dll";
         private string coreaudioPath = Application.StartupPath + @"\CoreAudio.dll";
+        private string logPath = Application.StartupPath + @"\EZBlocker-log.txt";
 
         private string volumeMixerPath = Environment.GetEnvironmentVariable("WINDIR") + @"\System32\SndVol.exe";
         private string hostsPath = Environment.GetEnvironmentVariable("WINDIR") + @"\System32\drivers\etc\hosts";
@@ -64,18 +65,7 @@ namespace EZBlocker
         {
             if (!HasNet35())
                 MessageBox.Show(".Net Framework 3.5 not found. EZBlocker may not work properly.", "EZBlocker");
-            if (!File.Exists(nircmdPath))
-            {
-                File.WriteAllBytes(nircmdPath, EZBlocker.Properties.Resources.nircmd32);
-            }
-            if (!File.Exists(jsonPath))
-            {
-                File.WriteAllBytes(jsonPath, EZBlocker.Properties.Resources.Newtonsoft_Json);
-            }
-            if (!File.Exists(coreaudioPath))
-            {
-                File.WriteAllBytes(coreaudioPath, EZBlocker.Properties.Resources.CoreAudio);
-            }
+
             InitializeComponent();
         }
 
@@ -138,6 +128,7 @@ namespace EZBlocker
                 StatusLabel.Text = "Connection Error";
                 WebHelperHook.CheckWebHelper();
                 Console.WriteLine(except);
+                File.WriteAllText(logPath, except.ToString());
             }
         }
        
@@ -479,6 +470,20 @@ namespace EZBlocker
                 Console.WriteLine(ex);
             }
 
+            // Extract dependencies
+            if (!File.Exists(nircmdPath))
+            {
+                File.WriteAllBytes(nircmdPath, EZBlocker.Properties.Resources.nircmd32);
+            }
+            if (!File.Exists(jsonPath))
+            {
+                File.WriteAllBytes(jsonPath, EZBlocker.Properties.Resources.Newtonsoft_Json);
+            }
+            if (!File.Exists(coreaudioPath))
+            {
+                File.WriteAllBytes(coreaudioPath, EZBlocker.Properties.Resources.CoreAudio);
+            }
+
             // Set up UI
             SpotifyMuteCheckbox.Checked = Properties.Settings.Default.SpotifyMute;
             BlockBannersCheckbox.Checked = File.ReadAllText(hostsPath).Contains("doubleclick.net");
@@ -494,6 +499,8 @@ namespace EZBlocker
             visitorId = Properties.Settings.Default.UID;
             
             Mute(0);
+
+            MainTimer.Enabled = true;
         }
     }
 }

@@ -43,7 +43,6 @@
             // 
             // MainTimer
             // 
-            this.MainTimer.Enabled = true;
             this.MainTimer.Interval = 1000;
             this.MainTimer.Tick += new System.EventHandler(this.MainTimer_Tick);
             // 
@@ -151,7 +150,6 @@
 
         #endregion
 
-        private System.Windows.Forms.Timer MainTimer;
         private System.Windows.Forms.Button MuteButton;
         private System.Windows.Forms.NotifyIcon NotifyIcon;
         private System.Windows.Forms.LinkLabel WebsiteLink;
@@ -160,6 +158,7 @@
         private System.Windows.Forms.Button VolumeMixerButton;
         private System.Windows.Forms.Label StatusLabel;
         private System.Windows.Forms.CheckBox BlockBannersCheckbox;
+        private System.Windows.Forms.Timer MainTimer;
     }
 }
 
