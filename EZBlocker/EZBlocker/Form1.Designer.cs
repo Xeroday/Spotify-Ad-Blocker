@@ -37,8 +37,8 @@
             this.Heartbeat = new System.Windows.Forms.Timer(this.components);
             this.SpotifyMuteCheckbox = new System.Windows.Forms.CheckBox();
             this.VolumeMixerButton = new System.Windows.Forms.Button();
-            this.StatusNameLabel = new System.Windows.Forms.Label();
             this.StatusLabel = new System.Windows.Forms.Label();
+            this.BlockBannersCheckbox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // MainTimer
@@ -68,7 +68,7 @@
             // WebsiteLink
             // 
             this.WebsiteLink.AutoSize = true;
-            this.WebsiteLink.Location = new System.Drawing.Point(140, 68);
+            this.WebsiteLink.Location = new System.Drawing.Point(140, 94);
             this.WebsiteLink.Name = "WebsiteLink";
             this.WebsiteLink.Size = new System.Drawing.Size(84, 13);
             this.WebsiteLink.TabIndex = 5;
@@ -87,9 +87,9 @@
             this.SpotifyMuteCheckbox.AutoSize = true;
             this.SpotifyMuteCheckbox.Location = new System.Drawing.Point(12, 48);
             this.SpotifyMuteCheckbox.Name = "SpotifyMuteCheckbox";
-            this.SpotifyMuteCheckbox.Size = new System.Drawing.Size(178, 17);
+            this.SpotifyMuteCheckbox.Size = new System.Drawing.Size(109, 17);
             this.SpotifyMuteCheckbox.TabIndex = 6;
-            this.SpotifyMuteCheckbox.Text = "Mute Only Spotify (Experimental)";
+            this.SpotifyMuteCheckbox.Text = "Mute Only Spotify";
             this.SpotifyMuteCheckbox.UseVisualStyleBackColor = true;
             this.SpotifyMuteCheckbox.CheckedChanged += new System.EventHandler(this.SpotifyMuteCheckBox_CheckedChanged);
             // 
@@ -103,33 +103,34 @@
             this.VolumeMixerButton.UseVisualStyleBackColor = true;
             this.VolumeMixerButton.Click += new System.EventHandler(this.VolumeMixerButton_Click);
             // 
-            // StatusNameLabel
-            // 
-            this.StatusNameLabel.AutoSize = true;
-            this.StatusNameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.StatusNameLabel.Location = new System.Drawing.Point(9, 68);
-            this.StatusNameLabel.Name = "StatusNameLabel";
-            this.StatusNameLabel.Size = new System.Drawing.Size(43, 13);
-            this.StatusNameLabel.TabIndex = 8;
-            this.StatusNameLabel.Text = "Status: ";
-            // 
             // StatusLabel
             // 
             this.StatusLabel.AutoSize = true;
             this.StatusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.StatusLabel.Location = new System.Drawing.Point(48, 68);
+            this.StatusLabel.Location = new System.Drawing.Point(9, 94);
             this.StatusLabel.Name = "StatusLabel";
             this.StatusLabel.Size = new System.Drawing.Size(54, 13);
             this.StatusLabel.TabIndex = 9;
             this.StatusLabel.Text = "Loading...";
             // 
+            // BlockBannersCheckbox
+            // 
+            this.BlockBannersCheckbox.AutoSize = true;
+            this.BlockBannersCheckbox.Location = new System.Drawing.Point(12, 71);
+            this.BlockBannersCheckbox.Name = "BlockBannersCheckbox";
+            this.BlockBannersCheckbox.Size = new System.Drawing.Size(111, 17);
+            this.BlockBannersCheckbox.TabIndex = 10;
+            this.BlockBannersCheckbox.Text = "Block Banner Ads";
+            this.BlockBannersCheckbox.UseVisualStyleBackColor = true;
+            this.BlockBannersCheckbox.CheckedChanged += new System.EventHandler(this.SkipAdsCheckbox_CheckedChanged);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(230, 88);
+            this.ClientSize = new System.Drawing.Size(230, 113);
+            this.Controls.Add(this.BlockBannersCheckbox);
             this.Controls.Add(this.StatusLabel);
-            this.Controls.Add(this.StatusNameLabel);
             this.Controls.Add(this.VolumeMixerButton);
             this.Controls.Add(this.SpotifyMuteCheckbox);
             this.Controls.Add(this.WebsiteLink);
@@ -157,8 +158,8 @@
         private System.Windows.Forms.Timer Heartbeat;
         private System.Windows.Forms.CheckBox SpotifyMuteCheckbox;
         private System.Windows.Forms.Button VolumeMixerButton;
-        private System.Windows.Forms.Label StatusNameLabel;
         private System.Windows.Forms.Label StatusLabel;
+        private System.Windows.Forms.CheckBox BlockBannersCheckbox;
     }
 }
 

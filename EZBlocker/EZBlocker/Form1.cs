@@ -17,26 +17,32 @@ namespace EZBlocker
 {
     public partial class Main : Form
     {
-        private string lastChecked = string.Empty; // Previous artist
         private bool muted = false;
         private bool spotifyMute = false;
         private float volume = 0.9f;
+        private string lastArtistName = "N/A";
 
         private string nircmdPath = Application.StartupPath + @"\nircmd.exe";
         private string jsonPath = Application.StartupPath + @"\Newtonsoft.Json.dll";
         private string coreaudioPath = Application.StartupPath + @"\CoreAudio.dll";
 
+        private string volumeMixerPath = Environment.GetEnvironmentVariable("WINDIR") + @"\System32\SndVol.exe";
+        private string hostsPath = Environment.GetEnvironmentVariable("WINDIR") + @"\System32\drivers\etc\hosts";
+
         [DllImport("user32.dll")]
         private static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-        
+        [DllImport("shell32.dll")]
+        public static extern bool IsUserAnAdmin();
 
+        // https://msdn.microsoft.com/en-us/library/windows/desktop/ms646275%28v=vs.85%29.aspx
         private const int WM_APPCOMMAND = 0x319;
         private const int APPCOMMAND_VOLUME_MUTE = 0x80000;
         private const int MEDIA_PLAYPAUSE = 0xE0000;
+        private const int MEDIA_NEXTTRACK = 0xB0000;
 
-        private const string ua = @"Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.65 Safari/537.36";
+        private const string ua = @"Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.111 Safari/537.36";
         private string EZBlockerUA = "EZBlocker " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " " + System.Environment.OSVersion;
         private const string website = @"http://www.ericzhang.me/projects/spotify-ad-blocker-ezblocker/";
 
@@ -71,27 +77,6 @@ namespace EZBlocker
                 File.WriteAllBytes(coreaudioPath, EZBlocker.Properties.Resources.CoreAudio);
             }
             InitializeComponent();
-            CheckUpdate();
-            try
-            {
-                Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe");
-                System.Diagnostics.Process.GetCurrentProcess().PriorityClass = System.Diagnostics.ProcessPriorityClass.High; // Windows throttles down when minimized to task tray, so make sure EZBlocker runs smoothly
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-            rnd = new Random(Environment.TickCount);
-            starttime = DateTime.Now.Ticks;
-            if (String.IsNullOrEmpty(Properties.Settings.Default.UID))
-            {
-                Properties.Settings.Default.UID = rnd.Next(100000000, 999999999).ToString(); // Build unique visitorId;
-                Properties.Settings.Default.Save();
-            }
-            visitorId = Properties.Settings.Default.UID;
-            SpotifyMuteCheckbox.Checked = Properties.Settings.Default.SpotifyMute;
-
-            LogAction("/launch");
         }
 
         /**
@@ -101,34 +86,57 @@ namespace EZBlocker
         {
             try
             {
-                int WebHelperResult = WebHelperHook.isAd();
-                Console.WriteLine("WebHelperResult " + WebHelperResult.ToString());
-                if (WebHelperResult == 0) // Not an ad
+                WebHelperResult whr = WebHelperHook.GetStatus();
+                Console.WriteLine(whr.isAd);
+
+                if (whr.isAd) // Track is ad
                 {
-                    if (muted) Mute(0);
-                    StatusLabel.Text = "Playing music";
-                }
-                else if (WebHelperResult == 1) // Is an ad
+                    if (whr.isPlaying)
+                    {
+                        if (lastArtistName != whr.artistName)
+                        {
+                            if (!muted) Mute(1);
+                            StatusLabel.Text = "Muting ad: " + ShortenName(whr.artistName);
+                            lastArtistName = whr.artistName;
+                            LogAction("/mute/" + whr.artistName);
+                            Console.WriteLine("Blocked " + whr.artistName);
+                        }
+                    }
+                    else // Ad is paused
+                    {
+                        Resume();
+                        StatusLabel.Text = "Muting: " + ShortenName(whr.artistName);
+                    }
+                } 
+                /*else if (whr.length - whr.position < 1.5) // Song is within last 1.5 seconds
                 {
-                    if (!muted) Mute(1); // Mute if not muted
-                    StatusLabel.Text = "Playing muted ad";
-                }
-                else if (WebHelperResult == 2) // Is an ad, paused
+                    if (skipAds)
+                        NextTrack();
+                }*/
+                else if (!whr.isRunning)
                 {
-                    Resume();
-                    StatusLabel.Text = "Playing muted ad";
+                    StatusLabel.Text = "Spotify is not running";
+                    lastArtistName = "N/A";
                 }
-                else if (WebHelperResult == -1) // Spotify is paused
+                else if (!whr.isPlaying)
                 {
                     StatusLabel.Text = "Spotify is paused";
-                } else if (WebHelperResult == -2) // Spotify is not running
+                    lastArtistName = "N/A";
+                }
+                else // Song is playing
                 {
-                    StatusLabel.Text = "Spotify not running";
+                    if (muted) Mute(0);
+                    if (lastArtistName != whr.artistName)
+                    {
+                        StatusLabel.Text = "Playing: " + ShortenName(whr.artistName);
+                        lastArtistName = whr.artistName;
+                    }
                 }
             }
             catch (Exception except)
             {
-                Notify("Error occurred trying to connect to ad-detection servers.");
+                StatusLabel.Text = "Connection Error";
+                WebHelperHook.CheckWebHelper();
                 Console.WriteLine(except);
             }
         }
@@ -189,6 +197,7 @@ namespace EZBlocker
          **/
         private void Resume()
         {
+            Console.WriteLine("Resuming Spotify");
             if (spotifyMute)
             {
                 SendMessage(GetHandle(), WM_APPCOMMAND, this.Handle, (IntPtr)MEDIA_PLAYPAUSE);
@@ -196,6 +205,22 @@ namespace EZBlocker
             else
             {
                 SendMessage(this.Handle, WM_APPCOMMAND, this.Handle, (IntPtr)MEDIA_PLAYPAUSE);
+            }
+        }
+
+        /**
+         *  Plays next track queued on Spotify
+         **/
+        private void NextTrack()
+        {
+            Console.WriteLine("Skipping to next track");
+            if (spotifyMute)
+            {
+                SendMessage(GetHandle(), WM_APPCOMMAND, this.Handle, (IntPtr)MEDIA_NEXTTRACK);
+            }
+            else
+            {
+                SendMessage(this.Handle, WM_APPCOMMAND, this.Handle, (IntPtr)MEDIA_NEXTTRACK);
             }
         }
 
@@ -220,6 +245,15 @@ namespace EZBlocker
             w.Headers.Add("user-agent", ua);
             string s = w.DownloadString(URL);
             return s;
+        }
+
+        private string ShortenName(string name)
+        {
+            if (name.Length > 12)
+            {
+                return name.Substring(0, 12) + "...";
+            }
+            return name;
         }
 
         /**
@@ -364,17 +398,51 @@ namespace EZBlocker
         private void SpotifyMuteCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             spotifyMute = SpotifyMuteCheckbox.Checked;
-            if (!spotifyMute) MessageBox.Show("You may need to restart Spotify for this to take affect", "EZBlocker");
+            if (visitorId == null) return; // Still setting up UI
+            if (!spotifyMute) MessageBox.Show("You may need to restart Spotify for this to take effect.", "EZBlocker", MessageBoxButtons.OK, MessageBoxIcon.Information);
             LogAction("/settings/spotifyMute/" + spotifyMute.ToString());
             Properties.Settings.Default.SpotifyMute = spotifyMute;
             Properties.Settings.Default.Save();
+        }
+
+        private void SkipAdsCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (visitorId == null) return; // Still setting up UI
+            if (!IsUserAnAdmin())
+            {
+                MessageBox.Show("Enabling/Disabling this option requires Administrator privilages.\n\nPlease reopen EZBlocker with \"Run as Administrator\".", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            try
+            {
+                if (BlockBannersCheckbox.Checked)
+                {
+                    using (StreamWriter sw = File.AppendText(hostsPath))
+                    {
+                        sw.WriteLine("0.0.0.0 pubads.g.doubleclick.net");
+                        sw.WriteLine("0.0.0.0 securepubads.g.doubleclick.net");
+                    }
+                }
+                else
+                {
+                    string[] text = File.ReadAllLines(hostsPath);
+                    text = text.Where(line => !line.Contains("doubleclick.net")).ToArray();
+                    File.WriteAllLines(hostsPath, text);
+                }
+                MessageBox.Show("You may need to restart Spotify or your computer for this setting to take effect.", "EZBlocker", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LogAction("/settings/blockBanners/" + BlockBannersCheckbox.Checked.ToString());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
         }
         
         private void VolumeMixerButton_Click(object sender, EventArgs e)
         {
             try
             {
-                Process.Start(Environment.GetEnvironmentVariable("WINDIR") + @"\System32\SndVol.exe");
+                Process.Start(volumeMixerPath);
             }
             catch (Exception ignore)
             {
@@ -396,8 +464,36 @@ namespace EZBlocker
 
         private void Main_Load(object sender, EventArgs e)
         {
-            Mute(0); // Unmute Spotify, if muted
-        }
+            LogAction("/launch");
+            
+            CheckUpdate();
+            
+            // Start Spotify and give EZBlocker higher priority
+            try
+            {
+                Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe");
+                System.Diagnostics.Process.GetCurrentProcess().PriorityClass = System.Diagnostics.ProcessPriorityClass.High; // Windows throttles down when minimized to task tray, so make sure EZBlocker runs smoothly
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
 
+            // Set up UI
+            SpotifyMuteCheckbox.Checked = Properties.Settings.Default.SpotifyMute;
+            BlockBannersCheckbox.Checked = File.ReadAllText(hostsPath).Contains("doubleclick.net");
+            
+            // Google Analytics
+            rnd = new Random(Environment.TickCount);
+            starttime = DateTime.Now.Ticks;
+            if (String.IsNullOrEmpty(Properties.Settings.Default.UID))
+            {
+                Properties.Settings.Default.UID = rnd.Next(100000000, 999999999).ToString(); // Build unique visitorId;
+                Properties.Settings.Default.Save();
+            }
+            visitorId = Properties.Settings.Default.UID;
+            
+            Mute(0);
+        }
     }
 }

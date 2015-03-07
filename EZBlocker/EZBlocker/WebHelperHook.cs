@@ -9,12 +9,11 @@ using System.IO;
 using System.Diagnostics;
 using System.Windows.Forms;
 
-
 namespace EZBlocker
 {
     class WebHelperHook
     {
-        private const string ua = @"Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.65 Safari/537.36";
+        private const string ua = @"Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.111 Safari/537.36";
         private const string port = ":4380";
 
         private static string oauthToken;
@@ -22,15 +21,9 @@ namespace EZBlocker
         private static string hostname;
 
         /**
-         * Checks if currently playing song is an ad.
-         * Returns:
-         * 0 if not an ad
-         * 1 if is an ad
-         * 2 if is an ad but paused
-         * -1 if not playing
-         * -2 if Spotify is not running
+         * Grabs the status of Spotify and returns a WebHelperResult object.
          **/
-        public static int isAd()
+        public static WebHelperResult GetStatus()
         {
             if (oauthToken == null || oauthToken == "null")
             {
@@ -40,13 +33,11 @@ namespace EZBlocker
             {
                 SetCSRF();
             }
-            
+
             string result = GetPage(GetURL("/remote/status.json" + "?oauth=" + oauthToken + "&csrf=" + csrfToken));
-            Console.WriteLine(result);
-            
-            bool isRunning = false;
-            bool isPlaying = false;
-            bool isTrackAd = false;
+            //Console.WriteLine(result);
+
+            WebHelperResult whr = new WebHelperResult();
 
             // Process data
             using (StringReader reader = new StringReader(result))
@@ -56,39 +47,44 @@ namespace EZBlocker
                 {
                     if (line.Contains("\"running\":"))
                     {
-                        isRunning = line.Contains("true");
+                        whr.isRunning = line.Contains("true");
                     }
-                    else if (line.Contains("\"track_type\":"))
+                    // else if (line.Contains("\"track_type\":"))
+                    else if (line.Contains("\"prev_enabled\":"))
                     {
-                        isTrackAd = line.Contains("\"ad\"");
+                        whr.isAd = line.Contains("false");
                     }
                     else if (line.Contains("\"playing\":"))
                     {
-                        isPlaying = line.Contains("true");
+                        whr.isPlaying = line.Contains("true");
+                    }
+                    /*else if (line.Contains("\"playing_position\":"))
+                    {
+                        if (!line.Contains("0,")) // Song isn't at 0 position
+                            whr.position = Convert.ToSingle(line.Split(new char[] { ':', ',' })[1]);
+                    }
+                    else if (line.Contains("\"length\":"))
+                    {
+                        whr.length = Convert.ToInt32(line.Split(new char[] { ':', ',' })[1]);
+                    }*/
+                    else if (line.Contains("\"artist_resource\":"))
+                    {
+                        while ((line = reader.ReadLine()) != null) // Read until we find the "name" field
+                        {
+                            if (line.Contains("\"name\":"))
+                            {
+                                whr.artistName = (line.Replace("\"name\":", "").Split('"')[1]);
+                                break;
+                            }
+                        }
                     }
                 }
             }
 
-            // Ad checking logic
-            if (isTrackAd)
-            {
-                if (isPlaying)
-                    return 1;
-                else // Spotify is paused
-                    return 2;
-            }
-            if (!isPlaying)
-            {
-                return -1;
-            }
-            if (!isRunning)
-            {
-                return -2;
-            }
-            return 0;
+            return whr;
         }
 
-        private static void CheckWebHelper()
+        public static void CheckWebHelper()
         {
             foreach (Process t in Process.GetProcesses().Where(t => t.ProcessName.ToLower().Equals("spotifywebhelper"))) // Check that SpotifyWebHelper.exe is running
             {
@@ -97,7 +93,14 @@ namespace EZBlocker
             try
             {
                 Console.WriteLine("Starting SpotifyWebHelper");
-                Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\Data\SpotifyWebHelper.exe");
+                if (File.Exists(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\Data\SpotifyWebHelper.exe"))
+                {
+                    Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\Data\SpotifyWebHelper.exe");
+                }
+                else
+                {
+                    Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\SpotifyWebHelper.exe");
+                }
             }
             catch {
                 MessageBox.Show("Please check 'Allow Spotify to be started from the Web' in your Spotify preferences.", "EZBlocker");
@@ -139,8 +142,33 @@ namespace EZBlocker
             w.Headers.Add("user-agent", ua);
             w.Headers.Add("Origin", "https://open.spotify.com");
             ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
-            string s = w.DownloadString(URL);
-            return s;
+            byte[] bytes = Encoding.Default.GetBytes(w.DownloadString(URL));
+            return Encoding.UTF8.GetString(bytes);
+        }
+
+        private static string RemoveDiacritics(string value)
+        {
+            if (String.IsNullOrEmpty(value))
+                return value;
+
+            string normalized = value.Normalize(NormalizationForm.FormD);
+            StringBuilder sb = new StringBuilder();
+
+            foreach (char c in normalized)
+            {
+                if (System.Globalization.CharUnicodeInfo.GetUnicodeCategory(c) != System.Globalization.UnicodeCategory.NonSpacingMark)
+                    sb.Append(c);
+            }
+
+            Encoding nonunicode = Encoding.GetEncoding(850);
+            Encoding unicode = Encoding.Unicode;
+
+            byte[] nonunicodeBytes = Encoding.Convert(unicode, nonunicode, unicode.GetBytes(sb.ToString()));
+            char[] nonunicodeChars = new char[nonunicode.GetCharCount(nonunicodeBytes, 0, nonunicodeBytes.Length)];
+            nonunicode.GetChars(nonunicodeBytes, 0, nonunicodeBytes.Length, nonunicodeChars, 0);
+
+            return new string(nonunicodeChars);
         }
     }
+
 }
