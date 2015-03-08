@@ -35,7 +35,7 @@ namespace EZBlocker
             }
 
             string result = GetPage(GetURL("/remote/status.json" + "?oauth=" + oauthToken + "&csrf=" + csrfToken));
-            //Console.WriteLine(result);
+            Console.WriteLine(result);
 
             WebHelperResult whr = new WebHelperResult();
 
@@ -77,6 +77,10 @@ namespace EZBlocker
                                 break;
                             }
                         }
+                    }
+                    else if (line.Contains("Invalid Csrf token"))
+                    {
+                        csrfToken = null;
                     }
                 }
             }

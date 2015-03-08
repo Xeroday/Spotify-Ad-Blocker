@@ -27,6 +27,7 @@ namespace EZBlocker
         private string coreaudioPath = Application.StartupPath + @"\CoreAudio.dll";
         private string logPath = Application.StartupPath + @"\EZBlocker-log.txt";
 
+        private string spotifyPath = Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe";
         private string volumeMixerPath = Environment.GetEnvironmentVariable("WINDIR") + @"\System32\SndVol.exe";
         private string hostsPath = Environment.GetEnvironmentVariable("WINDIR") + @"\System32\drivers\etc\hosts";
 
@@ -77,7 +78,7 @@ namespace EZBlocker
             try
             {
                 WebHelperResult whr = WebHelperHook.GetStatus();
-                Console.WriteLine(whr.isAd);
+                //Console.WriteLine(whr.isAd);
 
                 if (whr.isAd) // Track is ad
                 {
@@ -462,7 +463,21 @@ namespace EZBlocker
             // Start Spotify and give EZBlocker higher priority
             try
             {
-                Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe");
+                if (File.Exists(spotifyPath))
+                {
+                    if (!FileVersionInfo.GetVersionInfo(spotifyPath).FileVersion.StartsWith("1."))
+                    {
+                        if (MessageBox.Show("You are using Spotify " + FileVersionInfo.GetVersionInfo(spotifyPath).FileVersion + ".\n\nPlease download EZBlocker v1.4.0.1 or upgrade to the newest Spotify to use EZBlocker v1.5.\n\nClick OK to continue to the EZBlocker website.", "EZBlocker", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                        {
+                            Process.Start(website);
+                            Application.Exit();
+                        }
+                    }
+                    else
+                    {
+                        Process.Start(spotifyPath);
+                    }
+                }
                 System.Diagnostics.Process.GetCurrentProcess().PriorityClass = System.Diagnostics.ProcessPriorityClass.High; // Windows throttles down when minimized to task tray, so make sure EZBlocker runs smoothly
             }
             catch (Exception ex)
