@@ -50,7 +50,7 @@ namespace EZBlocker
                         whr.isRunning = line.Contains("true");
                     }
                     // else if (line.Contains("\"track_type\":"))
-                    else if (line.Contains("\"prev_enabled\":"))
+                    else if (line.Contains("\"next_enabled\":"))
                     {
                         whr.isAd = line.Contains("false");
                     }
