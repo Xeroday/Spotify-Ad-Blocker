@@ -116,7 +116,7 @@ namespace EZBlocker
         {
             Console.WriteLine("Getting OAuth Token");
             CheckWebHelper();
-            String url = "http://open.spotify.com/token";
+            String url = "https://open.spotify.com/token";
             String json = GetPage(url);
             OAuth res = JsonConvert.DeserializeObject<OAuth>(json);
             oauthToken = res.t; 
@@ -137,7 +137,8 @@ namespace EZBlocker
             {
                 hostname = new Random(Environment.TickCount).Next(100000, 100000000).ToString();
             }
-            return "http://" + hostname + ".spotilocal.com" + port + path;
+            return "http://127.0.0.1" + port + path;
+            //return "http://" + hostname + ".spotilocal.com" + port + path;
         }
 
         private static string GetPage(string URL)
