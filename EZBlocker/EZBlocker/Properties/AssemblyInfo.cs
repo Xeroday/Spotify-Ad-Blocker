@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Eric Zhang")]
 [assembly: AssemblyProduct("EZBlocker")]
-[assembly: AssemblyCopyright("Copyright ©  2012-2014 Eric Zhang")]
+[assembly: AssemblyCopyright("Copyright ©  2012-2015 Eric Zhang")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
