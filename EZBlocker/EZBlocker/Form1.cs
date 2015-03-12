@@ -13,6 +13,10 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Text;
 
+//For using the registry
+using Microsoft.Win32;
+
+
 namespace EZBlocker
 {
     public partial class Main : Form
@@ -516,6 +520,52 @@ namespace EZBlocker
             Mute(0);
 
             MainTimer.Enabled = true;
+        }
+
+        [DllImport("advapi.dll")]
+        public static extern long RegOpenKeyEx(RegistryHive hKey, String lpSubKey, int ulOptions, int samDesired, RegistryKey phkResult);
+
+        private void AutoStartCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (AutoStartCheckbox.Checked)
+            {
+                String val = (string)Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", "EZBlocker", null);
+                String path = Process.GetCurrentProcess().MainModule.FileName;
+
+                if (val != null)
+                {
+                    //There already is a value in HKCU\Run called EZBlocker
+                    if (!val.Equals(path))
+                    {
+                        Registry.SetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", "EZBlocker", path);
+                    }
+                }
+                else
+                {
+                    Registry.SetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", "EZBlocker", path);
+                }
+            }
+            else
+            {
+                String val = (string)Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", "EZBlocker", null);
+
+                if (val != null)
+                {
+
+                    RegistryKey key = null;
+                    RegOpenKeyEx(RegistryHive.CurrentUser, @"Software\Microsoft\Windows\CurrentVersion\Run", 0, 0x20006, key);
+                    if (key != null)
+                    {
+                        key.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true).DeleteValue("EZBlocker");
+                    }
+
+                    /*
+                     * not 1000% sure if this works, better would be
+                     * RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Default).OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true).DeleteValue("SpotifyMute");
+                     * This doesn't work on Windows XP though.
+                     */
+                }
+            }
         }
     }
 }
