@@ -551,13 +551,7 @@ namespace EZBlocker
 
                 if (val != null)
                 {
-
-                    RegistryKey key = null;
-                    RegOpenKeyEx(RegistryHive.CurrentUser, @"Software\Microsoft\Windows\CurrentVersion\Run", 0, 0x20006, key);
-                    if (key != null)
-                    {
-                        key.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true).DeleteValue("EZBlocker");
-                    }
+                    Process.Start("cmd", "/c Reg delete HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run /v EZBlocker /f");
 
                     /*
                      * not 1000% sure if this works, better would be
