@@ -12,7 +12,7 @@ For more info, visit the [EZBlocker project page][2].
 To download a pre-compiled binary of the latest version, click [here][1].
 
 Changelog (Major releases only):
- - V 1.5 (March 6, 2014):
+ - V 1.5 (March 6, 2015):
   - Support for Spotify versions 1.0 and above
   - Support for blocking banner advertisements and muting video advertisements
   - Adblocking is now fully automated and not dependent on any blocklists
