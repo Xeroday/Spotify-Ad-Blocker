@@ -3,9 +3,9 @@ EZBlocker
 
 EZBlocker is a Spotify Ad Blocker written in C# for Windows 7/8.
 
-It uses non-intrusive methods to read the Spotify client to extract song information. When an advertisement is playing, EZBlocker will mute Spotify and automatically resume playing regular music when the ad is over.
+It uses non-intrusive methods to read the Spotify client and extract the current track information, in order to determine when an advertisement is playing. EZBlocker will mute Spotify when ads are playing, and will automatically resume playing regular music when an ad is over.
 
-Because EZBlocker does not modify the Spotify client in any way, it is less buggy compared to other ad blockers. The goal for EZBlocker is to be the most reliable and stable ad blocker for Spotify.
+EZBlocker strives to be the most reliable and stable ad blocker for Spotify. Because EZBlocker does not modify the Spotify client in any way, it is less buggy in comparison to other ad blockers. 
 
 For more info, visit the [EZBlocker project page][2].
 
