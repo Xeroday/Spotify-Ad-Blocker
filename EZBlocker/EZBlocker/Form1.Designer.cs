@@ -39,6 +39,7 @@
             this.VolumeMixerButton = new System.Windows.Forms.Button();
             this.StatusLabel = new System.Windows.Forms.Label();
             this.BlockBannersCheckbox = new System.Windows.Forms.CheckBox();
+            this.AutoStartCheckbox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // MainTimer
@@ -67,7 +68,7 @@
             // WebsiteLink
             // 
             this.WebsiteLink.AutoSize = true;
-            this.WebsiteLink.Location = new System.Drawing.Point(140, 94);
+            this.WebsiteLink.Location = new System.Drawing.Point(140, 114);
             this.WebsiteLink.Name = "WebsiteLink";
             this.WebsiteLink.Size = new System.Drawing.Size(84, 13);
             this.WebsiteLink.TabIndex = 5;
@@ -106,7 +107,7 @@
             // 
             this.StatusLabel.AutoSize = true;
             this.StatusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.StatusLabel.Location = new System.Drawing.Point(9, 94);
+            this.StatusLabel.Location = new System.Drawing.Point(12, 114);
             this.StatusLabel.Name = "StatusLabel";
             this.StatusLabel.Size = new System.Drawing.Size(54, 13);
             this.StatusLabel.TabIndex = 9;
@@ -123,11 +124,23 @@
             this.BlockBannersCheckbox.UseVisualStyleBackColor = true;
             this.BlockBannersCheckbox.CheckedChanged += new System.EventHandler(this.SkipAdsCheckbox_CheckedChanged);
             // 
+            // AutoStartCheckbox
+            // 
+            this.AutoStartCheckbox.AutoSize = true;
+            this.AutoStartCheckbox.Location = new System.Drawing.Point(12, 94);
+            this.AutoStartCheckbox.Name = "AutoStartCheckbox";
+            this.AutoStartCheckbox.Size = new System.Drawing.Size(70, 17);
+            this.AutoStartCheckbox.TabIndex = 11;
+            this.AutoStartCheckbox.Text = "AutoStart";
+            this.AutoStartCheckbox.UseVisualStyleBackColor = true;
+            this.AutoStartCheckbox.CheckedChanged += new System.EventHandler(this.AutoStartCheckbox_CheckedChanged);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(230, 113);
+            this.ClientSize = new System.Drawing.Size(230, 133);
+            this.Controls.Add(this.AutoStartCheckbox);
             this.Controls.Add(this.BlockBannersCheckbox);
             this.Controls.Add(this.StatusLabel);
             this.Controls.Add(this.VolumeMixerButton);
@@ -159,6 +172,7 @@
         private System.Windows.Forms.Label StatusLabel;
         private System.Windows.Forms.CheckBox BlockBannersCheckbox;
         private System.Windows.Forms.Timer MainTimer;
+        private System.Windows.Forms.CheckBox AutoStartCheckbox;
     }
 }
 
