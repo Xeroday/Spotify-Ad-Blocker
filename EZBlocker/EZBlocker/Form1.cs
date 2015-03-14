@@ -415,6 +415,7 @@ namespace EZBlocker
                 {
                     using (StreamWriter sw = File.AppendText(hostsPath))
                     {
+                        sw.WriteLine();
                         sw.WriteLine("0.0.0.0 pubads.g.doubleclick.net");
                         sw.WriteLine("0.0.0.0 securepubads.g.doubleclick.net");
                     }
