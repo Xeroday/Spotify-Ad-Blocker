@@ -407,7 +407,7 @@ namespace EZBlocker
             }
             if (!File.Exists(hostsPath))
             {
-                File.Create(hostsPath);
+                File.Create(hostsPath).Close();
             }
             try
             {
