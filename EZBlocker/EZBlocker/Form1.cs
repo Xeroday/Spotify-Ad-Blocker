@@ -405,6 +405,10 @@ namespace EZBlocker
                 MessageBox.Show("Enabling/Disabling this option requires Administrator privilages.\n\nPlease reopen EZBlocker with \"Run as Administrator\".", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+            if (!File.Exists(hostsPath))
+            {
+                File.Create(hostsPath);
+            }
             try
             {
                 if (BlockBannersCheckbox.Checked)
@@ -501,8 +505,11 @@ namespace EZBlocker
 
             // Set up UI
             SpotifyMuteCheckbox.Checked = Properties.Settings.Default.SpotifyMute;
-            BlockBannersCheckbox.Checked = File.ReadAllText(hostsPath).Contains("doubleclick.net");
-            
+            if (File.Exists(hostsPath))
+            {
+                BlockBannersCheckbox.Checked = File.ReadAllText(hostsPath).Contains("doubleclick.net");
+            }
+
             // Google Analytics
             rnd = new Random(Environment.TickCount);
             starttime = DateTime.Now.Ticks;
