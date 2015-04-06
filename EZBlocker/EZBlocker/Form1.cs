@@ -338,7 +338,7 @@ namespace EZBlocker
             }
         }
 
-        private void RestoreFromTaskbar()
+        private void RestoreFromTray()
         {
             this.WindowState = FormWindowState.Normal;
             this.ShowInTaskbar = true;
@@ -354,7 +354,7 @@ namespace EZBlocker
             {
                 if (!this.ShowInTaskbar)
                 {
-                    RestoreFromTaskbar();
+                    RestoreFromTray();
                 }
                 else
                 {
@@ -373,13 +373,13 @@ namespace EZBlocker
         {
             if (!this.ShowInTaskbar)
             {
-                RestoreFromTaskbar();
+                RestoreFromTray();
             }
         }
 
         private void NotifyIcon_BalloonTipClicked(object sender, EventArgs e)
         {
-            RestoreFromTaskbar();
+            RestoreFromTray();
         }
 
         private void Form_Resize(object sender, EventArgs e)
