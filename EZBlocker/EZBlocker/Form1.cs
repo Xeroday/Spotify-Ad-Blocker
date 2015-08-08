@@ -459,6 +459,44 @@ namespace EZBlocker
             LogAction("/button/website");
         }
 
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Show();
+            this.WindowState = FormWindowState.Normal;
+            this.ShowInTaskbar = true;
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void StartMinimizedCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (visitorId == null) return; // Still setting up UI
+            Properties.Settings.Default.StartMinimized = StartMinimizedCheckBox.Checked;
+            LogAction("/settings/startMinimized/" + Properties.Settings.Default.StartMinimized.ToString());
+            Properties.Settings.Default.Save();
+        }
+
+        private void MinimizeOnCloseCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (visitorId == null) return; // Still setting up UI
+            Properties.Settings.Default.MinimizeOnClose = MinimizeOnCloseCheckBox.Checked;
+            LogAction("/settings/minimizeOnClose/" + Properties.Settings.Default.MinimizeOnClose.ToString());
+            Properties.Settings.Default.Save();
+        }
+
+        private void Main_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (Properties.Settings.Default.MinimizeOnClose && e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true;
+                WindowState = FormWindowState.Minimized;
+                return;
+            }
+        }
+
         private void Main_Load(object sender, EventArgs e)
         {
             LogAction("/launch");
@@ -506,6 +544,8 @@ namespace EZBlocker
 
             // Set up UI
             SpotifyMuteCheckbox.Checked = Properties.Settings.Default.SpotifyMute;
+            MinimizeOnCloseCheckBox.Checked = Properties.Settings.Default.MinimizeOnClose;
+            StartMinimizedCheckBox.Checked = Properties.Settings.Default.StartMinimized;
             if (File.Exists(hostsPath))
             {
                 BlockBannersCheckbox.Checked = File.ReadAllText(hostsPath).Contains("doubleclick.net");
@@ -524,6 +564,12 @@ namespace EZBlocker
             Mute(0);
 
             MainTimer.Enabled = true;
+
+            if (Properties.Settings.Default.StartMinimized)
+                if (Properties.Settings.Default.MinimizeOnClose)
+                    Close();
+                else
+                    WindowState = FormWindowState.Minimized;
         }
     }
 }
