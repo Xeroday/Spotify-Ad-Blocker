@@ -33,16 +33,18 @@
             this.MainTimer = new System.Windows.Forms.Timer(this.components);
             this.MuteButton = new System.Windows.Forms.Button();
             this.NotifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.NotifyIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.WebsiteLink = new System.Windows.Forms.LinkLabel();
             this.Heartbeat = new System.Windows.Forms.Timer(this.components);
             this.SpotifyMuteCheckbox = new System.Windows.Forms.CheckBox();
             this.VolumeMixerButton = new System.Windows.Forms.Button();
             this.StatusLabel = new System.Windows.Forms.Label();
             this.BlockBannersCheckbox = new System.Windows.Forms.CheckBox();
-            this.NotifyIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.StartMinimizedCheckBox = new System.Windows.Forms.CheckBox();
+            this.MinimizeOnCloseCheckBox = new System.Windows.Forms.CheckBox();
             this.NotifyIconMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -69,6 +71,34 @@
             this.NotifyIcon.Visible = true;
             this.NotifyIcon.BalloonTipClicked += new System.EventHandler(this.NotifyIcon_BalloonTipClicked);
             this.NotifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIcon_MouseDoubleClick);
+            // 
+            // NotifyIconMenu
+            // 
+            this.NotifyIconMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openToolStripMenuItem,
+            this.toolStripMenuItem1,
+            this.exitToolStripMenuItem});
+            this.NotifyIconMenu.Name = "contextMenuStrip1";
+            this.NotifyIconMenu.Size = new System.Drawing.Size(104, 54);
+            // 
+            // openToolStripMenuItem
+            // 
+            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
+            this.openToolStripMenuItem.Text = "&Open";
+            this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(100, 6);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
+            this.exitToolStripMenuItem.Text = "&Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // WebsiteLink
             // 
@@ -129,39 +159,35 @@
             this.BlockBannersCheckbox.UseVisualStyleBackColor = true;
             this.BlockBannersCheckbox.CheckedChanged += new System.EventHandler(this.SkipAdsCheckbox_CheckedChanged);
             // 
-            // NotifyIconMenu
+            // StartMinimizedCheckBox
             // 
-            this.NotifyIconMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openToolStripMenuItem,
-            this.toolStripMenuItem1,
-            this.exitToolStripMenuItem});
-            this.NotifyIconMenu.Name = "contextMenuStrip1";
-            this.NotifyIconMenu.Size = new System.Drawing.Size(153, 76);
+            this.StartMinimizedCheckBox.AutoSize = true;
+            this.StartMinimizedCheckBox.Location = new System.Drawing.Point(127, 48);
+            this.StartMinimizedCheckBox.Name = "StartMinimizedCheckBox";
+            this.StartMinimizedCheckBox.Size = new System.Drawing.Size(97, 17);
+            this.StartMinimizedCheckBox.TabIndex = 11;
+            this.StartMinimizedCheckBox.Text = "Start Minimized";
+            this.StartMinimizedCheckBox.UseVisualStyleBackColor = true;
+            this.StartMinimizedCheckBox.CheckedChanged += new System.EventHandler(this.StartMinimizedCheckBox_CheckedChanged);
             // 
-            // openToolStripMenuItem
+            // MinimizeOnCloseCheckBox
             // 
-            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.openToolStripMenuItem.Text = "&Open";
-            this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
-            // 
-            // exitToolStripMenuItem
-            // 
-            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.exitToolStripMenuItem.Text = "&Exit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            this.MinimizeOnCloseCheckBox.AutoSize = true;
+            this.MinimizeOnCloseCheckBox.Location = new System.Drawing.Point(127, 71);
+            this.MinimizeOnCloseCheckBox.Name = "MinimizeOnCloseCheckBox";
+            this.MinimizeOnCloseCheckBox.Size = new System.Drawing.Size(101, 17);
+            this.MinimizeOnCloseCheckBox.TabIndex = 12;
+            this.MinimizeOnCloseCheckBox.Text = "Minimize on Exit";
+            this.MinimizeOnCloseCheckBox.UseVisualStyleBackColor = true;
+            this.MinimizeOnCloseCheckBox.CheckedChanged += new System.EventHandler(this.MinimizeOnCloseCheckBox_CheckedChanged);
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(230, 113);
+            this.Controls.Add(this.MinimizeOnCloseCheckBox);
+            this.Controls.Add(this.StartMinimizedCheckBox);
             this.Controls.Add(this.BlockBannersCheckbox);
             this.Controls.Add(this.StatusLabel);
             this.Controls.Add(this.VolumeMixerButton);
@@ -175,6 +201,7 @@
             this.Name = "Main";
             this.RightToLeftLayout = true;
             this.Text = "EZBlocker";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.Load += new System.EventHandler(this.Main_Load);
             this.Resize += new System.EventHandler(this.Form_Resize);
             this.NotifyIconMenu.ResumeLayout(false);
@@ -198,6 +225,8 @@
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.CheckBox StartMinimizedCheckBox;
+        private System.Windows.Forms.CheckBox MinimizeOnCloseCheckBox;
     }
 }
 

@@ -58,5 +58,29 @@ namespace EZBlocker.Properties {
                 this["SpotifyMute"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool MinimizeOnClose {
+            get {
+                return ((bool)(this["MinimizeOnClose"]));
+            }
+            set {
+                this["MinimizeOnClose"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool StartMinimized {
+            get {
+                return ((bool)(this["StartMinimized"]));
+            }
+            set {
+                this["StartMinimized"] = value;
+            }
+        }
     }
 }
