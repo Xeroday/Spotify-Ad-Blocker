@@ -459,6 +459,18 @@ namespace EZBlocker
             LogAction("/button/website");
         }
 
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Show();
+            this.WindowState = FormWindowState.Normal;
+            this.ShowInTaskbar = true;
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
         private void Main_Load(object sender, EventArgs e)
         {
             LogAction("/launch");
