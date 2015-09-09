@@ -19,6 +19,7 @@ namespace EZBlocker
         private static string oauthToken;
         private static string csrfToken;
         private static string hostname;
+        private static bool warningMessageShown;
 
         /**
          * Grabs the status of Spotify and returns a WebHelperResult object.
@@ -90,26 +91,46 @@ namespace EZBlocker
 
         public static void CheckWebHelper()
         {
-            foreach (Process t in Process.GetProcesses().Where(t => t.ProcessName.ToLower().Equals("spotifywebhelper"))) // Check that SpotifyWebHelper.exe is running
-            {
-                return;
-            }
+            bool running;
             try
             {
-                Console.WriteLine("Starting SpotifyWebHelper");
-                if (File.Exists(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\Data\SpotifyWebHelper.exe"))
+                // Check if SpotifyWebHelper.exe is running
+                running = Process.GetProcesses().Any(t => t.ProcessName.ToLower().Equals("spotifywebhelper"));
+                if (!running)
                 {
-                    Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\Data\SpotifyWebHelper.exe");
-                }
-                else
-                {
-                    Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\SpotifyWebHelper.exe");
+                    Console.WriteLine("Starting SpotifyWebHelper");
+                    string appDataFolder = Environment.GetEnvironmentVariable("APPDATA");
+                    if (appDataFolder != null)
+                    {
+                        string helperExe = Path.Combine(appDataFolder, @"Spotify\Data\SpotifyWebHelper.exe");
+                        if (!File.Exists(helperExe))
+                        {
+                            helperExe = Path.Combine(appDataFolder, @"Spotify\SpotifyWebHelper.exe");
+                        }
+                      
+                        if (File.Exists(helperExe))
+                        {
+                            Process.Start(helperExe);
+                            running = true;
+                        }
+                    }
+                    else if (!warningMessageShown)
+                    {
+                        warningMessageShown = true;
+                        MessageBox.Show("Unable to find App Data folder to start SpotifyWebHelper.exe.", "EZBlocker");
+                    }
                 }
             }
-            catch {
-                MessageBox.Show("Please check 'Allow Spotify to be started from the Web' in your Spotify preferences.", "EZBlocker");
+            catch
+            {
+                running = false;
             }
 
+            if (!running && !warningMessageShown)
+            {
+                warningMessageShown = true;
+                MessageBox.Show("Please check 'Allow Spotify to be started from the Web' in your Spotify preferences.", "EZBlocker");
+            }
         }
 
         private static void SetOAuth()
