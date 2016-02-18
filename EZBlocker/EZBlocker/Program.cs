@@ -27,7 +27,7 @@ namespace EZBlocker
                 {
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
-                    Application.Run(new Main());
+                    Application.Run(new FrmMain());
                     mutex.ReleaseMutex();
                 }
                 else // another instance is already running
