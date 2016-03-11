@@ -197,17 +197,24 @@ namespace EZBlocker
     {
         // Timeout in milliseconds, default = 600,000 msec
         public int Timeout { get; set; }
+        private readonly CookieContainer m_container = new CookieContainer();
 
         public TimedWebClient()
         {
-            this.Timeout = 3 * 1000;
+            this.Timeout = 5 * 1000;
         }
 
         protected override WebRequest GetWebRequest(Uri address)
         {
-            var objWebRequest = base.GetWebRequest(address);
-            objWebRequest.Timeout = this.Timeout;
-            return objWebRequest;
+            var request = base.GetWebRequest(address);
+            request.Timeout = this.Timeout;
+            HttpWebRequest webRequest = request as HttpWebRequest;
+            if (webRequest != null)
+            {
+                webRequest.CookieContainer = m_container;
+                webRequest.KeepAlive = false;
+            }
+            return request;
         }
     }
 

@@ -68,58 +68,65 @@ namespace EZBlocker
          **/
         private void MainTimer_Tick(object sender, EventArgs e)
         {
-            WebHelperResult whr = WebHelperHook.GetStatus();
+            try {
+                WebHelperResult whr = WebHelperHook.GetStatus();
 
-            if (whr.isAd) // Track is ad
-            {
-                if (whr.isPlaying)
+                if (whr.isAd) // Track is ad
                 {
-                    Debug.WriteLine("Ad is playing");
-                    if (lastArtistName != whr.artistName)
+                    if (whr.isPlaying)
                     {
-                        if (!muted) Mute(1);
-                        StatusLabel.Text = "Muting ad";
-                        lastArtistName = whr.artistName;
-                        LogAction("/mute/" + whr.artistName);
-                        Debug.WriteLine("Blocked " + whr.artistName);
+                        Debug.WriteLine("Ad is playing");
+                        if (lastArtistName != whr.artistName)
+                        {
+                            if (!muted) Mute(1);
+                            StatusLabel.Text = "Muting ad";
+                            lastArtistName = whr.artistName;
+                            LogAction("/mute/" + whr.artistName);
+                            Debug.WriteLine("Blocked " + whr.artistName);
+                        }
+                    }
+                    else // Ad is paused
+                    {
+                        Debug.WriteLine("Ad is paused");
+                        Resume();
                     }
                 }
-                else // Ad is paused
+                else if (whr.isPrivateSession)
                 {
-                    Debug.WriteLine("Ad is paused");
-                    Resume();
+                    if (lastArtistName != whr.artistName)
+                    {
+                        StatusLabel.Text = "Playing: *Private Session*";
+                        lastArtistName = whr.artistName;
+                        MessageBox.Show("Please disable 'Private Session' on Spotify for EZBlocker to function properly.", "EZBlocker", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, (MessageBoxOptions)0x40000);
+                    }
+                }
+                else if (!whr.isRunning)
+                {
+                    MainTimer.Enabled = false;
+                    Notify("Spotify is not running. Please restart EZBlocker after starting Spotify.");
+                    MessageBox.Show("Spotify is not running. Please restart EZBlocker after starting Spotify.", "EZBlocker", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, (MessageBoxOptions)0x40000);
+                    StatusLabel.Text = "Spotify is not running";
+                    Application.Exit();
+                }
+                else if (!whr.isPlaying)
+                {
+                    StatusLabel.Text = "Spotify is paused";
+                    lastArtistName = "";
+                }
+                else // Song is playing
+                {
+                    if (muted) Mute(0);
+                    if (lastArtistName != whr.artistName)
+                    {
+                        StatusLabel.Text = "Playing: " + ShortenName(whr.artistName);
+                        lastArtistName = whr.artistName;
+                    }
                 }
             }
-            else if (whr.isPrivateSession)
+            catch (Exception ex)
             {
-                if (lastArtistName != whr.artistName)
-                {
-                    StatusLabel.Text = "Playing: *Private Session*";
-                    lastArtistName = whr.artistName;
-                    MessageBox.Show("Please disable 'Private Session' on Spotify for EZBlocker to function properly.", "EZBlocker", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, (MessageBoxOptions)0x40000);
-                }
-            }
-            else if (!whr.isRunning)
-            {
-                MainTimer.Enabled = false;
-                Notify("Spotify is not running. Please restart EZBlocker after starting Spotify.");
-                MessageBox.Show("Spotify is not running. Please restart EZBlocker after starting Spotify.", "EZBlocker", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, (MessageBoxOptions)0x40000);
-                StatusLabel.Text = "Spotify is not running";
-                Application.Exit();
-            }
-            else if (!whr.isPlaying)
-            {
-                StatusLabel.Text = "Spotify is paused";
-                lastArtistName = "";
-            }
-            else // Song is playing
-            {
-                if (muted) Mute(0);
-                if (lastArtistName != whr.artistName)
-                {
-                    StatusLabel.Text = "Playing: " + ShortenName(whr.artistName);
-                    lastArtistName = whr.artistName;
-                }
+                Debug.WriteLine(ex);
+                File.AppendAllText(logPath, ex.Message);
             }
         }
        

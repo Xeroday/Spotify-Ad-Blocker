@@ -63,7 +63,6 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Resources\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -78,6 +77,7 @@
   <ItemGroup>
     <Compile Include="Json\CSRF.cs" />
     <Compile Include="Json\OAuth.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="WebHelperHook.cs" />
     <Compile Include="WebHelperResult.cs" />
     <Compile Include="Form1.cs">
@@ -103,6 +103,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
