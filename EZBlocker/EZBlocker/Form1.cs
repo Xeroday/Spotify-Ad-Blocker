@@ -21,7 +21,7 @@ namespace EZBlocker
         private string nircmdPath = Application.StartupPath + @"\nircmd.exe";
         private string jsonPath = Application.StartupPath + @"\Newtonsoft.Json.dll";
         private string coreaudioPath = Application.StartupPath + @"\CoreAudio.dll";
-        private string logPath = Application.StartupPath + @"\EZBlocker-log.txt";
+        public static string logPath = Application.StartupPath + @"\EZBlocker-log.txt";
 
         private string spotifyPath = Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe";
         private string spotifyPrefsPath = Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\prefs";
@@ -102,11 +102,15 @@ namespace EZBlocker
                 }
                 else if (!whr.isRunning)
                 {
+                    Notify("Error connecting to Spotify. Retrying...");
+                    File.AppendAllText(logPath, "Not running.\r\n");
+                    MainTimer.Interval = 5000;
+                    /*
                     MainTimer.Enabled = false;
-                    Notify("Spotify is not running. Please restart EZBlocker after starting Spotify.");
                     MessageBox.Show("Spotify is not running. Please restart EZBlocker after starting Spotify.", "EZBlocker", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, (MessageBoxOptions)0x40000);
                     StatusLabel.Text = "Spotify is not running";
                     Application.Exit();
+                    */
                 }
                 else if (!whr.isPlaying)
                 {
@@ -116,6 +120,7 @@ namespace EZBlocker
                 else // Song is playing
                 {
                     if (muted) Mute(0);
+                    if (MainTimer.Interval > 1000) MainTimer.Interval = 1000;
                     if (lastArtistName != whr.artistName)
                     {
                         StatusLabel.Text = "Playing: " + ShortenName(whr.artistName);
@@ -524,6 +529,10 @@ namespace EZBlocker
             }
             visitorId = Properties.Settings.Default.UID;
             
+            File.AppendAllText(logPath, "-----------\r\n");
+            bool unsafeHeaders = WebHelperHook.SetAllowUnsafeHeaderParsing20();
+            Debug.WriteLine("Unsafe Headers: " + unsafeHeaders);
+
             Mute(0);
             
             MainTimer.Enabled = true;

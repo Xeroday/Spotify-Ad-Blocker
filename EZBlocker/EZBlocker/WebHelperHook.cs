@@ -5,12 +5,14 @@ using System.Text;
 using Newtonsoft.Json;
 using System.IO;
 using System.Diagnostics;
+using System.Configuration;
+using System.Reflection;
 
 namespace EZBlocker
 {
     class WebHelperHook
     {
-        private const string ua = @"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36";
+        private const string ua = @"Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; Trident/4.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; .NET4.0C; .NET4.0E)";
         private const string port = ":4380";
 
         private static string oauthToken;
@@ -40,6 +42,7 @@ namespace EZBlocker
             catch (WebException ex)
             {
                 Debug.WriteLine(ex);
+                File.AppendAllText(Main.logPath, "WebHelperHook: " + ex.Message + "\r\n");
             }
             
             WebHelperResult whr = new WebHelperResult();
@@ -190,6 +193,36 @@ namespace EZBlocker
             nonunicode.GetChars(nonunicodeBytes, 0, nonunicodeBytes.Length, nonunicodeChars, 0);
 
             return new string(nonunicodeChars);
+        }
+
+        public static bool SetAllowUnsafeHeaderParsing20()
+        {
+            //Get the assembly that contains the internal class
+            Assembly aNetAssembly = Assembly.GetAssembly(typeof(System.Net.Configuration.SettingsSection));
+            if (aNetAssembly != null)
+            {
+                //Use the assembly in order to get the internal type for the internal class
+                Type aSettingsType = aNetAssembly.GetType("System.Net.Configuration.SettingsSectionInternal");
+                if (aSettingsType != null)
+                {
+                    //Use the internal static property to get an instance of the internal settings class.
+                    //If the static instance isn't created allready the property will create it for us.
+                    object anInstance = aSettingsType.InvokeMember("Section",
+                      BindingFlags.Static | BindingFlags.GetProperty | BindingFlags.NonPublic, null, null, new object[] { });
+
+                    if (anInstance != null)
+                    {
+                        //Locate the private bool field that tells the framework is unsafe header parsing should be allowed or not
+                        FieldInfo aUseUnsafeHeaderParsing = aSettingsType.GetField("useUnsafeHeaderParsing", BindingFlags.NonPublic | BindingFlags.Instance);
+                        if (aUseUnsafeHeaderParsing != null)
+                        {
+                            aUseUnsafeHeaderParsing.SetValue(anInstance, true);
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
         }
     }
 
