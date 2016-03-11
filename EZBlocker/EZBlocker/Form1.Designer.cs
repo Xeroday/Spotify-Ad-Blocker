@@ -117,9 +117,9 @@
             this.BlockBannersCheckbox.AutoSize = true;
             this.BlockBannersCheckbox.Location = new System.Drawing.Point(12, 71);
             this.BlockBannersCheckbox.Name = "BlockBannersCheckbox";
-            this.BlockBannersCheckbox.Size = new System.Drawing.Size(111, 17);
+            this.BlockBannersCheckbox.Size = new System.Drawing.Size(165, 17);
             this.BlockBannersCheckbox.TabIndex = 10;
-            this.BlockBannersCheckbox.Text = "Block Banner Ads";
+            this.BlockBannersCheckbox.Text = "Disable All Ads (Experimental)";
             this.BlockBannersCheckbox.UseVisualStyleBackColor = true;
             this.BlockBannersCheckbox.CheckedChanged += new System.EventHandler(this.SkipAdsCheckbox_CheckedChanged);
             // 

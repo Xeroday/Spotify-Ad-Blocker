@@ -234,7 +234,7 @@ namespace EZBlocker
 
         public TimedWebClient()
         {
-            this.Timeout = 5 * 1000;
+            this.Timeout = 30 * 1000;
         }
 
         protected override WebRequest GetWebRequest(Uri address)

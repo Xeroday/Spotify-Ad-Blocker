@@ -2,7 +2,7 @@
 {
     class WebHelperResult
     {
-        public bool isRunning = false;
+        public bool isRunning = true;
         public bool isPlaying = false;
         public bool isAd = false;
         public bool isPrivateSession = false;
