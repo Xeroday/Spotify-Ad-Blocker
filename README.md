@@ -13,6 +13,7 @@ To download a pre-compiled binary of the latest version, click [here][1].
 
 Changelog (Major releases only):
  - V 1.6 (March 10, 2016):
+  - Better handling of Spotify updates/restarts
   - Fix bugs caused by newer Spotify local API
   - Update dependencies
   - Now requires .NET Framework 4.5
