@@ -299,6 +299,13 @@ namespace EZBlocker
             catch { /*ignore*/ }
         }
 
+        private void RestoreFromTray()
+        {
+            this.WindowState = FormWindowState.Normal;
+            this.ShowInTaskbar = true;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+        }
+        
         /**
          * Processes window message and shows EZBlocker when attempting to launch a second instance.
          **/
@@ -308,8 +315,7 @@ namespace EZBlocker
             {
                 if (!this.ShowInTaskbar)
                 {
-                    this.WindowState = FormWindowState.Normal;
-                    this.ShowInTaskbar = true;
+                    RestoreFromTray();
                 }
                 else
                 {
@@ -328,15 +334,13 @@ namespace EZBlocker
         {
             if (!this.ShowInTaskbar)
             {
-                this.WindowState = FormWindowState.Normal;
-                this.ShowInTaskbar = true;
+                RestoreFromTray();
             }
         }
 
         private void NotifyIcon_BalloonTipClicked(object sender, EventArgs e)
         {
-            this.WindowState = FormWindowState.Normal;
-            this.ShowInTaskbar = true;
+            RestoreFromTray();
         }
 
         private void Form_Resize(object sender, EventArgs e)
@@ -344,6 +348,7 @@ namespace EZBlocker
             if (this.WindowState == FormWindowState.Minimized)
             {
                 this.ShowInTaskbar = false;
+                this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
                 Notify("EZBlocker is hidden. Double-click this icon to restore.");
             }
         }
