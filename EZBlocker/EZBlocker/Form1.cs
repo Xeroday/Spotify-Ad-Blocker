@@ -177,7 +177,14 @@ namespace EZBlocker
         private void Resume()
         {
             Debug.WriteLine("Resuming Spotify");
-            SendMessage(this.Handle, WM_APPCOMMAND, this.Handle, (IntPtr)MEDIA_PLAYPAUSE);
+            if (spotifyMute)
+            {
+                SendMessage(GetHandle(), WM_APPCOMMAND, this.Handle, (IntPtr)MEDIA_PLAYPAUSE);
+            }
+            else
+            {
+                SendMessage(this.Handle, WM_APPCOMMAND, this.Handle, (IntPtr)MEDIA_PLAYPAUSE);
+            }
         }
 
         /**
@@ -203,7 +210,8 @@ namespace EZBlocker
         {
             foreach (Process t in Process.GetProcesses().Where(t => t.ProcessName.ToLower().Contains("spotify")))
             {
-                return FindWindow(null, "Spotify Free");
+                if (t.MainWindowTitle.Length > 1)
+                    return t.MainWindowHandle;
             }
             return IntPtr.Zero;
         }
@@ -242,6 +250,7 @@ namespace EZBlocker
                 {
                     File.Delete(nircmdPath);
                     File.Delete(jsonPath);
+                    File.Delete(coreaudioPath);
                 }
                 catch { }
             }
@@ -456,18 +465,7 @@ namespace EZBlocker
             {
                 if (File.Exists(spotifyPath))
                 {
-                    if (!FileVersionInfo.GetVersionInfo(spotifyPath).FileVersion.StartsWith("1."))
-                    {
-                        if (MessageBox.Show("You are using Spotify " + FileVersionInfo.GetVersionInfo(spotifyPath).FileVersion + ".\n\nPlease download EZBlocker v1.4.0.1 or upgrade to the newest Spotify to use EZBlocker v1.5.\n\nClick OK to continue to the EZBlocker website.", "EZBlocker", MessageBoxButtons.OKCancel) == DialogResult.OK)
-                        {
-                            Process.Start(website);
-                            Application.Exit();
-                        }
-                    }
-                    else
-                    {
-                        Process.Start(spotifyPath);
-                    }
+                    Process.Start(spotifyPath);
                 }
                 Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High; // Windows throttles down when minimized to task tray, so make sure EZBlocker runs smoothly
             }
