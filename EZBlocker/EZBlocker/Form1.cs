@@ -92,7 +92,12 @@ namespace EZBlocker
             }
             else if (whr.isPrivateSession)
             {
-                lastArtistName = "Private session";
+                if (lastArtistName != whr.artistName)
+                {
+                    StatusLabel.Text = "Playing: *Private Session*";
+                    lastArtistName = whr.artistName;
+                    MessageBox.Show("Please disable 'Private Session' on Spotify for EZBlocker to function properly.", "EZBlocker");
+                }
             }
             else if (!whr.isRunning)
             {
