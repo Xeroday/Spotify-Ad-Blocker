@@ -2,16 +2,12 @@
 using System.IO;
 using System.Net;
 using System.Reflection;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using System.Diagnostics;
-using Newtonsoft.Json;
 using CoreAudio;
 using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
 using System.Threading;
-using System.Text;
 
 namespace EZBlocker
 {
@@ -20,7 +16,7 @@ namespace EZBlocker
         private bool muted = false;
         private bool spotifyMute = false;
         private float volume = 0.9f;
-        private string lastArtistName = "N/A";
+        private string lastArtistName = "";
 
         private string nircmdPath = Application.StartupPath + @"\nircmd.exe";
         private string jsonPath = Application.StartupPath + @"\Newtonsoft.Json.dll";
@@ -28,6 +24,7 @@ namespace EZBlocker
         private string logPath = Application.StartupPath + @"\EZBlocker-log.txt";
 
         private string spotifyPath = Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe";
+        private string spotifyPrefsPath = Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\prefs";
         private string volumeMixerPath = Environment.GetEnvironmentVariable("WINDIR") + @"\System32\SndVol.exe";
         private string hostsPath = Environment.GetEnvironmentVariable("WINDIR") + @"\System32\drivers\etc\hosts";
 
@@ -43,10 +40,9 @@ namespace EZBlocker
         private const int APPCOMMAND_VOLUME_MUTE = 0x80000;
         private const int MEDIA_PLAYPAUSE = 0xE0000;
         private const int MEDIA_NEXTTRACK = 0xB0000;
-
-        private const string ua = @"Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.111 Safari/537.36";
+        
         private string EZBlockerUA = "EZBlocker " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " " + System.Environment.OSVersion;
-        private const string website = @"http://www.ericzhang.me/projects/spotify-ad-blocker-ezblocker/";
+        private const string website = @"https://www.ericzhang.me/projects/spotify-ad-blocker-ezblocker/";
 
         // Google Analytics stuff
         private Random rnd;
@@ -64,9 +60,6 @@ namespace EZBlocker
 
         public Main()
         {
-            if (!HasNet35())
-                MessageBox.Show(".Net Framework 3.5 not found. EZBlocker may not work properly.", "EZBlocker");
-
             InitializeComponent();
         }
 
@@ -75,61 +68,50 @@ namespace EZBlocker
          **/
         private void MainTimer_Tick(object sender, EventArgs e)
         {
-            try
-            {
-                WebHelperResult whr = WebHelperHook.GetStatus();
-                //Console.WriteLine(whr.isAd);
+            WebHelperResult whr = WebHelperHook.GetStatus();
 
-                if (whr.isAd) // Track is ad
+            if (whr.isAd) // Track is ad
+            {
+                if (whr.isPlaying)
                 {
-                    if (whr.isPlaying)
-                    {
-                        if (lastArtistName != whr.artistName)
-                        {
-                            if (!muted) Mute(1);
-                            StatusLabel.Text = "Muting ad: " + ShortenName(whr.artistName);
-                            lastArtistName = whr.artistName;
-                            LogAction("/mute/" + whr.artistName);
-                            Console.WriteLine("Blocked " + whr.artistName);
-                        }
-                    }
-                    else // Ad is paused
-                    {
-                        Resume();
-                        StatusLabel.Text = "Muting: " + ShortenName(whr.artistName);
-                    }
-                } 
-                /*else if (whr.length - whr.position < 1.5) // Song is within last 1.5 seconds
-                {
-                    if (skipAds)
-                        NextTrack();
-                }*/
-                else if (!whr.isRunning)
-                {
-                    StatusLabel.Text = "Spotify is not running";
-                    lastArtistName = "N/A";
-                }
-                else if (!whr.isPlaying)
-                {
-                    StatusLabel.Text = "Spotify is paused";
-                    lastArtistName = "N/A";
-                }
-                else // Song is playing
-                {
-                    if (muted) Mute(0);
+                    Debug.WriteLine("Ad is playing");
                     if (lastArtistName != whr.artistName)
                     {
-                        StatusLabel.Text = "Playing: " + ShortenName(whr.artistName);
+                        if (!muted) Mute(1);
+                        StatusLabel.Text = "Muting ad";
                         lastArtistName = whr.artistName;
+                        LogAction("/mute/" + whr.artistName);
+                        Debug.WriteLine("Blocked " + whr.artistName);
                     }
                 }
+                else // Ad is paused
+                {
+                    Debug.WriteLine("Ad is paused");
+                    Resume();
+                }
             }
-            catch (Exception except)
+            else if (whr.isPrivateSession)
             {
-                StatusLabel.Text = "Connection Error";
-                WebHelperHook.CheckWebHelper();
-                Console.WriteLine(except);
-                File.WriteAllText(logPath, except.ToString());
+                lastArtistName = "Private session";
+            }
+            else if (!whr.isRunning)
+            {
+                StatusLabel.Text = "Spotify is not running";
+                lastArtistName = "";
+            }
+            else if (!whr.isPlaying)
+            {
+                StatusLabel.Text = "Spotify is paused";
+                lastArtistName = "";
+            }
+            else // Song is playing
+            {
+                if (muted) Mute(0);
+                if (lastArtistName != whr.artistName)
+                {
+                    StatusLabel.Text = "Playing: " + ShortenName(whr.artistName);
+                    lastArtistName = whr.artistName;
+                }
             }
         }
        
@@ -173,9 +155,9 @@ namespace EZBlocker
             }
             else // Mute all of Windows
             {
-                System.Diagnostics.Process process = new System.Diagnostics.Process();
-                System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-                startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                Process process = new Process();
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+                startInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 startInfo.FileName = "cmd.exe";
                 startInfo.Arguments = "/C nircmd mutesysvolume " + i.ToString();
                 process.StartInfo = startInfo;
@@ -189,15 +171,8 @@ namespace EZBlocker
          **/
         private void Resume()
         {
-            Console.WriteLine("Resuming Spotify");
-            if (spotifyMute)
-            {
-                SendMessage(GetHandle(), WM_APPCOMMAND, this.Handle, (IntPtr)MEDIA_PLAYPAUSE);
-            }
-            else
-            {
-                SendMessage(this.Handle, WM_APPCOMMAND, this.Handle, (IntPtr)MEDIA_PLAYPAUSE);
-            }
+            Debug.WriteLine("Resuming Spotify");
+            SendMessage(this.Handle, WM_APPCOMMAND, this.Handle, (IntPtr)MEDIA_PLAYPAUSE);
         }
 
         /**
@@ -205,7 +180,7 @@ namespace EZBlocker
          **/
         private void NextTrack()
         {
-            Console.WriteLine("Skipping to next track");
+            Debug.WriteLine("Skipping to next track");
             if (spotifyMute)
             {
                 SendMessage(GetHandle(), WM_APPCOMMAND, this.Handle, (IntPtr)MEDIA_NEXTTRACK);
@@ -267,7 +242,7 @@ namespace EZBlocker
             }
             try
             {
-                int latest = Convert.ToInt32(GetPage("http://www.ericzhang.me/dl/?file=EZBlocker-version.txt", EZBlockerUA));
+                int latest = Convert.ToInt32(GetPage("https://www.ericzhang.me/dl/?file=EZBlocker-version.txt", EZBlockerUA));
                 int current = Convert.ToInt32(Assembly.GetExecutingAssembly().GetName().Version.ToString().Replace(".", ""));
                 if (latest <= current)
                     return;
@@ -322,20 +297,6 @@ namespace EZBlocker
                 }
             }
             catch { /*ignore*/ }
-        }
-
-        bool HasNet35()
-        {
-            try
-            {
-                AppDomain.CurrentDomain.Load(
-                    "System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089");
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
         }
 
         /**
@@ -417,7 +378,7 @@ namespace EZBlocker
                     {
                         sw.WriteLine();
                         sw.WriteLine("0.0.0.0 pubads.g.doubleclick.net");
-                        sw.WriteLine("0.0.0.0 securepubads.g.doubleclick.net");
+                        sw.Write("0.0.0.0 securepubads.g.doubleclick.net");
                     }
                 }
                 else
@@ -431,7 +392,7 @@ namespace EZBlocker
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                Debug.WriteLine(ex);
             }
         }
         
@@ -464,7 +425,22 @@ namespace EZBlocker
             LogAction("/launch");
             
             CheckUpdate();
-            
+
+            // Enable web helper
+            if (File.Exists(spotifyPrefsPath))
+            {
+                String[] lines = File.ReadAllLines(spotifyPrefsPath);
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    if (lines[i].Contains("webhelper.enabled") && lines[i].Contains("false"))
+                    {
+                        lines[i] = "webhelper.enabled=true";
+                        File.WriteAllLines(spotifyPrefsPath, lines);
+                        break;
+                    }
+                }
+            }
+
             // Start Spotify and give EZBlocker higher priority
             try
             {
@@ -483,25 +459,25 @@ namespace EZBlocker
                         Process.Start(spotifyPath);
                     }
                 }
-                System.Diagnostics.Process.GetCurrentProcess().PriorityClass = System.Diagnostics.ProcessPriorityClass.High; // Windows throttles down when minimized to task tray, so make sure EZBlocker runs smoothly
+                Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High; // Windows throttles down when minimized to task tray, so make sure EZBlocker runs smoothly
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                Debug.WriteLine(ex);
             }
 
             // Extract dependencies
             if (!File.Exists(nircmdPath))
             {
-                File.WriteAllBytes(nircmdPath, EZBlocker.Properties.Resources.nircmd32);
+                File.WriteAllBytes(nircmdPath, Properties.Resources.nircmd32);
             }
             if (!File.Exists(jsonPath))
             {
-                File.WriteAllBytes(jsonPath, EZBlocker.Properties.Resources.Newtonsoft_Json);
+                File.WriteAllBytes(jsonPath, Properties.Resources.Newtonsoft_Json);
             }
             if (!File.Exists(coreaudioPath))
             {
-                File.WriteAllBytes(coreaudioPath, EZBlocker.Properties.Resources.CoreAudio);
+                File.WriteAllBytes(coreaudioPath, Properties.Resources.CoreAudio);
             }
 
             // Set up UI

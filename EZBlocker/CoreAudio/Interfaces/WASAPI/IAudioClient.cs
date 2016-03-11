@@ -23,8 +23,6 @@
 /* Created by Xavier Flix (2010/11/18) */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Runtime.InteropServices;
 
 namespace CoreAudio.Interfaces

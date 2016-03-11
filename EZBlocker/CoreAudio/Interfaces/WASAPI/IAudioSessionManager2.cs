@@ -20,11 +20,8 @@
   3. This notice may not be removed or altered from any source distribution.
 */
 using System;
-using System.Collections.Generic;
 #if (NET40) 
-using System.Linq;
 #endif
-using System.Text;
 using System.Runtime.InteropServices;
 
 namespace CoreAudio.Interfaces

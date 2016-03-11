@@ -22,12 +22,8 @@
 
 /* Created by Xavier Flix (2010/11/18) */
 
-using System;
-using System.Collections.Generic;
 #if (NET40) 
-using System.Linq;
 #endif
-using System.Text;
 
 namespace CoreAudio
 {

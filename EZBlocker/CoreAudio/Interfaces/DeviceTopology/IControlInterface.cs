@@ -20,11 +20,9 @@
   3. This notice may not be removed or altered from any source distribution.
 */
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Runtime.InteropServices;
 
- 
+
 namespace CoreAudio.Interfaces
 {
     [Guid("45d37c3f-5140-444a-ae24-400789f3cbf3"),

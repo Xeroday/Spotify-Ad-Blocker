@@ -1,19 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Security;
 using System.Text;
 using Newtonsoft.Json;
 using System.IO;
 using System.Diagnostics;
-using System.Windows.Forms;
 
 namespace EZBlocker
 {
     class WebHelperHook
     {
-        private const string ua = @"Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.111 Safari/537.36";
+        private const string ua = @"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36";
         private const string port = ":4380";
 
         private static string oauthToken;
@@ -34,9 +31,19 @@ namespace EZBlocker
                 SetCSRF();
             }
 
-            string result = GetPage(GetURL("/remote/status.json" + "?oauth=" + oauthToken + "&csrf=" + csrfToken));
-            Console.WriteLine(result);
-
+            string result = "";
+            try
+            {
+                result = GetPage(GetURL("/remote/status.json" + "?oauth=" + oauthToken + "&csrf=" + csrfToken));
+                // Debug.WriteLine(result);
+            }
+            catch (WebException ex)
+            {
+                Debug.WriteLine(ex);
+                oauthToken = null;
+                csrfToken = null;
+            }
+            
             WebHelperResult whr = new WebHelperResult();
 
             // Process data
@@ -54,6 +61,10 @@ namespace EZBlocker
                     {
                         whr.isAd = line.Contains("false");
                     }
+                    else if (line.Contains("\"private_session\":"))
+                    {
+                        whr.isPrivateSession = line.Contains("true");
+                    }
                     else if (line.Contains("\"playing\":"))
                     {
                         whr.isPlaying = line.Contains("true");
@@ -62,11 +73,11 @@ namespace EZBlocker
                     {
                         if (!line.Contains("0,")) // Song isn't at 0 position
                             whr.position = Convert.ToSingle(line.Split(new char[] { ':', ',' })[1]);
-                    }
+                    }*/
                     else if (line.Contains("\"length\":"))
                     {
                         whr.length = Convert.ToInt32(line.Split(new char[] { ':', ',' })[1]);
-                    }*/
+                    }
                     else if (line.Contains("\"artist_resource\":"))
                     {
                         while ((line = reader.ReadLine()) != null) // Read until we find the "name" field
@@ -94,41 +105,34 @@ namespace EZBlocker
             {
                 return;
             }
-            try
+            Debug.WriteLine("Starting SpotifyWebHelper");
+            if (File.Exists(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\Data\SpotifyWebHelper.exe"))
             {
-                Console.WriteLine("Starting SpotifyWebHelper");
-                if (File.Exists(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\Data\SpotifyWebHelper.exe"))
-                {
-                    Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\Data\SpotifyWebHelper.exe");
-                }
-                else
-                {
-                    Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\SpotifyWebHelper.exe");
-                }
+                Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\Data\SpotifyWebHelper.exe");
             }
-            catch {
-                MessageBox.Show("Please check 'Allow Spotify to be started from the Web' in your Spotify preferences.", "EZBlocker");
+            else if (File.Exists(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\SpotifyWebHelper.exe"))
+            {
+                Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\SpotifyWebHelper.exe");
             }
-
         }
 
         private static void SetOAuth()
         {
-            Console.WriteLine("Getting OAuth Token");
+            Debug.WriteLine("Getting OAuth Token");
             CheckWebHelper();
             String url = "https://open.spotify.com/token";
             String json = GetPage(url);
             OAuth res = JsonConvert.DeserializeObject<OAuth>(json);
-            oauthToken = res.t; 
+            oauthToken = res.t;
         }
 
         private static void SetCSRF()
         {
-            Console.WriteLine("Getting CSRF Token");
+            Debug.WriteLine("Getting CSRF Token");
             String url = GetURL("/simplecsrf/token.json");
             String json = GetPage(url);
             CSRF res = JsonConvert.DeserializeObject<CSRF>(json);
-            csrfToken = res.token; 
+            csrfToken = res.token;
         }
 
         private static string GetURL(string path)

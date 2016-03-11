@@ -21,8 +21,6 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using CoreAudio.Interfaces;
 using System.Runtime.InteropServices;
 
