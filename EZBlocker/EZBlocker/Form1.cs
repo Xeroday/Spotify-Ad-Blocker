@@ -253,16 +253,20 @@ namespace EZBlocker
         {
             if (Properties.Settings.Default.UpdateSettings) // If true, then first launch of latest EZBlocker
             {
-                Properties.Settings.Default.Upgrade();
-                Properties.Settings.Default.UpdateSettings = false;
-                Properties.Settings.Default.Save();
                 try
                 {
                     File.Delete(nircmdPath);
                     File.Delete(jsonPath);
                     File.Delete(coreaudioPath);
+                    Properties.Settings.Default.Upgrade();
+                    Properties.Settings.Default.UpdateSettings = false;
+                    Properties.Settings.Default.Save();
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                    MessageBox.Show("There was an error updating EZBlocker. Please run as Administrator to update.");
+                }
             }
             try
             {
@@ -485,19 +489,24 @@ namespace EZBlocker
             }
 
             // Extract dependencies
-            if (!File.Exists(nircmdPath))
+            try {
+                if (!File.Exists(nircmdPath))
+                {
+                    File.WriteAllBytes(nircmdPath, Properties.Resources.nircmd32);
+                }
+                if (!File.Exists(jsonPath))
+                {
+                    File.WriteAllBytes(jsonPath, Properties.Resources.Newtonsoft_Json);
+                }
+                if (!File.Exists(coreaudioPath))
+                {
+                    File.WriteAllBytes(coreaudioPath, Properties.Resources.CoreAudio);
+                }
+            } catch (Exception ex)
             {
-                File.WriteAllBytes(nircmdPath, Properties.Resources.nircmd32);
+                Debug.WriteLine(ex);
+                MessageBox.Show("Error loading EZBlocker dependencies. Please run EZBlocker as administrator or put EZBlocker in a user folder.");
             }
-            if (!File.Exists(jsonPath))
-            {
-                File.WriteAllBytes(jsonPath, Properties.Resources.Newtonsoft_Json);
-            }
-            if (!File.Exists(coreaudioPath))
-            {
-                File.WriteAllBytes(coreaudioPath, Properties.Resources.CoreAudio);
-            }
-
             // Set up UI
             SpotifyMuteCheckbox.Checked = Properties.Settings.Default.SpotifyMute;
             if (File.Exists(hostsPath))
