@@ -35,13 +35,11 @@ namespace EZBlocker
             try
             {
                 result = GetPage(GetURL("/remote/status.json" + "?oauth=" + oauthToken + "&csrf=" + csrfToken));
-                // Debug.WriteLine(result);
+                Debug.WriteLine(result);
             }
             catch (WebException ex)
             {
                 Debug.WriteLine(ex);
-                oauthToken = null;
-                csrfToken = null;
             }
             
             WebHelperResult whr = new WebHelperResult();
@@ -91,7 +89,13 @@ namespace EZBlocker
                     }
                     else if (line.Contains("Invalid Csrf token"))
                     {
-                        csrfToken = null;
+                        Debug.WriteLine("Invalid CSRF token");
+                        SetCSRF();
+                    }
+                    else if (line.Contains("Invalid OAuth token"))
+                    {
+                        Debug.WriteLine("Invalid OAuth token");
+                        SetOAuth();
                     }
                 }
             }
@@ -122,6 +126,7 @@ namespace EZBlocker
             CheckWebHelper();
             String url = "https://open.spotify.com/token";
             String json = GetPage(url);
+            Debug.WriteLine(json);
             OAuth res = JsonConvert.DeserializeObject<OAuth>(json);
             oauthToken = res.t;
         }
@@ -131,6 +136,13 @@ namespace EZBlocker
             Debug.WriteLine("Getting CSRF Token");
             String url = GetURL("/simplecsrf/token.json");
             String json = GetPage(url);
+            Debug.WriteLine(json);
+            if (json.Contains("\"error\":"))
+            {
+                csrfToken = "";  // Block rest of CSRF calls
+                System.Windows.Forms.MessageBox.Show("Error hooking Spotify. Please restart EZBlocker after restarting Spotify.", "Error");
+                System.Windows.Forms.Application.Exit();
+            }
             CSRF res = JsonConvert.DeserializeObject<CSRF>(json);
             csrfToken = res.token;
         }
@@ -147,7 +159,8 @@ namespace EZBlocker
 
         private static string GetPage(string URL)
         {
-            WebClient w = new WebClient();
+            Debug.WriteLine("Getting page " + URL);
+            WebClient w = new TimedWebClient();
             w.Headers.Add("user-agent", ua);
             w.Headers.Add("Origin", "https://open.spotify.com");
             ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
@@ -177,6 +190,24 @@ namespace EZBlocker
             nonunicode.GetChars(nonunicodeBytes, 0, nonunicodeBytes.Length, nonunicodeChars, 0);
 
             return new string(nonunicodeChars);
+        }
+    }
+
+    class TimedWebClient : WebClient
+    {
+        // Timeout in milliseconds, default = 600,000 msec
+        public int Timeout { get; set; }
+
+        public TimedWebClient()
+        {
+            this.Timeout = 3 * 1000;
+        }
+
+        protected override WebRequest GetWebRequest(Uri address)
+        {
+            var objWebRequest = base.GetWebRequest(address);
+            objWebRequest.Timeout = this.Timeout;
+            return objWebRequest;
         }
     }
 
