@@ -382,7 +382,8 @@ namespace EZBlocker
             {
                 this.ShowInTaskbar = false;
                 this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-                Notify("EZBlocker is hidden. Double-click this icon to restore.");
+                // Very Annoying
+                // Notify("EZBlocker is hidden. Double-click this icon to restore.");
             }
         }
 
