@@ -163,7 +163,7 @@ namespace EZBlocker
         private static string GetPage(string URL)
         {
             Debug.WriteLine("Getting page " + URL);
-            WebClient w = new TimedWebClient();
+            WebClient w = new WebClient();
             w.Headers.Add("user-agent", ua);
             w.Headers.Add("Origin", "https://open.spotify.com");
             ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };

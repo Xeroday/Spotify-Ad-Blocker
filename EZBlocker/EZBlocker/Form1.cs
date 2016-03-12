@@ -102,7 +102,8 @@ namespace EZBlocker
                 }
                 else if (!whr.isRunning)
                 {
-                    // Notify("Error connecting to Spotify. Retrying...");
+                    StatusLabel.Text = "Spotif is not running";
+                    //Notify("Error connecting to Spotify. Retrying...");
                     File.AppendAllText(logPath, "Not running.\r\n");
                     MainTimer.Interval = 5000;
                     /*
