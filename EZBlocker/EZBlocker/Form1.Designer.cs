@@ -34,7 +34,6 @@
             this.MuteButton = new System.Windows.Forms.Button();
             this.NotifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.WebsiteLink = new System.Windows.Forms.LinkLabel();
-            this.Heartbeat = new System.Windows.Forms.Timer(this.components);
             this.SpotifyMuteCheckbox = new System.Windows.Forms.CheckBox();
             this.VolumeMixerButton = new System.Windows.Forms.Button();
             this.StatusLabel = new System.Windows.Forms.Label();
@@ -74,12 +73,6 @@
             this.WebsiteLink.TabStop = true;
             this.WebsiteLink.Text = "About/Info/FAQ";
             this.WebsiteLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.WebsiteLink_LinkClicked);
-            // 
-            // Heartbeat
-            // 
-            this.Heartbeat.Enabled = true;
-            this.Heartbeat.Interval = 295000;
-            this.Heartbeat.Tick += new System.EventHandler(this.Heartbeat_Tick);
             // 
             // SpotifyMuteCheckbox
             // 
@@ -153,7 +146,6 @@
         private System.Windows.Forms.Button MuteButton;
         private System.Windows.Forms.NotifyIcon NotifyIcon;
         private System.Windows.Forms.LinkLabel WebsiteLink;
-        private System.Windows.Forms.Timer Heartbeat;
         private System.Windows.Forms.CheckBox SpotifyMuteCheckbox;
         private System.Windows.Forms.Button VolumeMixerButton;
         private System.Windows.Forms.Label StatusLabel;
