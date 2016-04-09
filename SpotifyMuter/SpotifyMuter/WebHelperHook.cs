@@ -5,7 +5,6 @@ using System.Text;
 using Newtonsoft.Json;
 using System.IO;
 using System.Diagnostics;
-using System.Configuration;
 using System.Reflection;
 
 namespace SpotifyMuter
@@ -234,13 +233,13 @@ namespace SpotifyMuter
 
         public TimedWebClient()
         {
-            this.Timeout = 30 * 1000;
+            Timeout = 30 * 1000;
         }
 
         protected override WebRequest GetWebRequest(Uri address)
         {
             var request = base.GetWebRequest(address);
-            request.Timeout = this.Timeout;
+            request.Timeout = Timeout;
             HttpWebRequest webRequest = request as HttpWebRequest;
             if (webRequest != null)
             {
