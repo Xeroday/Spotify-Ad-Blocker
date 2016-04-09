@@ -1,4 +1,4 @@
-﻿namespace EZBlocker
+﻿namespace SpotifyMuter
 {
     class OAuth
     {

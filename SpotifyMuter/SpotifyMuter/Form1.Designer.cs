@@ -1,4 +1,4 @@
-﻿namespace EZBlocker
+﻿namespace SpotifyMuter
 {
     partial class Main
     {
@@ -120,7 +120,7 @@
             this.MaximizeBox = false;
             this.Name = "Main";
             this.RightToLeftLayout = true;
-            this.Text = "EZBlocker";
+            this.Text = "SpotifyMuter";
             this.Load += new System.EventHandler(this.Main_Load);
             this.Resize += new System.EventHandler(this.Form_Resize);
             this.ResumeLayout(false);

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-namespace EZBlocker
+namespace SpotifyMuter
 {
     public static class WindowUtilities
     {

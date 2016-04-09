@@ -8,7 +8,7 @@ using System.Diagnostics;
 using System.Configuration;
 using System.Reflection;
 
-namespace EZBlocker
+namespace SpotifyMuter
 {
     class WebHelperHook
     {
@@ -143,7 +143,7 @@ namespace EZBlocker
             if (json.Contains("\"error\":"))
             {
                 csrfToken = "";  // Block rest of CSRF calls
-                System.Windows.Forms.MessageBox.Show("Error hooking Spotify. Please restart EZBlocker after restarting Spotify.", "Error");
+                System.Windows.Forms.MessageBox.Show("Error hooking Spotify. Please restart SpotifyMuter after restarting Spotify.", "Error");
                 System.Windows.Forms.Application.Exit();
             }
             CSRF res = JsonConvert.DeserializeObject<CSRF>(json);

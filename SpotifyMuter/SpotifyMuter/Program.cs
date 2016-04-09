@@ -4,7 +4,7 @@ using System.Threading;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-namespace EZBlocker
+namespace SpotifyMuter
 {
     static class Program
     {

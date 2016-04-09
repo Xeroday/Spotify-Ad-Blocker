@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("EZBlocker")]
+[assembly: AssemblyTitle("SpotifyMuter")]
 [assembly: AssemblyDescription("http://www.ericzhang.me")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Eric Zhang")]
-[assembly: AssemblyProduct("EZBlocker")]
+[assembly: AssemblyProduct("SpotifyMuter")]
 [assembly: AssemblyCopyright("Copyright ©  2012-2016 Eric Zhang")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

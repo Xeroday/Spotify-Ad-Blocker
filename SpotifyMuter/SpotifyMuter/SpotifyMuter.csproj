@@ -7,8 +7,8 @@
     <ProjectGuid>{32C0D43C-E0F1-46D6-8661-EF5BE2566BA8}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EZBlocker</RootNamespace>
-    <AssemblyName>EZBlocker</AssemblyName>
+    <RootNamespace>SpotifyMuter</RootNamespace>
+    <AssemblyName>SpotifyMuter</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -54,7 +54,8 @@
     <ApplicationIcon>my_music.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>EZBlocker.Program</StartupObject>
+    <StartupObject>
+    </StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AudioSwitcher.AudioApi, Version=3.0.0.209, Culture=neutral, PublicKeyToken=fda5729e2db3a64f, processorArchitecture=MSIL">

@@ -8,14 +8,14 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using AudioSwitcher.AudioApi.CoreAudio;
 
-namespace EZBlocker
+namespace SpotifyMuter
 {
     public partial class Main : Form
     {
         private bool muted = false;
         private string lastArtistName = "";
         
-        public static string logPath = Application.StartupPath + @"\EZBlocker-log.txt";
+        public static string logPath = Application.StartupPath + @"\SpotifyMuter-log.txt";
 
         private string spotifyPath = Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe";
         private string spotifyPrefsPath = Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\prefs";
@@ -35,8 +35,8 @@ namespace EZBlocker
         private const int MEDIA_PLAYPAUSE = 0xE0000;
         private const int MEDIA_NEXTTRACK = 0xB0000;
         
-        private string EZBlockerUA = "EZBlocker " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " " + System.Environment.OSVersion;
-        private const string website = @"https://www.ericzhang.me/projects/spotify-ad-blocker-ezblocker/";
+        private string SpotifyMuterUA = "SpotifyMuter " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " " + System.Environment.OSVersion;
+        private const string website = @"https://www.ericzhang.me/projects/spotify-ad-blocker-SpotifyMuter/";
 
         public Main()
         {
@@ -76,7 +76,7 @@ namespace EZBlocker
                     {
                         StatusLabel.Text = "Playing: *Private Session*";
                         lastArtistName = whr.artistName;
-                        MessageBox.Show("Please disable 'Private Session' on Spotify for EZBlocker to function properly.", "EZBlocker", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, (MessageBoxOptions)0x40000);
+                        MessageBox.Show("Please disable 'Private Session' on Spotify for SpotifyMuter to function properly.", "SpotifyMuter", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, (MessageBoxOptions)0x40000);
                     }
                 }
                 else if (!whr.isRunning)
@@ -86,7 +86,7 @@ namespace EZBlocker
                     MainTimer.Interval = 5000;
                     /*
                     MainTimer.Enabled = false;
-                    MessageBox.Show("Spotify is not running. Please restart EZBlocker after starting Spotify.", "EZBlocker", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, (MessageBoxOptions)0x40000);
+                    MessageBox.Show("Spotify is not running. Please restart SpotifyMuter after starting Spotify.", "SpotifyMuter", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, (MessageBoxOptions)0x40000);
                     StatusLabel.Text = "Spotify is not running";
                     Application.Exit();
                     */
@@ -183,7 +183,7 @@ namespace EZBlocker
         }
         
         /**
-         * Processes window message and shows EZBlocker when attempting to launch a second instance.
+         * Processes window message and shows SpotifyMuter when attempting to launch a second instance.
          **/
         protected override void WndProc(ref Message m)
         {
@@ -203,7 +203,7 @@ namespace EZBlocker
 
         private void Notify(String message)
         {
-            NotifyIcon.ShowBalloonTip(10000, "EZBlocker", message, ToolTipIcon.None);
+            NotifyIcon.ShowBalloonTip(10000, "SpotifyMuter", message, ToolTipIcon.None);
         }
 
         private void NotifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -225,7 +225,7 @@ namespace EZBlocker
             {
                 this.ShowInTaskbar = false;
                 this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
-                Notify("EZBlocker is hidden. Double-click this icon to restore.");
+                Notify("SpotifyMuter is hidden. Double-click this icon to restore.");
             }
         }
 
@@ -233,7 +233,7 @@ namespace EZBlocker
         {
             if (!IsUserAnAdmin())
             {
-                MessageBox.Show("Enabling/Disabling this option requires Administrator privilages.\n\nPlease reopen EZBlocker with \"Run as Administrator\".", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Enabling/Disabling this option requires Administrator privilages.\n\nPlease reopen SpotifyMuter with \"Run as Administrator\".", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             if (!File.Exists(hostsPath))
@@ -257,7 +257,7 @@ namespace EZBlocker
                     text = text.Where(line => !line.Contains("doubleclick.net")).ToArray();
                     File.WriteAllLines(hostsPath, text);
                 }
-                MessageBox.Show("You may need to restart Spotify or your computer for this setting to take effect.", "EZBlocker", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("You may need to restart Spotify or your computer for this setting to take effect.", "SpotifyMuter", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
@@ -273,7 +273,7 @@ namespace EZBlocker
             }
             catch (Exception)
             {
-                MessageBox.Show("Could not open Volume Mixer. This is only available on Windows 7/8/10", "EZBlocker");
+                MessageBox.Show("Could not open Volume Mixer. This is only available on Windows 7/8/10", "SpotifyMuter");
             }
         }
 
@@ -304,14 +304,14 @@ namespace EZBlocker
                 }
             }
 
-            // Start Spotify and give EZBlocker higher priority
+            // Start Spotify and give SpotifyMuter higher priority
             try
             {
                 if (File.Exists(spotifyPath))
                 {
                     Process.Start(spotifyPath);
                 }
-                Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High; // Windows throttles down when minimized to task tray, so make sure EZBlocker runs smoothly
+                Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High; // Windows throttles down when minimized to task tray, so make sure SpotifyMuter runs smoothly
             }
             catch (Exception ex)
             {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace EZBlocker
+namespace SpotifyMuter
 {
     public class Info
     {
