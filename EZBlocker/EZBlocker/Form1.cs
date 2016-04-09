@@ -14,8 +14,7 @@ namespace EZBlocker
     {
         private bool muted = false;
         private string lastArtistName = "";
-
-        private string nircmdPath = Application.StartupPath + @"\nircmd.exe";
+        
         public static string logPath = Application.StartupPath + @"\EZBlocker-log.txt";
 
         private string spotifyPath = Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe";
@@ -319,17 +318,6 @@ namespace EZBlocker
                 Debug.WriteLine(ex);
             }
 
-            // Extract dependencies
-            try {
-                if (!File.Exists(nircmdPath))
-                {
-                    File.WriteAllBytes(nircmdPath, Properties.Resources.nircmd32);
-                }              
-            } catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-                MessageBox.Show("Error loading EZBlocker dependencies. Please run EZBlocker as administrator or put EZBlocker in a user folder.");
-            }
             // Set up UI
             if (File.Exists(hostsPath))
             {

@@ -124,7 +124,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="my_music.ico" />
-    <None Include="Resources\nircmd32.exe" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
