@@ -5,22 +5,18 @@ using System.Reflection;
 using System.Linq;
 using System.Windows.Forms;
 using System.Diagnostics;
-using CoreAudio;
 using System.Runtime.InteropServices;
-using System.Threading;
+using AudioSwitcher.AudioApi.CoreAudio;
 
 namespace EZBlocker
 {
     public partial class Main : Form
     {
         private bool muted = false;
-        private bool spotifyMute = false;
-        private float volume = 0.9f;
         private string lastArtistName = "";
 
         private string nircmdPath = Application.StartupPath + @"\nircmd.exe";
         private string jsonPath = Application.StartupPath + @"\Newtonsoft.Json.dll";
-        private string coreaudioPath = Application.StartupPath + @"\CoreAudio.dll";
         public static string logPath = Application.StartupPath + @"\EZBlocker-log.txt";
 
         private string spotifyPath = Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe";
@@ -132,43 +128,22 @@ namespace EZBlocker
 
             muted = Convert.ToBoolean(i);
 
-            if (spotifyMute) // Mute only Spotify process
-            {
-                // EZBlocker2.AudioUtilities.SetApplicationMute("spotify", muted);
+           // Mute only Spotify process
+           
+                var audioController = new CoreAudioController();
+                var defaultDevice = audioController.GetDefaultDevice(AudioSwitcher.AudioApi.DeviceType.Playback, AudioSwitcher.AudioApi.Role.Multimedia);
+                var sessions = defaultDevice.SessionController.ActiveSessions();
 
-                MMDeviceEnumerator DevEnum = new MMDeviceEnumerator();
-                MMDevice device = DevEnum.GetDefaultAudioEndpoint(EDataFlow.eRender, ERole.eMultimedia);
-                AudioSessionManager2 asm = device.AudioSessionManager2;
-                SessionCollection sessions = asm.Sessions;
-                for (int sid = 0; sid < sessions.Count; sid++)
+                for (int sessionId = 0; sessionId < sessions.Count(); sessionId++)
                 {
-                    string id = sessions[sid].GetSessionIdentifier;
-                    if (id.ToLower().IndexOf("spotify.exe") > -1)
+                    var currentSession = sessions.ElementAt(sessionId);
+                    string displayName = currentSession.DisplayName;
+                    if (displayName == "Spotify")
                     {
-                        if (muted)
-                        {
-                            volume = sessions[sid].SimpleAudioVolume.MasterVolume;
-                            sessions[sid].SimpleAudioVolume.MasterVolume = 0;
-                        }
-                        else
-                        {
-                            sessions[sid].SimpleAudioVolume.MasterVolume = volume;
-                        }
-                        //sessions[sid].SimpleAudioVolume.Mute = muted;
+                        currentSession.IsMuted = muted;
                     }
                 }
-            }
-            else // Mute all of Windows
-            {
-                Process process = new Process();
-                ProcessStartInfo startInfo = new ProcessStartInfo();
-                startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                startInfo.FileName = "cmd.exe";
-                startInfo.Arguments = "/C nircmd mutesysvolume " + i.ToString();
-                process.StartInfo = startInfo;
-                process.Start();
-            }
-
+            
         }
 
         /**
@@ -177,30 +152,7 @@ namespace EZBlocker
         private void Resume()
         {
             Debug.WriteLine("Resuming Spotify");
-            if (spotifyMute)
-            {
-                SendMessage(GetHandle(), WM_APPCOMMAND, this.Handle, (IntPtr)MEDIA_PLAYPAUSE);
-            }
-            else
-            {
-                SendMessage(this.Handle, WM_APPCOMMAND, this.Handle, (IntPtr)MEDIA_PLAYPAUSE);
-            }
-        }
-
-        /**
-         *  Plays next track queued on Spotify
-         **/
-        private void NextTrack()
-        {
-            Debug.WriteLine("Skipping to next track");
-            if (spotifyMute)
-            {
-                SendMessage(GetHandle(), WM_APPCOMMAND, this.Handle, (IntPtr)MEDIA_NEXTTRACK);
-            }
-            else
-            {
-                SendMessage(this.Handle, WM_APPCOMMAND, this.Handle, (IntPtr)MEDIA_NEXTTRACK);
-            }
+            SendMessage(GetHandle(), WM_APPCOMMAND, this.Handle, (IntPtr)MEDIA_PLAYPAUSE);
         }
 
         /**
@@ -214,17 +166,6 @@ namespace EZBlocker
                     return t.MainWindowHandle;
             }
             return IntPtr.Zero;
-        }
-
-        /**
-         * Gets the source of a given URL
-         **/
-        private string GetPage(string URL, string ua)
-        {
-            WebClient w = new WebClient();
-            w.Headers.Add("user-agent", ua);
-            string s = w.DownloadString(URL);
-            return s;
         }
 
         private string ShortenName(string name)
@@ -288,14 +229,6 @@ namespace EZBlocker
                 this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
                 Notify("EZBlocker is hidden. Double-click this icon to restore.");
             }
-        }
-
-        private void SpotifyMuteCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            spotifyMute = SpotifyMuteCheckbox.Checked;
-            if (!spotifyMute) MessageBox.Show("You may need to restart Spotify for this to take effect.", "EZBlocker", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            Properties.Settings.Default.SpotifyMute = spotifyMute;
-            Properties.Settings.Default.Save();
         }
 
         private void SkipAdsCheckbox_CheckedChanged(object sender, EventArgs e)
@@ -397,17 +330,12 @@ namespace EZBlocker
                 {
                     File.WriteAllBytes(jsonPath, Properties.Resources.Newtonsoft_Json);
                 }
-                if (!File.Exists(coreaudioPath))
-                {
-                    File.WriteAllBytes(coreaudioPath, Properties.Resources.CoreAudio);
-                }
             } catch (Exception ex)
             {
                 Debug.WriteLine(ex);
                 MessageBox.Show("Error loading EZBlocker dependencies. Please run EZBlocker as administrator or put EZBlocker in a user folder.");
             }
             // Set up UI
-            SpotifyMuteCheckbox.Checked = Properties.Settings.Default.SpotifyMute;
             if (File.Exists(hostsPath))
             {
                 BlockBannersCheckbox.Checked = File.ReadAllText(hostsPath).Contains("doubleclick.net");

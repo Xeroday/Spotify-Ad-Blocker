@@ -34,7 +34,6 @@
             this.MuteButton = new System.Windows.Forms.Button();
             this.NotifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.WebsiteLink = new System.Windows.Forms.LinkLabel();
-            this.SpotifyMuteCheckbox = new System.Windows.Forms.CheckBox();
             this.VolumeMixerButton = new System.Windows.Forms.Button();
             this.StatusLabel = new System.Windows.Forms.Label();
             this.BlockBannersCheckbox = new System.Windows.Forms.CheckBox();
@@ -73,17 +72,6 @@
             this.WebsiteLink.TabStop = true;
             this.WebsiteLink.Text = "About/Info/FAQ";
             this.WebsiteLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.WebsiteLink_LinkClicked);
-            // 
-            // SpotifyMuteCheckbox
-            // 
-            this.SpotifyMuteCheckbox.AutoSize = true;
-            this.SpotifyMuteCheckbox.Location = new System.Drawing.Point(12, 48);
-            this.SpotifyMuteCheckbox.Name = "SpotifyMuteCheckbox";
-            this.SpotifyMuteCheckbox.Size = new System.Drawing.Size(109, 17);
-            this.SpotifyMuteCheckbox.TabIndex = 6;
-            this.SpotifyMuteCheckbox.Text = "Mute Only Spotify";
-            this.SpotifyMuteCheckbox.UseVisualStyleBackColor = true;
-            this.SpotifyMuteCheckbox.CheckedChanged += new System.EventHandler(this.SpotifyMuteCheckBox_CheckedChanged);
             // 
             // VolumeMixerButton
             // 
@@ -124,7 +112,6 @@
             this.Controls.Add(this.BlockBannersCheckbox);
             this.Controls.Add(this.StatusLabel);
             this.Controls.Add(this.VolumeMixerButton);
-            this.Controls.Add(this.SpotifyMuteCheckbox);
             this.Controls.Add(this.WebsiteLink);
             this.Controls.Add(this.MuteButton);
             this.Cursor = System.Windows.Forms.Cursors.Default;
@@ -146,7 +133,6 @@
         private System.Windows.Forms.Button MuteButton;
         private System.Windows.Forms.NotifyIcon NotifyIcon;
         private System.Windows.Forms.LinkLabel WebsiteLink;
-        private System.Windows.Forms.CheckBox SpotifyMuteCheckbox;
         private System.Windows.Forms.Button VolumeMixerButton;
         private System.Windows.Forms.Label StatusLabel;
         private System.Windows.Forms.CheckBox BlockBannersCheckbox;
