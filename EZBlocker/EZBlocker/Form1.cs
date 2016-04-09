@@ -16,7 +16,6 @@ namespace EZBlocker
         private string lastArtistName = "";
 
         private string nircmdPath = Application.StartupPath + @"\nircmd.exe";
-        private string jsonPath = Application.StartupPath + @"\Newtonsoft.Json.dll";
         public static string logPath = Application.StartupPath + @"\EZBlocker-log.txt";
 
         private string spotifyPath = Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe";
@@ -325,11 +324,7 @@ namespace EZBlocker
                 if (!File.Exists(nircmdPath))
                 {
                     File.WriteAllBytes(nircmdPath, Properties.Resources.nircmd32);
-                }
-                if (!File.Exists(jsonPath))
-                {
-                    File.WriteAllBytes(jsonPath, Properties.Resources.Newtonsoft_Json);
-                }
+                }              
             } catch (Exception ex)
             {
                 Debug.WriteLine(ex);
