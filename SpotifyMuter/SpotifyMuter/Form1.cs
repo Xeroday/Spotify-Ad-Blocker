@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
@@ -13,8 +12,6 @@ namespace SpotifyMuter
     {
         private bool _muted;
         private string _lastArtistName = "";
-
-        private readonly string spotifyPrefsPath = Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\prefs";
 
         [DllImport("user32.dll")]
         private static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
@@ -184,20 +181,8 @@ namespace SpotifyMuter
         {
             NlogConfiguration.Configure();
 
-            // Enable web helper
-            if (File.Exists(spotifyPrefsPath))
-            {
-                String[] lines = File.ReadAllLines(spotifyPrefsPath);
-                for (int i = 0; i < lines.Length; i++)
-                {
-                    if (lines[i].Contains("webhelper.enabled") && lines[i].Contains("false"))
-                    {
-                        lines[i] = "webhelper.enabled=true";
-                        File.WriteAllLines(spotifyPrefsPath, lines);
-                        break;
-                    }
-                }
-            }
+            var webhelperEnabler = new WebhelperEnabler();
+            webhelperEnabler.EnableWebhelper();
 
             // Give SpotifyMuter higher priority
             try
