@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Text;
 using Newtonsoft.Json;
 using System.IO;
-using System.Diagnostics;
 using System.Reflection;
+using Anotar.NLog;
 
 namespace SpotifyMuter
 {
@@ -36,12 +37,11 @@ namespace SpotifyMuter
             try
             {
                 result = GetPage(GetURL("/remote/status.json" + "?oauth=" + oauthToken + "&csrf=" + csrfToken));
-                Debug.WriteLine(result);
+                LogTo.Debug(result);
             }
             catch (WebException ex)
             {
-                Debug.WriteLine(ex);
-                File.AppendAllText(Main.logPath, "WebHelperHook: " + ex.Message + "\r\n");
+                LogTo.DebugException("WebHelperHook: ", ex);
             }
             
             WebHelperResult whr = new WebHelperResult();
@@ -91,12 +91,12 @@ namespace SpotifyMuter
                     }
                     else if (line.Contains("Invalid Csrf token"))
                     {
-                        Debug.WriteLine("Invalid CSRF token");
+                        LogTo.Debug("Invalid CSRF token");
                         SetCSRF();
                     }
                     else if (line.Contains("Invalid OAuth token"))
                     {
-                        Debug.WriteLine("Invalid OAuth token");
+                        LogTo.Debug("Invalid OAuth token");
                         SetOAuth();
                     }
                 }
@@ -111,7 +111,7 @@ namespace SpotifyMuter
             {
                 return;
             }
-            Debug.WriteLine("Starting SpotifyWebHelper");
+            LogTo.Debug("Starting SpotifyWebHelper");
             if (File.Exists(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\Data\SpotifyWebHelper.exe"))
             {
                 Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\Data\SpotifyWebHelper.exe");
@@ -124,21 +124,21 @@ namespace SpotifyMuter
 
         private static void SetOAuth()
         {
-            Debug.WriteLine("Getting OAuth Token");
+            LogTo.Debug("Getting OAuth Token");
             CheckWebHelper();
             String url = "https://open.spotify.com/token";
             String json = GetPage(url);
-            Debug.WriteLine(json);
+            LogTo.Debug(json);
             OAuth res = JsonConvert.DeserializeObject<OAuth>(json);
             oauthToken = res.t;
         }
 
         private static void SetCSRF()
         {
-            Debug.WriteLine("Getting CSRF Token");
+            LogTo.Debug("Getting CSRF Token");
             String url = GetURL("/simplecsrf/token.json");
             String json = GetPage(url);
-            Debug.WriteLine(json);
+            LogTo.Debug(json);
             if (json.Contains("\"error\":"))
             {
                 csrfToken = "";  // Block rest of CSRF calls
@@ -161,7 +161,7 @@ namespace SpotifyMuter
 
         private static string GetPage(string URL)
         {
-            Debug.WriteLine("Getting page " + URL);
+            LogTo.Debug("Getting page " + URL);
             WebClient w = new TimedWebClient();
             w.Headers.Add("user-agent", ua);
             w.Headers.Add("Origin", "https://open.spotify.com");
@@ -224,30 +224,4 @@ namespace SpotifyMuter
             return false;
         }
     }
-
-    class TimedWebClient : WebClient
-    {
-        // Timeout in milliseconds, default = 600,000 msec
-        public int Timeout { get; set; }
-        private readonly CookieContainer m_container = new CookieContainer();
-
-        public TimedWebClient()
-        {
-            Timeout = 30 * 1000;
-        }
-
-        protected override WebRequest GetWebRequest(Uri address)
-        {
-            var request = base.GetWebRequest(address);
-            request.Timeout = Timeout;
-            HttpWebRequest webRequest = request as HttpWebRequest;
-            if (webRequest != null)
-            {
-                webRequest.CookieContainer = m_container;
-                webRequest.KeepAlive = false;
-            }
-            return request;
-        }
-    }
-
 }

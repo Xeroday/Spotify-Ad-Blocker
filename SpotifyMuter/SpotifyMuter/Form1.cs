@@ -1,28 +1,24 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Anotar.NLog;
 using AudioSwitcher.AudioApi.CoreAudio;
 
 namespace SpotifyMuter
 {
     public partial class Main : Form
     {
-        private bool muted;
-        private string lastArtistName = "";
-        
-        public static string logPath = Application.StartupPath + @"\SpotifyMuter-log.txt";
+        private bool _muted;
+        private string _lastArtistName = "";
 
         private readonly string spotifyPrefsPath = Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\prefs";
 
         [DllImport("user32.dll")]
         private static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
-
-        [DllImport("shell32.dll")]
-        public static extern bool IsUserAnAdmin();
-
+        
         // https://msdn.microsoft.com/en-us/library/windows/desktop/ms646275%28v=vs.85%29.aspx
         private const int WM_APPCOMMAND = 0x319;
         private const int MEDIA_PLAYPAUSE = 0xE0000;
@@ -38,40 +34,40 @@ namespace SpotifyMuter
         private void MainTimer_Tick(object sender, EventArgs e)
         {
             try {
-                WebHelperResult whr = WebHelperHook.GetStatus();
+                WebHelperResult result = WebHelperHook.GetStatus();
 
-                if (whr.isAd) // Track is ad
+                if (result.isAd) // Track is ad
                 {
-                    if (whr.isPlaying)
+                    if (result.isPlaying)
                     {
-                        Debug.WriteLine("Ad is playing");
-                        if (lastArtistName != whr.artistName)
+                        LogTo.Debug("Ad is playing");
+                        if (_lastArtistName != result.artistName)
                         {
-                            if (!muted) Mute(1);
-                            Debug.WriteLine("Muting ad");
-                            lastArtistName = whr.artistName;
-                            Debug.WriteLine("Blocked " + whr.artistName);
+                            if (!_muted) Mute(1);
+                            LogTo.Debug("Muting ad");
+                            _lastArtistName = result.artistName;
+                            LogTo.Debug("Blocked " + result.artistName);
                         }
                     }
                     else // Ad is paused
                     {
-                        Debug.WriteLine("Ad is paused");
+                        LogTo.Debug("Ad is paused");
                         Resume();
                     }
                 }
-                else if (whr.isPrivateSession)
+                else if (result.isPrivateSession)
                 {
-                    if (lastArtistName != whr.artistName)
+                    if (_lastArtistName != result.artistName)
                     {
-                        Debug.WriteLine("Playing: *Private Session*");
-                        lastArtistName = whr.artistName;
+                        LogTo.Debug("Playing: *Private Session*");
+                        _lastArtistName = result.artistName;
                         MessageBox.Show("Please disable 'Private Session' on Spotify for SpotifyMuter to function properly.", "SpotifyMuter", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, (MessageBoxOptions)0x40000);
                     }
                 }
-                else if (!whr.isRunning)
+                else if (!result.isRunning)
                 {
                     // Notify("Error connecting to Spotify. Retrying...");
-                    File.AppendAllText(logPath, "Not running.\r\n");
+                    LogTo.Debug("Not running.");
                     MainTimer.Interval = 5000;
                     /*
                     MainTimer.Enabled = false;
@@ -80,26 +76,25 @@ namespace SpotifyMuter
                     Application.Exit();
                     */
                 }
-                else if (!whr.isPlaying)
+                else if (!result.isPlaying)
                 {
-                    Debug.WriteLine("Spotify is paused");
-                    lastArtistName = "";
+                    LogTo.Debug("Spotify is paused");
+                    _lastArtistName = "";
                 }
                 else // Song is playing
                 {
-                    if (muted) Mute(0);
+                    if (_muted) Mute(0);
                     if (MainTimer.Interval > 1000) MainTimer.Interval = 1000;
-                    if (lastArtistName != whr.artistName)
+                    if (_lastArtistName != result.artistName)
                     {
-                        Debug.WriteLine("Playing: " + ShortenName(whr.artistName));
-                        lastArtistName = whr.artistName;
+                        LogTo.Debug("Playing: " + ShortenName(result.artistName));
+                        _lastArtistName = result.artistName;
                     }
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex);
-                File.AppendAllText(logPath, ex.Message);
+                LogTo.DebugException("Error", ex);
             }
         }
        
@@ -111,9 +106,9 @@ namespace SpotifyMuter
         private void Mute(int i)
         {
             if (i == 2) // Toggle mute
-                i = (muted ? 0 : 1);
+                i = (_muted ? 0 : 1);
 
-            muted = Convert.ToBoolean(i);
+            _muted = Convert.ToBoolean(i);
 
            // Mute only Spotify process
            
@@ -127,7 +122,7 @@ namespace SpotifyMuter
                     string displayName = currentSession.DisplayName;
                     if (displayName == "Spotify")
                     {
-                        currentSession.IsMuted = muted;
+                        currentSession.IsMuted = _muted;
                     }
                 }
             
@@ -138,7 +133,7 @@ namespace SpotifyMuter
          **/
         private void Resume()
         {
-            Debug.WriteLine("Resuming Spotify");
+            LogTo.Debug("Resuming Spotify");
             SendMessage(GetHandle(), WM_APPCOMMAND, Handle, (IntPtr)MEDIA_PLAYPAUSE);
         }
 
@@ -181,10 +176,14 @@ namespace SpotifyMuter
             ShowInTaskbar = false;
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
             Notify("SpotifyMuter is hidden. Double-click this icon to close it.");
+
+            LogTo.Debug("Window was hidden to tray.");
         }
 
         private void Main_Load(object sender, EventArgs e)
         {
+            NlogConfiguration.Configure();
+
             // Enable web helper
             if (File.Exists(spotifyPrefsPath))
             {
@@ -207,12 +206,11 @@ namespace SpotifyMuter
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex);
+                LogTo.DebugException("Error: ", ex);
             }
             
-            File.AppendAllText(logPath, "-----------\r\n");
             bool unsafeHeaders = WebHelperHook.SetAllowUnsafeHeaderParsing20();
-            Debug.WriteLine("Unsafe Headers: " + unsafeHeaders);
+            LogTo.Debug("Unsafe Headers: " + unsafeHeaders);
 
             Mute(0);
             
