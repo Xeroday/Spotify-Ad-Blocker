@@ -166,7 +166,7 @@ namespace SpotifyMuter
         {
             Close();
         }
-        
+
         private void HideWindow()
         {
             WindowState = FormWindowState.Minimized;
@@ -198,10 +198,20 @@ namespace SpotifyMuter
             LogTo.Debug("Unsafe Headers: " + unsafeHeaders);
 
             Mute(0);
-            
+
+            AddContextMenu();
+
             MainTimer.Enabled = true;
 
             HideWindow();
+        }
+
+        /// <summary>Add ContextMenu to tray</summary>
+        private void AddContextMenu()
+        {
+            ContextMenu trayMenu = new ContextMenu();
+            trayMenu.MenuItems.Add("Exit", (o, args) => { Close(); });
+            NotifyIcon.ContextMenu = trayMenu;
         }
     }
 }
