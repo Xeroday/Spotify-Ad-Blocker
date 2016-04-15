@@ -15,7 +15,7 @@ namespace SpotifyMuter
 
         [DllImport("user32.dll")]
         private static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
-        
+
         // https://msdn.microsoft.com/en-us/library/windows/desktop/ms646275%28v=vs.85%29.aspx
         private const int WM_APPCOMMAND = 0x319;
         private const int MEDIA_PLAYPAUSE = 0xE0000;
@@ -30,7 +30,8 @@ namespace SpotifyMuter
          **/
         private void MainTimer_Tick(object sender, EventArgs e)
         {
-            try {
+            try
+            {
                 WebHelperResult result = WebHelperHook.GetStatus();
 
                 if (result.isAd) // Track is ad
@@ -40,7 +41,7 @@ namespace SpotifyMuter
                         LogTo.Debug("Ad is playing");
                         if (_lastArtistName != result.artistName)
                         {
-                            if (!_muted) Mute(1);
+                            if (!_muted) Mute(true);
                             LogTo.Debug("Muting ad");
                             _lastArtistName = result.artistName;
                             LogTo.Debug("Blocked " + result.artistName);
@@ -80,11 +81,11 @@ namespace SpotifyMuter
                 }
                 else // Song is playing
                 {
-                    if (_muted) Mute(0);
+                    if (_muted) Mute(false);
                     if (MainTimer.Interval > 1000) MainTimer.Interval = 1000;
                     if (_lastArtistName != result.artistName)
                     {
-                        LogTo.Debug("Playing: " + ShortenName(result.artistName));
+                        LogTo.Debug("Playing: " + result.artistName);
                         _lastArtistName = result.artistName;
                     }
                 }
@@ -94,35 +95,23 @@ namespace SpotifyMuter
                 LogTo.DebugException("Error", ex);
             }
         }
-       
-        /**
-         * Mutes/Unmutes Spotify.
-         
-         * i: 0 = unmute, 1 = mute, 2 = toggle
-         **/
-        private void Mute(int i)
+
+        private void Mute(bool mute)
         {
-            if (i == 2) // Toggle mute
-                i = (_muted ? 0 : 1);
+            var audioController = new CoreAudioController();
+            var defaultDevice = audioController.GetDefaultDevice(AudioSwitcher.AudioApi.DeviceType.Playback, AudioSwitcher.AudioApi.Role.Multimedia);
+            var sessions = defaultDevice.SessionController.ActiveSessions();
 
-            _muted = Convert.ToBoolean(i);
-
-           // Mute only Spotify process
-           
-                var audioController = new CoreAudioController();
-                var defaultDevice = audioController.GetDefaultDevice(AudioSwitcher.AudioApi.DeviceType.Playback, AudioSwitcher.AudioApi.Role.Multimedia);
-                var sessions = defaultDevice.SessionController.ActiveSessions();
-
-                for (int sessionId = 0; sessionId < sessions.Count(); sessionId++)
+            for (int sessionId = 0; sessionId < sessions.Count(); sessionId++)
+            {
+                var currentSession = sessions.ElementAt(sessionId);
+                string displayName = currentSession.DisplayName;
+                if (displayName == "Spotify")
                 {
-                    var currentSession = sessions.ElementAt(sessionId);
-                    string displayName = currentSession.DisplayName;
-                    if (displayName == "Spotify")
-                    {
-                        currentSession.IsMuted = _muted;
-                    }
+                    _muted = mute;
+                    currentSession.IsMuted = mute;
                 }
-            
+            }
         }
 
         /**
@@ -147,15 +136,6 @@ namespace SpotifyMuter
             return IntPtr.Zero;
         }
 
-        private string ShortenName(string name)
-        {
-            if (name.Length > 12)
-            {
-                return name.Substring(0, 12) + "...";
-            }
-            return name;
-        }
-        
         private void Notify(String message)
         {
             NotifyIcon.ShowBalloonTip(10000, "SpotifyMuter", message, ToolTipIcon.None);
@@ -193,11 +173,11 @@ namespace SpotifyMuter
             {
                 LogTo.DebugException("Error: ", ex);
             }
-            
+
             bool unsafeHeaders = WebHelperHook.SetAllowUnsafeHeaderParsing20();
             LogTo.Debug("Unsafe Headers: " + unsafeHeaders);
 
-            Mute(0);
+            Mute(false);
 
             AddContextMenu();
 
