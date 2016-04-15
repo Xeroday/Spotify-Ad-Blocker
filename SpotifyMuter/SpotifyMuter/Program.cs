@@ -8,8 +8,8 @@ namespace SpotifyMuter
 {
     static class Program
     {
-        public static string appGuid =
-            ((GuidAttribute)Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(GuidAttribute), false).GetValue(0)).Value.ToString();
+        private static readonly string AppGuid =
+            ((GuidAttribute)Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(GuidAttribute), false).GetValue(0)).Value;
 
         /// <summary>
         /// The main entry point for the application.
@@ -17,7 +17,7 @@ namespace SpotifyMuter
         [STAThread]
         static void Main()
         {
-            string mutexId = string.Format("Local\\{{{0}}}", appGuid); // unique id for local mutex
+            string mutexId = $"Local\\{{{AppGuid}}}"; // unique id for local mutex
 
             using (var mutex = new Mutex(false, mutexId))
             {
@@ -27,11 +27,6 @@ namespace SpotifyMuter
                     Application.SetCompatibleTextRenderingDefault(false);
                     Application.Run(new Main());
                     mutex.ReleaseMutex();
-                }
-                else // another instance is already running
-                {
-                    WindowUtilities.ShowFirstInstance();
-                    return;
                 }
             }
         }

@@ -1,4 +1,4 @@
-﻿namespace SpotifyMuter
+﻿namespace SpotifyMuter.Json
 {
     class ArtistResource
     {

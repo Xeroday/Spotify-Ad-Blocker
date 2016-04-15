@@ -5,7 +5,6 @@ using System.Net;
 using System.Text;
 using Newtonsoft.Json;
 using System.IO;
-using System.Reflection;
 using Anotar.NLog;
 using SpotifyMuter.Json;
 
@@ -112,60 +111,6 @@ namespace SpotifyMuter
             ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
             byte[] bytes = Encoding.Default.GetBytes(w.DownloadString(URL));
             return Encoding.UTF8.GetString(bytes);
-        }
-
-        private static string RemoveDiacritics(string value)
-        {
-            if (String.IsNullOrEmpty(value))
-                return value;
-
-            string normalized = value.Normalize(NormalizationForm.FormD);
-            StringBuilder sb = new StringBuilder();
-
-            foreach (char c in normalized)
-            {
-                if (System.Globalization.CharUnicodeInfo.GetUnicodeCategory(c) != System.Globalization.UnicodeCategory.NonSpacingMark)
-                    sb.Append(c);
-            }
-
-            Encoding nonunicode = Encoding.GetEncoding(850);
-            Encoding unicode = Encoding.Unicode;
-
-            byte[] nonunicodeBytes = Encoding.Convert(unicode, nonunicode, unicode.GetBytes(sb.ToString()));
-            char[] nonunicodeChars = new char[nonunicode.GetCharCount(nonunicodeBytes, 0, nonunicodeBytes.Length)];
-            nonunicode.GetChars(nonunicodeBytes, 0, nonunicodeBytes.Length, nonunicodeChars, 0);
-
-            return new string(nonunicodeChars);
-        }
-
-        public static bool SetAllowUnsafeHeaderParsing20()
-        {
-            //Get the assembly that contains the internal class
-            Assembly aNetAssembly = Assembly.GetAssembly(typeof(System.Net.Configuration.SettingsSection));
-            if (aNetAssembly != null)
-            {
-                //Use the assembly in order to get the internal type for the internal class
-                Type aSettingsType = aNetAssembly.GetType("System.Net.Configuration.SettingsSectionInternal");
-                if (aSettingsType != null)
-                {
-                    //Use the internal static property to get an instance of the internal settings class.
-                    //If the static instance isn't created allready the property will create it for us.
-                    object anInstance = aSettingsType.InvokeMember("Section",
-                      BindingFlags.Static | BindingFlags.GetProperty | BindingFlags.NonPublic, null, null, new object[] { });
-
-                    if (anInstance != null)
-                    {
-                        //Locate the private bool field that tells the framework is unsafe header parsing should be allowed or not
-                        FieldInfo aUseUnsafeHeaderParsing = aSettingsType.GetField("useUnsafeHeaderParsing", BindingFlags.NonPublic | BindingFlags.Instance);
-                        if (aUseUnsafeHeaderParsing != null)
-                        {
-                            aUseUnsafeHeaderParsing.SetValue(anInstance, true);
-                            return true;
-                        }
-                    }
-                }
-            }
-            return false;
         }
     }
 }

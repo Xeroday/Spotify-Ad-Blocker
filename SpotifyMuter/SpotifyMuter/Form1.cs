@@ -163,9 +163,6 @@ namespace SpotifyMuter
                 LogTo.DebugException("Error: ", ex);
             }
 
-            bool unsafeHeaders = WebHelperHook.SetAllowUnsafeHeaderParsing20();
-            LogTo.Debug("Unsafe Headers: " + unsafeHeaders);
-
             Mute(false);
 
             AddContextMenu();
