@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Reflection;
 using Anotar.NLog;
+using SpotifyMuter.Json;
 
 namespace SpotifyMuter
 {
@@ -20,9 +21,9 @@ namespace SpotifyMuter
         private static string hostname;
 
         /**
-         * Grabs the status of Spotify and returns a WebHelperResult object.
+         * Grabs the status of Spotify and returns a SpotifyStatus object.
          **/
-        public static WebHelperResult GetStatus()
+        public static SpotifyStatus GetStatus()
         {
             if (oauthToken == null || oauthToken == "null")
             {
@@ -33,76 +34,19 @@ namespace SpotifyMuter
                 SetCSRF();
             }
 
-            string result = "";
+            string jsonString = "";
             try
             {
-                result = GetPage(GetURL("/remote/status.json" + "?oauth=" + oauthToken + "&csrf=" + csrfToken));
-                LogTo.Debug(result);
+                jsonString = GetPage(GetURL("/remote/status.json" + "?oauth=" + oauthToken + "&csrf=" + csrfToken));
+                LogTo.Debug(jsonString);
             }
             catch (WebException ex)
             {
                 LogTo.DebugException("WebHelperHook: ", ex);
             }
-            
-            WebHelperResult whr = new WebHelperResult();
 
-            // Process data
-            using (StringReader reader = new StringReader(result))
-            {
-                string line;
-                while ((line = reader.ReadLine()) != null)
-                {
-                    if (line.Contains("\"running\":"))
-                    {
-                        whr.isRunning = line.Contains("true");
-                    }
-                    // else if (line.Contains("\"track_type\":"))
-                    else if (line.Contains("\"next_enabled\":"))
-                    {
-                        whr.isAd = line.Contains("false");
-                    }
-                    else if (line.Contains("\"private_session\":"))
-                    {
-                        whr.isPrivateSession = line.Contains("true");
-                    }
-                    else if (line.Contains("\"playing\":"))
-                    {
-                        whr.isPlaying = line.Contains("true");
-                    }
-                    /*else if (line.Contains("\"playing_position\":"))
-                    {
-                        if (!line.Contains("0,")) // Song isn't at 0 position
-                            whr.position = Convert.ToSingle(line.Split(new char[] { ':', ',' })[1]);
-                    }*/
-                    else if (line.Contains("\"length\":"))
-                    {
-                        whr.length = Convert.ToInt32(line.Split(new char[] { ':', ',' })[1]);
-                    }
-                    else if (line.Contains("\"artist_resource\":"))
-                    {
-                        while ((line = reader.ReadLine()) != null) // Read until we find the "name" field
-                        {
-                            if (line.Contains("\"name\":"))
-                            {
-                                whr.artistName = (line.Replace("\"name\":", "").Split('"')[1]);
-                                break;
-                            }
-                        }
-                    }
-                    else if (line.Contains("Invalid Csrf token"))
-                    {
-                        LogTo.Debug("Invalid CSRF token");
-                        SetCSRF();
-                    }
-                    else if (line.Contains("Invalid OAuth token"))
-                    {
-                        LogTo.Debug("Invalid OAuth token");
-                        SetOAuth();
-                    }
-                }
-            }
-
-            return whr;
+            var result = JsonConvert.DeserializeObject<SpotifyStatus>(jsonString);
+            return result;
         }
 
         public static void CheckWebHelper()

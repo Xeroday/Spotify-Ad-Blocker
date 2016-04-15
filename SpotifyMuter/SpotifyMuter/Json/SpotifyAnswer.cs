@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SpotifyMuter
+namespace SpotifyMuter.Json
 {
     public class Info
     {

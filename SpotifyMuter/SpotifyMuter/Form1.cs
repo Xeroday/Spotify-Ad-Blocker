@@ -5,13 +5,13 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using Anotar.NLog;
 using AudioSwitcher.AudioApi.CoreAudio;
+using SpotifyMuter.Json;
 
 namespace SpotifyMuter
 {
     public partial class Main : Form
     {
         private bool _muted;
-        private string _lastArtistName = "";
 
         [DllImport("user32.dll")]
         private static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
@@ -32,19 +32,18 @@ namespace SpotifyMuter
         {
             try
             {
-                WebHelperResult result = WebHelperHook.GetStatus();
+                SpotifyStatus result = WebHelperHook.GetStatus();
 
-                if (result.isAd) // Track is ad
+                if (!result.next_enabled) // Track is ad
                 {
-                    if (result.isPlaying)
+                    if (result.playing)
                     {
                         LogTo.Debug("Ad is playing");
-                        if (_lastArtistName != result.artistName)
+
+                        if (!_muted)
                         {
-                            if (!_muted) Mute(true);
                             LogTo.Debug("Muting ad");
-                            _lastArtistName = result.artistName;
-                            LogTo.Debug("Blocked " + result.artistName);
+                            Mute(true);
                         }
                     }
                     else // Ad is paused
@@ -53,40 +52,30 @@ namespace SpotifyMuter
                         Resume();
                     }
                 }
-                else if (result.isPrivateSession)
+                else
                 {
-                    if (_lastArtistName != result.artistName)
+                    if (result.open_graph_state.private_session)
                     {
                         LogTo.Debug("Playing: *Private Session*");
-                        _lastArtistName = result.artistName;
                         MessageBox.Show("Please disable 'Private Session' on Spotify for SpotifyMuter to function properly.", "SpotifyMuter", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, (MessageBoxOptions)0x40000);
                     }
-                }
-                else if (!result.isRunning)
-                {
-                    // Notify("Error connecting to Spotify. Retrying...");
-                    LogTo.Debug("Not running.");
-                    MainTimer.Interval = 5000;
-                    /*
-                    MainTimer.Enabled = false;
-                    MessageBox.Show("Spotify is not running. Please restart SpotifyMuter after starting Spotify.", "SpotifyMuter", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, (MessageBoxOptions)0x40000);
-                    StatusLabel.Text = "Spotify is not running";
-                    Application.Exit();
-                    */
-                }
-                else if (!result.isPlaying)
-                {
-                    LogTo.Debug("Spotify is paused");
-                    _lastArtistName = "";
-                }
-                else // Song is playing
-                {
-                    if (_muted) Mute(false);
-                    if (MainTimer.Interval > 1000) MainTimer.Interval = 1000;
-                    if (_lastArtistName != result.artistName)
+                    else
                     {
-                        LogTo.Debug("Playing: " + result.artistName);
-                        _lastArtistName = result.artistName;
+                        if (!result.playing)
+                        {
+                            LogTo.Debug("Spotify is paused");
+                        }
+                        else // Song is playing
+                        {
+                            if (_muted)
+                            {
+                                Mute(false);
+                            }
+                            if (result.track.artist_resource != null)
+                            {
+                                LogTo.Debug("Playing: {0} - {1}", result.track.artist_resource.name, result.track.track_resource.name);
+                            }
+                        }
                     }
                 }
             }
