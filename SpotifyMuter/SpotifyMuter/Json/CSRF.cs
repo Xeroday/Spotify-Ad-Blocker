@@ -1,8 +1,13 @@
-﻿namespace SpotifyMuter.Json
+﻿using Newtonsoft.Json;
+
+namespace SpotifyMuter.Json
 {
     class CSRF
     {
-        public Error error;
-        public string token;
+        [JsonProperty(PropertyName = "error")]
+        public Error Error { get; set; }
+
+        [JsonProperty(PropertyName = "token")]
+        public string Token { get; set; }
     }
 }

@@ -1,13 +1,28 @@
-﻿namespace SpotifyMuter.Json
+﻿using Newtonsoft.Json;
+
+namespace SpotifyMuter.Json
 {
     class SpotifyStatus
     {
-        public Error error;
-        public bool running;
-        public bool playing;
-        public bool next_enabled;
-        public OpenGraphState open_graph_state;
-        public float playing_position;
-        public Track track;
+        [JsonProperty(PropertyName = "error")]
+        public Error Error { get; set; }
+
+        [JsonProperty(PropertyName = "running")]
+        public bool Running { get; set; }
+
+        [JsonProperty(PropertyName = "playing")]
+        public bool Playing { get; set; }
+
+        [JsonProperty(PropertyName = "next_enabled")]
+        public bool NextEnabled { get; set; }
+
+        [JsonProperty(PropertyName = "open_graph_state")]
+        public OpenGraphState OpenGraphState { get; set; }
+
+        [JsonProperty(PropertyName = "playing_position")]
+        public float PlayingPosition { get; set; }
+
+        [JsonProperty(PropertyName = "track")]
+        public Track Track { get; set; }
     }
 }

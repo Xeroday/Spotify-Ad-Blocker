@@ -26,15 +26,15 @@ namespace SpotifyMuter
             {
                 SpotifyStatus result = WebHelperHook.GetStatus();
 
-                if (result.error != null)
+                if (result.Error != null)
                 {
-                    LogTo.Debug($"Error {result.error.type}: {result.error.message}");
+                    LogTo.Debug($"Error {result.Error.Type}: {result.Error.Message}");
                 }
                 else
                 {
-                    if (!result.next_enabled) // Track is ad
+                    if (!result.NextEnabled) // Track is ad
                     {
-                        if (result.playing)
+                        if (result.Playing)
                         {
                             LogTo.Debug("Ad is playing");
                             LogTo.Debug("Muting ad");
@@ -48,14 +48,14 @@ namespace SpotifyMuter
                     }
                     else
                     {
-                        if (result.open_graph_state.private_session)
+                        if (result.OpenGraphState.PrivateSession)
                         {
                             LogTo.Debug("Playing: *Private Session*");
                             MessageBox.Show("Please disable 'Private Session' on Spotify for SpotifyMuter to function properly.", "SpotifyMuter", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, (MessageBoxOptions)0x40000);
                         }
                         else
                         {
-                            if (!result.playing)
+                            if (!result.Playing)
                             {
                                 LogTo.Debug("Spotify is paused");
                             }
@@ -63,9 +63,9 @@ namespace SpotifyMuter
                             {
                                 _spotifyMuter.UnMute();
 
-                                if (result.track.artist_resource != null)
+                                if (result.Track.ArtistResource != null)
                                 {
-                                    LogTo.Debug($"Playing: {result.track.artist_resource.name} - {result.track.track_resource.name}");
+                                    LogTo.Debug($"Playing: {result.Track.ArtistResource.Name} - {result.Track.TrackResource.Name}");
                                 }
                             }
                         }

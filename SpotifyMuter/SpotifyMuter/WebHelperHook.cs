@@ -63,7 +63,7 @@ namespace SpotifyMuter
             string json = GetPage(url);
             LogTo.Debug(json);
             OAuth res = JsonConvert.DeserializeObject<OAuth>(json);
-            _oauthToken = res.t;
+            _oauthToken = res.Token;
         }
 
         public static void SetCsrf()
@@ -73,13 +73,13 @@ namespace SpotifyMuter
             string json = GetPage(url);
             LogTo.Debug(json);
             CSRF res = JsonConvert.DeserializeObject<CSRF>(json);
-            if (res.error != null)
+            if (res.Error != null)
             {
                 _csrfToken = "";  // Block rest of CSRF calls
                 System.Windows.Forms.MessageBox.Show("Error hooking Spotify. Please restart SpotifyMuter after restarting Spotify.", "Error");
                 System.Windows.Forms.Application.Exit();
             }
-            _csrfToken = res.token;
+            _csrfToken = res.Token;
         }
 
         private static string GetUrl(string path)

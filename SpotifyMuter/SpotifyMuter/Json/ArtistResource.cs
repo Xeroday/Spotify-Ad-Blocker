@@ -1,7 +1,10 @@
-﻿namespace SpotifyMuter.Json
+﻿using Newtonsoft.Json;
+
+namespace SpotifyMuter.Json
 {
     class ArtistResource
     {
-        public string name;
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
     }
 }

@@ -1,8 +1,13 @@
-﻿namespace SpotifyMuter.Json
+﻿using Newtonsoft.Json;
+
+namespace SpotifyMuter.Json
 {
     class Error
     {
-        public string type;
-        public string message;
+        [JsonProperty(PropertyName = "type")]
+        public string Type { get; set; }
+
+        [JsonProperty(PropertyName = "message")]
+        public string Message { get; set; }
     }
 }

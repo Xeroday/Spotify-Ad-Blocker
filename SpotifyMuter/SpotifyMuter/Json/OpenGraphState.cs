@@ -1,7 +1,10 @@
-﻿namespace SpotifyMuter.Json
+﻿using Newtonsoft.Json;
+
+namespace SpotifyMuter.Json
 {
     class OpenGraphState
     {
-        public bool private_session;
+        [JsonProperty(PropertyName = "private_session")]
+        public bool PrivateSession { get; set; }
     }
 }

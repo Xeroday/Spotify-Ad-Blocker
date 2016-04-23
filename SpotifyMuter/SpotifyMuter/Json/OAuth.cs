@@ -1,7 +1,10 @@
-﻿namespace SpotifyMuter.Json
+﻿using Newtonsoft.Json;
+
+namespace SpotifyMuter.Json
 {
     class OAuth
     {
-        public string t; // OAuth token
+        [JsonProperty(PropertyName = "t")]
+        public string Token { get; set; } // OAuth token
     }
 }
