@@ -12,17 +12,12 @@ namespace SpotifyMuter
     public partial class Main : Form
     {
         private bool _muted;
-
-        [DllImport("user32.dll")]
-        private static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
-
-        // https://msdn.microsoft.com/en-us/library/windows/desktop/ms646275%28v=vs.85%29.aspx
-        private const int WM_APPCOMMAND = 0x319;
-        private const int MEDIA_PLAYPAUSE = 0xE0000;
+        private readonly ResumeMessageSender _resumeMessageSender;
 
         public Main()
         {
             InitializeComponent();
+            _resumeMessageSender = new ResumeMessageSender();
         }
 
         /**
@@ -55,7 +50,7 @@ namespace SpotifyMuter
                         else // Ad is paused
                         {
                             LogTo.Debug("Ad is paused");
-                            Resume();
+                            _resumeMessageSender.Resume(Handle);
                         }
                     }
                     else
@@ -79,7 +74,7 @@ namespace SpotifyMuter
                                 }
                                 if (result.track.artist_resource != null)
                                 {
-                                    LogTo.Debug("Playing: {0} - {1}", result.track.artist_resource.name, result.track.track_resource.name);
+                                    LogTo.Debug($"Playing: {result.track.artist_resource.name} - {result.track.track_resource.name}");
                                 }
                             }
                         }
@@ -108,28 +103,6 @@ namespace SpotifyMuter
                     currentSession.IsMuted = mute;
                 }
             }
-        }
-
-        /**
-         * Resumes playing Spotify
-         **/
-        private void Resume()
-        {
-            LogTo.Debug("Resuming Spotify");
-            SendMessage(GetHandle(), WM_APPCOMMAND, Handle, (IntPtr)MEDIA_PLAYPAUSE);
-        }
-
-        /**
-         * Gets the Spotify process handle
-         **/
-        private IntPtr GetHandle()
-        {
-            foreach (Process t in Process.GetProcesses().Where(t => t.ProcessName.ToLower().Contains("spotify")))
-            {
-                if (t.MainWindowTitle.Length > 1)
-                    return t.MainWindowHandle;
-            }
-            return IntPtr.Zero;
         }
 
         /// <summary>Close on double click</summary>

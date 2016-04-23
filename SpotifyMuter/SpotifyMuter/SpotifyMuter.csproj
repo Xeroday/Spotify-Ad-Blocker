@@ -94,6 +94,7 @@
     <Compile Include="NlogConfiguration.cs" />
     <Compile Include="Json\OpenGraphState.cs" />
     <Compile Include="Json\Track.cs" />
+    <Compile Include="ResumeMessageSender.cs" />
     <Compile Include="WebhelperEnabler.cs" />
     <Compile Include="WebHelperHook.cs" />
     <Compile Include="Json\SpotifyStatus.cs" />
