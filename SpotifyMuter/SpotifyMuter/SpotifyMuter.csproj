@@ -93,9 +93,6 @@
     <Compile Include="Json\TrackResource.cs" />
     <Compile Include="NlogConfiguration.cs" />
     <Compile Include="Json\OpenGraphState.cs" />
-    <Compile Include="TimedWebClient.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Json\Track.cs" />
     <Compile Include="WebhelperEnabler.cs" />
     <Compile Include="WebHelperHook.cs" />

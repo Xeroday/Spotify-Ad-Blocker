@@ -96,7 +96,7 @@ namespace SpotifyMuter
         private static string GetPage(string url)
         {
             LogTo.Debug("Getting page " + url);
-            WebClient w = new TimedWebClient();
+            WebClient w = new WebClient();
             w.Headers.Add("user-agent", Ua);
             w.Headers.Add("Origin", "https://open.spotify.com");
             ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
