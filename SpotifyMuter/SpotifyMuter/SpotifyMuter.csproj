@@ -86,6 +86,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="JsonPageLoader.cs" />
     <Compile Include="Json\ArtistResource.cs" />
     <Compile Include="Json\CSRF.cs" />
     <Compile Include="Json\Error.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="Json\Track.cs" />
     <Compile Include="ResumeMessageSender.cs" />
     <Compile Include="SpotifyMuter.cs" />
+    <Compile Include="UrlBuilder.cs" />
     <Compile Include="WebhelperEnabler.cs" />
     <Compile Include="WebHelperHook.cs" />
     <Compile Include="Json\SpotifyStatus.cs" />
