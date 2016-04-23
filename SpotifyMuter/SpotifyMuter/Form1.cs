@@ -159,7 +159,7 @@ namespace SpotifyMuter
             AddContextMenu();
 
             WebHelperHook.SetOAuth();
-            WebHelperHook.SetCSRF();
+            WebHelperHook.SetCsrf();
 
             MainTimer.Enabled = true;
 
