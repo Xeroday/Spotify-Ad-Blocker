@@ -88,6 +88,7 @@
   <ItemGroup>
     <Compile Include="Json\ArtistResource.cs" />
     <Compile Include="Json\CSRF.cs" />
+    <Compile Include="Json\Error.cs" />
     <Compile Include="Json\OAuth.cs" />
     <Compile Include="Json\TrackResource.cs" />
     <Compile Include="NlogConfiguration.cs" />

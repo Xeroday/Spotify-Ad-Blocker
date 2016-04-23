@@ -2,6 +2,7 @@
 {
     class SpotifyStatus
     {
+        public Error error;
         public bool running;
         public bool playing;
         public bool next_enabled;

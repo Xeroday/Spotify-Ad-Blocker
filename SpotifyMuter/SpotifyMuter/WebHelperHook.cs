@@ -24,15 +24,6 @@ namespace SpotifyMuter
          **/
         public static SpotifyStatus GetStatus()
         {
-            if (oauthToken == null || oauthToken == "null")
-            {
-                SetOAuth();
-            }
-            if (csrfToken == null || csrfToken == "null")
-            {
-                SetCSRF();
-            }
-
             string jsonString = "";
             try
             {
@@ -65,30 +56,30 @@ namespace SpotifyMuter
             }
         }
 
-        private static void SetOAuth()
+        public static void SetOAuth()
         {
             LogTo.Debug("Getting OAuth Token");
             CheckWebHelper();
-            String url = "https://open.spotify.com/token";
-            String json = GetPage(url);
+            string url = "https://open.spotify.com/token";
+            string json = GetPage(url);
             LogTo.Debug(json);
             OAuth res = JsonConvert.DeserializeObject<OAuth>(json);
             oauthToken = res.t;
         }
 
-        private static void SetCSRF()
+        public static void SetCSRF()
         {
             LogTo.Debug("Getting CSRF Token");
-            String url = GetURL("/simplecsrf/token.json");
-            String json = GetPage(url);
+            string url = GetURL("/simplecsrf/token.json");
+            string json = GetPage(url);
             LogTo.Debug(json);
-            if (json.Contains("\"error\":"))
+            CSRF res = JsonConvert.DeserializeObject<CSRF>(json);
+            if (res.error != null)
             {
                 csrfToken = "";  // Block rest of CSRF calls
                 System.Windows.Forms.MessageBox.Show("Error hooking Spotify. Please restart SpotifyMuter after restarting Spotify.", "Error");
                 System.Windows.Forms.Application.Exit();
             }
-            CSRF res = JsonConvert.DeserializeObject<CSRF>(json);
             csrfToken = res.token;
         }
 

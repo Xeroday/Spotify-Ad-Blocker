@@ -34,46 +34,53 @@ namespace SpotifyMuter
             {
                 SpotifyStatus result = WebHelperHook.GetStatus();
 
-                if (!result.next_enabled) // Track is ad
+                if (result.error != null)
                 {
-                    if (result.playing)
-                    {
-                        LogTo.Debug("Ad is playing");
-
-                        if (!_muted)
-                        {
-                            LogTo.Debug("Muting ad");
-                            Mute(true);
-                        }
-                    }
-                    else // Ad is paused
-                    {
-                        LogTo.Debug("Ad is paused");
-                        Resume();
-                    }
+                    LogTo.Debug($"Error {result.error.type}: {result.error.message}");
                 }
                 else
                 {
-                    if (result.open_graph_state.private_session)
+                    if (!result.next_enabled) // Track is ad
                     {
-                        LogTo.Debug("Playing: *Private Session*");
-                        MessageBox.Show("Please disable 'Private Session' on Spotify for SpotifyMuter to function properly.", "SpotifyMuter", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, (MessageBoxOptions)0x40000);
+                        if (result.playing)
+                        {
+                            LogTo.Debug("Ad is playing");
+
+                            if (!_muted)
+                            {
+                                LogTo.Debug("Muting ad");
+                                Mute(true);
+                            }
+                        }
+                        else // Ad is paused
+                        {
+                            LogTo.Debug("Ad is paused");
+                            Resume();
+                        }
                     }
                     else
                     {
-                        if (!result.playing)
+                        if (result.open_graph_state.private_session)
                         {
-                            LogTo.Debug("Spotify is paused");
+                            LogTo.Debug("Playing: *Private Session*");
+                            MessageBox.Show("Please disable 'Private Session' on Spotify for SpotifyMuter to function properly.", "SpotifyMuter", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, (MessageBoxOptions)0x40000);
                         }
-                        else // Song is playing
+                        else
                         {
-                            if (_muted)
+                            if (!result.playing)
                             {
-                                Mute(false);
+                                LogTo.Debug("Spotify is paused");
                             }
-                            if (result.track.artist_resource != null)
+                            else // Song is playing
                             {
-                                LogTo.Debug("Playing: {0} - {1}", result.track.artist_resource.name, result.track.track_resource.name);
+                                if (_muted)
+                                {
+                                    Mute(false);
+                                }
+                                if (result.track.artist_resource != null)
+                                {
+                                    LogTo.Debug("Playing: {0} - {1}", result.track.artist_resource.name, result.track.track_resource.name);
+                                }
                             }
                         }
                     }
@@ -125,7 +132,7 @@ namespace SpotifyMuter
             return IntPtr.Zero;
         }
 
-        private void Notify(String message)
+        private void Notify(string message)
         {
             NotifyIcon.ShowBalloonTip(10000, "SpotifyMuter", message, ToolTipIcon.None);
         }
@@ -141,7 +148,7 @@ namespace SpotifyMuter
             WindowState = FormWindowState.Minimized;
             ShowInTaskbar = false;
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
-            Notify("SpotifyMuter is hidden. Double-click this icon to close it.");
+            Notify("SpotifyMuter is hidden. Double-click the icon to close it.");
 
             LogTo.Debug("Window was hidden to tray.");
         }
@@ -153,19 +160,13 @@ namespace SpotifyMuter
             var webhelperEnabler = new WebhelperEnabler();
             webhelperEnabler.EnableWebhelper();
 
-            // Give SpotifyMuter higher priority
-            try
-            {
-                Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High; // Windows throttles down when minimized to task tray, so make sure SpotifyMuter runs smoothly
-            }
-            catch (Exception ex)
-            {
-                LogTo.DebugException("Error: ", ex);
-            }
 
             Mute(false);
 
             AddContextMenu();
+
+            WebHelperHook.SetOAuth();
+            WebHelperHook.SetCSRF();
 
             MainTimer.Enabled = true;
 

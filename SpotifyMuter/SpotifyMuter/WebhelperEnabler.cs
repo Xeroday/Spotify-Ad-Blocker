@@ -12,7 +12,7 @@ namespace SpotifyMuter
         {
             if (File.Exists(_spotifyPrefsPath))
             {
-                String[] lines = File.ReadAllLines(_spotifyPrefsPath);
+                string[] lines = File.ReadAllLines(_spotifyPrefsPath);
                 for (int i = 0; i < lines.Length; i++)
                 {
                     if (lines[i].Contains("webhelper.enabled") && lines[i].Contains("false"))

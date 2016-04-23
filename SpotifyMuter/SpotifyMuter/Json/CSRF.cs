@@ -2,6 +2,7 @@
 {
     class CSRF
     {
+        public Error error;
         public string token;
     }
 }
