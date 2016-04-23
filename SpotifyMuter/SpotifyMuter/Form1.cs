@@ -1,28 +1,25 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Linq;
 using System.Windows.Forms;
-using System.Runtime.InteropServices;
 using Anotar.NLog;
-using AudioSwitcher.AudioApi.CoreAudio;
 using SpotifyMuter.Json;
 
 namespace SpotifyMuter
 {
     public partial class Main : Form
     {
-        private bool _muted;
         private readonly ResumeMessageSender _resumeMessageSender;
+        private readonly SpotifyMuter _spotifyMuter;
 
         public Main()
         {
             InitializeComponent();
             _resumeMessageSender = new ResumeMessageSender();
+            _spotifyMuter = new SpotifyMuter();
         }
 
-        /**
-         * Contains the logic for when to mute Spotify
-         **/
+        /// <summary>
+        /// Contains the logic for when to mute Spotify
+        /// </summary>
         private void MainTimer_Tick(object sender, EventArgs e)
         {
             try
@@ -40,12 +37,8 @@ namespace SpotifyMuter
                         if (result.playing)
                         {
                             LogTo.Debug("Ad is playing");
-
-                            if (!_muted)
-                            {
-                                LogTo.Debug("Muting ad");
-                                Mute(true);
-                            }
+                            LogTo.Debug("Muting ad");
+                            _spotifyMuter.Mute();
                         }
                         else // Ad is paused
                         {
@@ -68,10 +61,8 @@ namespace SpotifyMuter
                             }
                             else // Song is playing
                             {
-                                if (_muted)
-                                {
-                                    Mute(false);
-                                }
+                                _spotifyMuter.UnMute();
+
                                 if (result.track.artist_resource != null)
                                 {
                                     LogTo.Debug($"Playing: {result.track.artist_resource.name} - {result.track.track_resource.name}");
@@ -84,24 +75,6 @@ namespace SpotifyMuter
             catch (Exception ex)
             {
                 LogTo.DebugException("Error", ex);
-            }
-        }
-
-        private void Mute(bool mute)
-        {
-            var audioController = new CoreAudioController();
-            var defaultDevice = audioController.GetDefaultDevice(AudioSwitcher.AudioApi.DeviceType.Playback, AudioSwitcher.AudioApi.Role.Multimedia);
-            var sessions = defaultDevice.SessionController.ActiveSessions();
-
-            for (int sessionId = 0; sessionId < sessions.Count(); sessionId++)
-            {
-                var currentSession = sessions.ElementAt(sessionId);
-                string displayName = currentSession.DisplayName;
-                if (displayName == "Spotify")
-                {
-                    _muted = mute;
-                    currentSession.IsMuted = mute;
-                }
             }
         }
 
@@ -126,8 +99,6 @@ namespace SpotifyMuter
 
             var webhelperEnabler = new WebhelperEnabler();
             webhelperEnabler.EnableWebhelper();
-
-            Mute(false);
 
             AddContextMenu();
 
