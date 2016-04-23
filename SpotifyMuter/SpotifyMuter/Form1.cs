@@ -132,11 +132,6 @@ namespace SpotifyMuter
             return IntPtr.Zero;
         }
 
-        private void Notify(string message)
-        {
-            NotifyIcon.ShowBalloonTip(10000, "SpotifyMuter", message, ToolTipIcon.None);
-        }
-
         /// <summary>Close on double click</summary>
         private void NotifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
@@ -148,7 +143,6 @@ namespace SpotifyMuter
             WindowState = FormWindowState.Minimized;
             ShowInTaskbar = false;
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
-            Notify("SpotifyMuter is hidden. Double-click the icon to close it.");
 
             LogTo.Debug("Window was hidden to tray.");
         }
@@ -159,7 +153,6 @@ namespace SpotifyMuter
 
             var webhelperEnabler = new WebhelperEnabler();
             webhelperEnabler.EnableWebhelper();
-
 
             Mute(false);
 
