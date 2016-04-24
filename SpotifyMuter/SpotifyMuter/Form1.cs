@@ -95,8 +95,6 @@ namespace SpotifyMuter
 
         private void Main_Load(object sender, EventArgs e)
         {
-            NlogConfiguration.Configure();
-
             var webhelperEnabler = new WebhelperEnabler();
             webhelperEnabler.EnableWebhelper();
 

@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using System.Threading;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Anotar.NLog;
 
 namespace SpotifyMuter
 {
@@ -17,8 +18,11 @@ namespace SpotifyMuter
         [STAThread]
         static void Main()
         {
-            string mutexId = $"Local\\{{{AppGuid}}}"; // unique id for local mutex
+            NlogConfiguration.Configure();
 
+            LogTo.Debug("Starting SpotifyMuter.");
+
+            string mutexId = $"Local\\{{{AppGuid}}}"; // unique id for local mutex
             using (var mutex = new Mutex(false, mutexId))
             {
                 if (mutex.WaitOne(TimeSpan.Zero))
@@ -28,7 +32,13 @@ namespace SpotifyMuter
                     Application.Run(new Main());
                     mutex.ReleaseMutex();
                 }
+                else
+                {
+                    LogTo.Debug("SpotifyMuter is already running. Exiting.");
+                }
             }
+
+            LogTo.Debug("SpotifyMuter was closed. Exiting");
         }
     }
 }
