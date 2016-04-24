@@ -19,7 +19,7 @@ namespace SpotifyMuter
 
             // Step 3. Set target properties 
             fileTarget.FileName = "${basedir}/SpotifyMuter.log";
-            fileTarget.Layout = "${message}";
+            fileTarget.Layout = @"${longdate}|${level:uppercase=true}|${logger}|${message}${when:when=length('${exception}')>0:inner=${newline}${exception:format=Type, Message, StackTrace}}";
             fileTarget.DeleteOldFileOnStartup = true;
 
             // Step 4. Define rules

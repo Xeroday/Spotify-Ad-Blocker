@@ -15,8 +15,16 @@ namespace SpotifyMuter
             w.Headers.Add("user-agent", Ua);
             w.Headers.Add("Origin", "https://open.spotify.com");
             ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
-            byte[] bytes = Encoding.Default.GetBytes(w.DownloadString(url));
-            return Encoding.UTF8.GetString(bytes);
+            try
+            {
+                byte[] bytes = Encoding.Default.GetBytes(w.DownloadString(url));
+                return Encoding.UTF8.GetString(bytes);
+            }
+            catch (WebException exception)
+            {
+                LogTo.DebugException($"Getting page {url} failed", exception);
+                throw;
+            }
         }
     }
 }

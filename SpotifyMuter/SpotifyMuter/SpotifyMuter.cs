@@ -17,7 +17,7 @@ namespace SpotifyMuter
         {
             if (IsSpotifyMuted)
             {
-               Mute(false);
+                Mute(false);
             }
         }
 
@@ -31,7 +31,7 @@ namespace SpotifyMuter
 
         private void Mute(bool mute)
         {
-           var audioController = new CoreAudioController();
+            var audioController = new CoreAudioController();
             var defaultDevice = audioController.GetDefaultDevice(AudioSwitcher.AudioApi.DeviceType.Playback, AudioSwitcher.AudioApi.Role.Multimedia);
             var sessions = defaultDevice.SessionController.ActiveSessions();
 
