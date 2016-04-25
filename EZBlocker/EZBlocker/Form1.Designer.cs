@@ -39,6 +39,9 @@
             this.VolumeMixerButton = new System.Windows.Forms.Button();
             this.StatusLabel = new System.Windows.Forms.Label();
             this.BlockBannersCheckbox = new System.Windows.Forms.CheckBox();
+            this.NextTrackButton = new System.Windows.Forms.Button();
+            this.PreviousTrackButton = new System.Windows.Forms.Button();
+            this.PlayPauseTrackButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // MainTimer
@@ -123,11 +126,47 @@
             this.BlockBannersCheckbox.UseVisualStyleBackColor = true;
             this.BlockBannersCheckbox.CheckedChanged += new System.EventHandler(this.SkipAdsCheckbox_CheckedChanged);
             // 
+            // NextTrackButton
+            // 
+            this.NextTrackButton.Font = new System.Drawing.Font("Segoe UI Symbol", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.NextTrackButton.Location = new System.Drawing.Point(193, 44);
+            this.NextTrackButton.Name = "NextTrackButton";
+            this.NextTrackButton.Size = new System.Drawing.Size(25, 23);
+            this.NextTrackButton.TabIndex = 11;
+            this.NextTrackButton.Text = "⏩";
+            this.NextTrackButton.UseVisualStyleBackColor = true;
+            this.NextTrackButton.Click += new System.EventHandler(this.NextTrackButton_Click);
+            // 
+            // PreviousTrackButton
+            // 
+            this.PreviousTrackButton.Font = new System.Drawing.Font("Segoe UI Symbol", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PreviousTrackButton.Location = new System.Drawing.Point(127, 44);
+            this.PreviousTrackButton.Name = "PreviousTrackButton";
+            this.PreviousTrackButton.Size = new System.Drawing.Size(25, 23);
+            this.PreviousTrackButton.TabIndex = 12;
+            this.PreviousTrackButton.Text = "⏪ ";
+            this.PreviousTrackButton.UseVisualStyleBackColor = true;
+            this.PreviousTrackButton.Click += new System.EventHandler(this.PreviousTrackButton_Click);
+            // 
+            // PlayPauseTrackButton
+            // 
+            this.PlayPauseTrackButton.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PlayPauseTrackButton.Location = new System.Drawing.Point(158, 44);
+            this.PlayPauseTrackButton.Name = "PlayPauseTrackButton";
+            this.PlayPauseTrackButton.Size = new System.Drawing.Size(29, 23);
+            this.PlayPauseTrackButton.TabIndex = 13;
+            this.PlayPauseTrackButton.Text = "❚❚";
+            this.PlayPauseTrackButton.UseVisualStyleBackColor = true;
+            this.PlayPauseTrackButton.Click += new System.EventHandler(this.PlayPauseTrackButton_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(230, 113);
+            this.Controls.Add(this.PlayPauseTrackButton);
+            this.Controls.Add(this.PreviousTrackButton);
+            this.Controls.Add(this.NextTrackButton);
             this.Controls.Add(this.BlockBannersCheckbox);
             this.Controls.Add(this.StatusLabel);
             this.Controls.Add(this.VolumeMixerButton);
@@ -159,6 +198,9 @@
         private System.Windows.Forms.Label StatusLabel;
         private System.Windows.Forms.CheckBox BlockBannersCheckbox;
         private System.Windows.Forms.Timer MainTimer;
+        private System.Windows.Forms.Button NextTrackButton;
+        private System.Windows.Forms.Button PreviousTrackButton;
+        private System.Windows.Forms.Button PlayPauseTrackButton;
     }
 }
 

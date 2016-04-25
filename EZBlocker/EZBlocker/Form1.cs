@@ -40,6 +40,7 @@ namespace EZBlocker
         private const int APPCOMMAND_VOLUME_MUTE = 0x80000;
         private const int MEDIA_PLAYPAUSE = 0xE0000;
         private const int MEDIA_NEXTTRACK = 0xB0000;
+        private const int MEDIA_PREVIOUSTRACK = 0xC0000;
         
         private string EZBlockerUA = "EZBlocker " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " " + System.Environment.OSVersion;
         private const string website = @"https://www.ericzhang.me/projects/spotify-ad-blocker-ezblocker/";
@@ -115,10 +116,12 @@ namespace EZBlocker
                 else if (!whr.isPlaying)
                 {
                     StatusLabel.Text = "Spotify is paused";
+                    PlayPauseTrackButton.Text = "▶";
                     lastArtistName = "";
                 }
                 else // Song is playing
                 {
+                    PlayPauseTrackButton.Text = "❚❚";
                     if (muted) Mute(0);
                     if (MainTimer.Interval > 1000) MainTimer.Interval = 1000;
                     if (lastArtistName != whr.artistName)
@@ -215,6 +218,19 @@ namespace EZBlocker
             else
             {
                 SendMessage(this.Handle, WM_APPCOMMAND, this.Handle, (IntPtr)MEDIA_NEXTTRACK);
+            }
+        }
+
+        private void PreviousTrack()
+        {
+            Debug.WriteLine("Going back to previous track");
+            if (spotifyMute)
+            {
+                SendMessage(GetHandle(), WM_APPCOMMAND, this.Handle, (IntPtr)MEDIA_PREVIOUSTRACK);
+            }
+            else
+            {
+                SendMessage(this.Handle, WM_APPCOMMAND, this.Handle, (IntPtr)MEDIA_PREVIOUSTRACK);
             }
         }
 
@@ -456,6 +472,21 @@ namespace EZBlocker
         {
             Process.Start(website);
             LogAction("/button/website");
+        }
+
+        private void NextTrackButton_Click(object sender, EventArgs e)
+        {
+            NextTrack();
+        }
+
+        private void PreviousTrackButton_Click(object sender, EventArgs e)
+        {
+            PreviousTrack();
+        }
+
+        private void PlayPauseTrackButton_Click(object sender, EventArgs e)
+        {
+            Resume();
         }
 
         private void Main_Load(object sender, EventArgs e)
