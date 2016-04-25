@@ -96,7 +96,7 @@
             // 
             this.VolumeMixerButton.Location = new System.Drawing.Point(12, 6);
             this.VolumeMixerButton.Name = "VolumeMixerButton";
-            this.VolumeMixerButton.Size = new System.Drawing.Size(212, 36);
+            this.VolumeMixerButton.Size = new System.Drawing.Size(206, 36);
             this.VolumeMixerButton.TabIndex = 7;
             this.VolumeMixerButton.Text = "Open Volume Mixer";
             this.VolumeMixerButton.UseVisualStyleBackColor = true;
