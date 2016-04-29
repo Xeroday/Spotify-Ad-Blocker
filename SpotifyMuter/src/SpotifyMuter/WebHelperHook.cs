@@ -5,7 +5,7 @@ using System.Net;
 using Newtonsoft.Json;
 using System.IO;
 using Anotar.NLog;
-using SpotifyMuter.Json;
+using Model;
 
 namespace SpotifyMuter
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using Anotar.NLog;
-using SpotifyMuter.Json;
+using Model;
 
 namespace SpotifyMuter
 {

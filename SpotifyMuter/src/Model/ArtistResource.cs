@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace SpotifyMuter.Json
+namespace Model
 {
-    class TrackResource
+    public class ArtistResource
     {
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }

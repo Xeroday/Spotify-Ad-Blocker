@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace SpotifyMuter.Json
+namespace Model
 {
-    class Error
+    public class Error
     {
         [JsonProperty(PropertyName = "type")]
         public string Type { get; set; }
