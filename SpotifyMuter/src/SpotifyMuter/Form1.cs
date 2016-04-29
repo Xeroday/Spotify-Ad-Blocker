@@ -7,14 +7,12 @@ namespace SpotifyMuter
 {
     public partial class Main : Form
     {
-        private readonly ResumeMessageSender _resumeMessageSender;
         private readonly SpotifyMuter _spotifyMuter;
         private readonly WebHelperHook _webHelperHook;
 
         public Main()
         {
             InitializeComponent();
-            _resumeMessageSender = new ResumeMessageSender();
             _spotifyMuter = new SpotifyMuter();
             _webHelperHook = new WebHelperHook();
         }
@@ -42,10 +40,9 @@ namespace SpotifyMuter
                             LogTo.Debug("Muting ad");
                             _spotifyMuter.Mute();
                         }
-                        else // Ad is paused
+                        else
                         {
-                            LogTo.Debug("Ad is paused");
-                            _resumeMessageSender.Resume(Handle);
+                            LogTo.Debug("Ad is paused.");
                         }
                     }
                     else
