@@ -29,11 +29,11 @@ namespace SpotifyMuter
         /// </summary>
         private IntPtr GetHandle()
         {
-            foreach (Process t in Process.GetProcesses().Where(t => t.ProcessName.ToLower().Contains("spotify")))
+            foreach (Process process in Process.GetProcesses().Where(t => t.ProcessName.ToLower().Contains("spotify")))
             {
-                if (t.MainWindowTitle.Length > 1)
+                if (process.MainWindowTitle.Length > 1)
                 {
-                    return t.MainWindowHandle;
+                    return process.MainWindowHandle;
                 }
             }
             return IntPtr.Zero;

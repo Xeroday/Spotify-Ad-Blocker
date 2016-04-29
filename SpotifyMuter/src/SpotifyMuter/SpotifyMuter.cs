@@ -33,9 +33,9 @@ namespace SpotifyMuter
         {
             var audioController = new CoreAudioController();
             var defaultDevice = audioController.GetDefaultDevice(AudioSwitcher.AudioApi.DeviceType.Playback, AudioSwitcher.AudioApi.Role.Multimedia);
-            var sessions = defaultDevice.SessionController.ActiveSessions();
+            var sessions = defaultDevice.SessionController.ActiveSessions().ToList();
 
-            for (int sessionId = 0; sessionId < sessions.Count(); sessionId++)
+            for (int sessionId = 0; sessionId < sessions.Count; sessionId++)
             {
                 var currentSession = sessions.ElementAt(sessionId);
                 string displayName = currentSession.DisplayName;

@@ -3,7 +3,7 @@ using System.IO;
 
 namespace SpotifyMuter
 {
-    public class WebhelperEnabler
+    public class SpotifyWebHelperEnabler
     {
         private readonly string _spotifyPrefsPath = Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\prefs";
 

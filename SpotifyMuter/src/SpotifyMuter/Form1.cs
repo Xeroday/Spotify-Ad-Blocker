@@ -9,12 +9,14 @@ namespace SpotifyMuter
     {
         private readonly ResumeMessageSender _resumeMessageSender;
         private readonly SpotifyMuter _spotifyMuter;
+        private readonly WebHelperHook _webHelperHook;
 
         public Main()
         {
             InitializeComponent();
             _resumeMessageSender = new ResumeMessageSender();
             _spotifyMuter = new SpotifyMuter();
+            _webHelperHook = new WebHelperHook();
         }
 
         /// <summary>
@@ -24,7 +26,7 @@ namespace SpotifyMuter
         {
             try
             {
-                SpotifyStatus result = WebHelperHook.GetStatus();
+                SpotifyStatus result = _webHelperHook.GetStatus();
 
                 if (result.Error != null)
                 {
@@ -95,13 +97,13 @@ namespace SpotifyMuter
 
         private void Main_Load(object sender, EventArgs e)
         {
-            var webhelperEnabler = new WebhelperEnabler();
+            var webhelperEnabler = new SpotifyWebHelperEnabler();
             webhelperEnabler.EnableWebhelper();
 
             AddContextMenu();
 
-            WebHelperHook.SetOAuth();
-            WebHelperHook.SetCsrf();
+            _webHelperHook.SetOAuth();
+            _webHelperHook.SetCsrf();
 
             MainTimer.Enabled = true;
 

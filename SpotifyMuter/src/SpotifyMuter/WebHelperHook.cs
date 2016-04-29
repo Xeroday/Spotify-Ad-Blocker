@@ -1,23 +1,25 @@
-﻿using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
+﻿using System.Net;
 using Newtonsoft.Json;
-using System.IO;
 using Anotar.NLog;
 using Model;
 
 namespace SpotifyMuter
 {
-    static class WebHelperHook
+    public class WebHelperHook
     {
         private static string _oauthToken;
         private static string _csrfToken;
+        private readonly SpotifyWebHelperStarter _spotifyWebHelperStarter;
+
+        public WebHelperHook()
+        {
+            _spotifyWebHelperStarter = new SpotifyWebHelperStarter();
+        }
 
         /// <summary>
         /// Grabs the status of Spotify and returns a SpotifyStatus object.
         /// </summary>
-        public static SpotifyStatus GetStatus()
+        public SpotifyStatus GetStatus()
         {
             string jsonString = "";
             try
@@ -34,27 +36,10 @@ namespace SpotifyMuter
             return result;
         }
 
-        public static void CheckWebHelper()
-        {
-            foreach (Process t in Process.GetProcesses().Where(t => t.ProcessName.ToLower().Equals("spotifywebhelper"))) // Check that SpotifyWebHelper.exe is running
-            {
-                return;
-            }
-            LogTo.Debug("Starting SpotifyWebHelper");
-            if (File.Exists(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\Data\SpotifyWebHelper.exe"))
-            {
-                Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\Data\SpotifyWebHelper.exe");
-            }
-            else if (File.Exists(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\SpotifyWebHelper.exe"))
-            {
-                Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\SpotifyWebHelper.exe");
-            }
-        }
-
-        public static void SetOAuth()
+        public void SetOAuth()
         {
             LogTo.Debug("Getting OAuth Token");
-            CheckWebHelper();
+            _spotifyWebHelperStarter.StartWebHelper();
             string url = "https://open.spotify.com/token";
             string json = JsonPageLoader.GetPage(url);
             LogTo.Debug(json);
@@ -62,7 +47,7 @@ namespace SpotifyMuter
             _oauthToken = res.Token;
         }
 
-        public static void SetCsrf()
+        public void SetCsrf()
         {
             LogTo.Debug("Getting CSRF Token");
             string url = UrlBuilder.GetUrl("/simplecsrf/token.json");
