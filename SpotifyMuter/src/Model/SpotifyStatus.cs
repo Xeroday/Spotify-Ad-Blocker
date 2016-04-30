@@ -24,5 +24,9 @@ namespace Model
 
         [JsonProperty(PropertyName = "track")]
         public Track Track { get; set; }
+
+        public bool HasError => Error != null;
+
+        public bool IsPrivateSession => OpenGraphState.PrivateSession;
     }
 }

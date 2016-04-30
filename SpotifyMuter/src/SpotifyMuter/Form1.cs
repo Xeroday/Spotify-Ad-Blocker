@@ -22,58 +22,72 @@ namespace SpotifyMuter
         /// </summary>
         private void MainTimer_Tick(object sender, EventArgs e)
         {
-            try
+            SpotifyStatus result = _webHelperHook.GetStatus();
+
+            if (ResultContainsError(result)
+                || SpotifyIsInPrivateSession(result))
             {
-                SpotifyStatus result = _webHelperHook.GetStatus();
+                return;
+            }
 
-                if (result.Error != null)
-                {
-                    LogTo.Debug($"Error {result.Error.Type}: {result.Error.Message}");
-                }
-                else
-                {
-                    if (!result.NextEnabled) // Track is ad
-                    {
-                        if (result.Playing)
-                        {
-                            LogTo.Debug("Ad is playing");
-                            LogTo.Debug("Muting ad");
-                            _spotifyMuter.Mute();
-                        }
-                        else
-                        {
-                            LogTo.Debug("Ad is paused.");
-                        }
-                    }
-                    else
-                    {
-                        if (result.OpenGraphState.PrivateSession)
-                        {
-                            LogTo.Debug("Playing: *Private Session*");
-                            MessageBox.Show("Please disable 'Private Session' on Spotify for SpotifyMuter to function properly.", "SpotifyMuter", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, (MessageBoxOptions)0x40000);
-                        }
-                        else
-                        {
-                            if (!result.Playing)
-                            {
-                                LogTo.Debug("Spotify is paused");
-                            }
-                            else // Song is playing
-                            {
-                                _spotifyMuter.UnMute();
+            if (!result.NextEnabled) // Track is ad
+            {
+                MuteAd(result);
+            }
+            else
+            {
+                UnmuteAd(result);
+            }
+        }
 
-                                if (result.Track.ArtistResource != null)
-                                {
-                                    LogTo.Debug($"Playing: {result.Track.ArtistResource.Name} - {result.Track.TrackResource.Name}");
-                                }
-                            }
-                        }
-                    }
+        private static bool ResultContainsError(SpotifyStatus result)
+        {
+            if (result.HasError)
+            {
+                LogTo.Debug($"Error {result.Error.Type}: {result.Error.Message}");
+                return true;
+            }
+            return false;
+        }
+
+        private static bool SpotifyIsInPrivateSession(SpotifyStatus result)
+        {
+            if (result.IsPrivateSession)
+            {
+                LogTo.Debug("Playing: *Private Session*");
+                MessageBox.Show("Please disable 'Private Session' on Spotify for SpotifyMuter to function properly.", "SpotifyMuter", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, (MessageBoxOptions) 0x40000);
+                return true;
+            }
+            return false;
+        }
+
+        private void MuteAd(SpotifyStatus result)
+        {
+            if (result.Playing)
+            {
+                LogTo.Debug("Ad is playing");
+                _spotifyMuter.Mute();
+            }
+            else
+            {
+                LogTo.Debug("Ad is paused.");
+            }
+        }
+
+        private void UnmuteAd(SpotifyStatus result)
+        {
+            if (result.Playing)
+            {
+                _spotifyMuter.UnMute();
+
+                if (result.Track.ArtistResource != null)
+                {
+                    LogTo.Debug($"Playing: {result.Track.ArtistResource.Name} - {result.Track.TrackResource.Name}");
                 }
             }
-            catch (Exception ex)
+            else
             {
-                LogTo.DebugException("Error", ex);
+                LogTo.Debug("Spotify is paused");
             }
         }
 

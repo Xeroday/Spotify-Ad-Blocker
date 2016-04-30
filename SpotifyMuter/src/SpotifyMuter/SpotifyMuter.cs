@@ -1,4 +1,5 @@
 using System.Linq;
+using Anotar.NLog;
 using AudioSwitcher.AudioApi.CoreAudio;
 
 namespace SpotifyMuter
@@ -17,6 +18,7 @@ namespace SpotifyMuter
         {
             if (IsSpotifyMuted)
             {
+                LogTo.Debug("Unmuting ad");
                 Mute(false);
             }
         }
@@ -25,6 +27,7 @@ namespace SpotifyMuter
         {
             if (!IsSpotifyMuted)
             {
+                LogTo.Debug("Muting ad");
                 Mute(true);
             }
         }
