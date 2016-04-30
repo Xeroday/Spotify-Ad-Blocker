@@ -89,6 +89,7 @@
     <Compile Include="JsonPageLoader.cs" />
     <Compile Include="NlogConfiguration.cs" />
     <Compile Include="SpotifyMuter.cs" />
+    <Compile Include="SpotifyStatusProcessor.cs" />
     <Compile Include="SpotifyWebHelperStarter.cs" />
     <Compile Include="UrlBuilder.cs" />
     <Compile Include="SpotifyWebHelperEnabler.cs" />

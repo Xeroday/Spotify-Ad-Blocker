@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Anotar.NLog;
+using Newtonsoft.Json;
 
 namespace Model
 {
@@ -25,8 +26,30 @@ namespace Model
         [JsonProperty(PropertyName = "track")]
         public Track Track { get; set; }
 
-        public bool HasError => Error != null;
+        public bool HasError
+        {
+            get
+            {
+                if (Error != null)
+                {
+                    LogTo.Debug($"Error {Error.Type}: {Error.Message}");
+                    return true;
+                }
+                return false;
+            }
+        }
 
-        public bool IsPrivateSession => OpenGraphState.PrivateSession;
+        public bool SpotifyIsInPrivateSession
+        {
+            get
+            {
+                if (OpenGraphState.PrivateSession)
+                {
+                    LogTo.Debug("Playing: *Private Session*");
+                    return true;
+                }
+                return false;
+            }
+        }
     }
 }
