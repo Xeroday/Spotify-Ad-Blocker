@@ -1,7 +1,7 @@
 SpotifyMuter
 =========
 
-This is a fork of EZBlocker.
+This is a fork of [EZBlocker](https://github.com/Xeroday/Spotify-Ad-Blocker).
 
 It should work with Windows 7/8/10.
 
