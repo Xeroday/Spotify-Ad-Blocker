@@ -13,13 +13,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see<http://www.gnu.org/licenses/>.*/
+
 using System.Net;
 using System.Text;
 using Anotar.NLog;
 
-namespace SpotifyMuter
+namespace Utilities
 {
-    static class JsonPageLoader
+    public static class JsonPageLoader
     {
         private const string Ua = @"Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; Trident/4.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; .NET4.0C; .NET4.0E)";
 

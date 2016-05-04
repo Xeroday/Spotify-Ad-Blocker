@@ -13,12 +13,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see<http://www.gnu.org/licenses/>.*/
+
 using System.Net;
-using Newtonsoft.Json;
 using Anotar.NLog;
 using Model;
+using Newtonsoft.Json;
+using SpotifyWebHelper.Exceptions;
+using Utilities;
 
-namespace SpotifyMuter
+namespace SpotifyWebHelper
 {
     public class WebHelperHook
     {
@@ -69,11 +72,9 @@ namespace SpotifyMuter
             string json = JsonPageLoader.GetPage(url);
             LogTo.Debug(json);
             CSRF res = JsonConvert.DeserializeObject<CSRF>(json);
-            if (res.Error != null)
+            if (res.HasError)
             {
-                _csrfToken = "";  // Block rest of CSRF calls
-                System.Windows.Forms.MessageBox.Show("Error hooking Spotify. Please restart SpotifyMuter after restarting Spotify.", "Error");
-                System.Windows.Forms.Application.Exit();
+                throw new SetCsrfException("Error hooking Spotify. Please restart SpotifyMuter after restarting Spotify.");
             }
             _csrfToken = res.Token;
         }

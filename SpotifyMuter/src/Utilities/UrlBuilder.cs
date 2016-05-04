@@ -1,5 +1,5 @@
 ﻿/* SpotifyMuter - A simple Spotify Ad Muter for Windows
- * Copyright(C) 2016 Maschmi
+ * Copyright(C) 2016 Eric Zhang, Maschmi
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,16 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see<http://www.gnu.org/licenses/>.*/
 
-using Newtonsoft.Json;
-
-namespace Model
+namespace Utilities
 {
-    public class Error
+    public static class UrlBuilder
     {
-        [JsonProperty(PropertyName = "type")]
-        public string Type { get; set; }
+        private const string Port = ":4380";
 
-        [JsonProperty(PropertyName = "message")]
-        public string Message { get; set; }
+        public static string GetUrl(string path)
+        {
+            return "http://127.0.0.1" + Port + path;
+            //return "http://" + hostname + ".spotilocal.com" + port + path;
+        }
     }
 }

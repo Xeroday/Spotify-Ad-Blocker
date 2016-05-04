@@ -13,15 +13,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see<http://www.gnu.org/licenses/>.*/
+
 using Newtonsoft.Json;
 
 namespace Model
 {
-    public class CSRF
+    public class CSRF : ErrorContainer
     {
-        [JsonProperty(PropertyName = "error")]
-        public Error Error { get; set; }
-
         [JsonProperty(PropertyName = "token")]
         public string Token { get; set; }
     }

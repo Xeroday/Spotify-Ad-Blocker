@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1B49E4E4-BEDE-4AF7-B7B8-3FA765A83D8A}</ProjectGuid>
+    <ProjectGuid>{6B02D4D5-E16C-4B73-91A3-52B6347C44E6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Model</RootNamespace>
-    <AssemblyName>Model</AssemblyName>
+    <RootNamespace>SpotifyWebHelper</RootNamespace>
+    <AssemblyName>SpotifyWebHelper</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
@@ -48,22 +48,27 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArtistResource.cs" />
-    <Compile Include="CSRF.cs" />
-    <Compile Include="Error.cs" />
-    <Compile Include="ErrorContainer.cs" />
-    <Compile Include="OAuth.cs" />
-    <Compile Include="OpenGraphState.cs" />
-    <Compile Include="SpotifyStatus.cs" />
-    <Compile Include="Track.cs" />
-    <Compile Include="TrackResource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Exceptions\SetCsrfException.cs" />
+    <Compile Include="SpotifyWebHelperEnabler.cs" />
+    <Compile Include="SpotifyWebHelperStarter.cs" />
+    <Compile Include="WebHelperHook.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="FodyWeavers.xml" />
+    <ProjectReference Include="..\Model\Model.csproj">
+      <Project>{1b49e4e4-bede-4af7-b7b8-3fa765a83d8a}</Project>
+      <Name>Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utilities\Utilities.csproj">
+      <Project>{8beecc3a-126c-4d6a-b00b-3b6c98504e38}</Project>
+      <Name>Utilities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\packages\Fody.1.29.4\build\dotnet\Fody.targets" Condition="Exists('..\..\packages\Fody.1.29.4\build\dotnet\Fody.targets')" />
