@@ -18,6 +18,7 @@ using System;
 
 namespace SpotifyWebHelper.Exceptions
 {
+    [Serializable]
     public class SetCsrfException : Exception
     {
         public SetCsrfException()

@@ -1,5 +1,5 @@
 /* SpotifyMuter - A simple Spotify Ad Muter for Windows
- * Copyright(C) 2016 Eric Zhang, Maschmi
+ * Copyright(C) 2012-2016 Eric Zhang, 2016 Maschmi
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
