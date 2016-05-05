@@ -76,10 +76,14 @@
       <HintPath>..\..\packages\NLog.4.3.3\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NlogConfiguration.cs" />
@@ -125,6 +129,10 @@
     <ProjectReference Include="..\SpotifyWebHelper\SpotifyWebHelper.csproj">
       <Project>{6b02d4d5-e16c-4b73-91a3-52b6347c44e6}</Project>
       <Name>SpotifyWebHelper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\View\View.csproj">
+      <Project>{5ffd3736-0929-471e-8e5f-8fc368b92e92}</Project>
+      <Name>View</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -19,6 +19,7 @@ using System.Windows.Forms;
 using Anotar.NLog;
 using Model;
 using SpotifyWebHelper;
+using View;
 
 namespace SpotifyMuter
 {
@@ -75,6 +76,7 @@ namespace SpotifyMuter
         {
             ContextMenu trayMenu = new ContextMenu();
             trayMenu.MenuItems.Add("Exit", (o, args) => { Close(); });
+            trayMenu.MenuItems.Add("About", (o, args) => { new AboutWindow().Show(); });
             NotifyIcon.ContextMenu = trayMenu;
         }
     }
