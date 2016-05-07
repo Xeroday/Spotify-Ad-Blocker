@@ -121,7 +121,7 @@
             this.BlockBannersCheckbox.TabIndex = 10;
             this.BlockBannersCheckbox.Text = "Disable All Ads (Experimental)";
             this.BlockBannersCheckbox.UseVisualStyleBackColor = true;
-            this.BlockBannersCheckbox.CheckedChanged += new System.EventHandler(this.SkipAdsCheckbox_CheckedChanged);
+            this.BlockBannersCheckbox.Click += new System.EventHandler(this.SkipAdsCheckbox_Click);
             // 
             // Main
             // 

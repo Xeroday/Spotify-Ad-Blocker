@@ -28,6 +28,8 @@ namespace EZBlocker
         private string volumeMixerPath = Environment.GetEnvironmentVariable("WINDIR") + @"\System32\SndVol.exe";
         private string hostsPath = Environment.GetEnvironmentVariable("WINDIR") + @"\System32\drivers\etc\hosts";
 
+        private string[] adHosts = { "pubads.g.doubleclick.net", "securepubads.g.doubleclick.net", "www.googletagservices.com", "gads.pubmatic.com"};
+
         [DllImport("user32.dll")]
         private static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
@@ -69,6 +71,12 @@ namespace EZBlocker
         private void MainTimer_Tick(object sender, EventArgs e)
         {
             try {
+                if (Process.GetProcessesByName("spotify").Length < 1)
+                {
+                    Notify("Exiting EZBlocker.");
+                    Application.Exit();
+                }
+
                 WebHelperResult whr = WebHelperHook.GetStatus();
 
                 if (whr.isAd) // Track is ad
@@ -102,7 +110,7 @@ namespace EZBlocker
                 }
                 else if (!whr.isRunning)
                 {
-                    StatusLabel.Text = "Spotif is not running";
+                    StatusLabel.Text = "Spotify is not running";
                     //Notify("Error connecting to Spotify. Retrying...");
                     File.AppendAllText(logPath, "Not running.\r\n");
                     MainTimer.Interval = 5000;
@@ -397,12 +405,13 @@ namespace EZBlocker
             Properties.Settings.Default.Save();
         }
 
-        private void SkipAdsCheckbox_CheckedChanged(object sender, EventArgs e)
+        private void SkipAdsCheckbox_Click(object sender, EventArgs e)
         {
             if (visitorId == null) return; // Still setting up UI
             if (!IsUserAnAdmin())
             {
                 MessageBox.Show("Enabling/Disabling this option requires Administrator privilages.\n\nPlease reopen EZBlocker with \"Run as Administrator\".", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                BlockBannersCheckbox.Checked = !BlockBannersCheckbox.Checked;
                 return;
             }
             if (!File.Exists(hostsPath))
@@ -416,14 +425,16 @@ namespace EZBlocker
                     using (StreamWriter sw = File.AppendText(hostsPath))
                     {
                         sw.WriteLine();
-                        sw.WriteLine("0.0.0.0 pubads.g.doubleclick.net");
-                        sw.Write("0.0.0.0 securepubads.g.doubleclick.net");
+                        foreach (string host in adHosts)
+                        {
+                            sw.WriteLine("0.0.0.0 " + host);
+                        }
                     }
                 }
                 else
                 {
                     string[] text = File.ReadAllLines(hostsPath);
-                    text = text.Where(line => !line.Contains("doubleclick.net")).ToArray();
+                    text = text.Where(line => !adHosts.Contains(line.Replace("0.0.0.0 ", ""))).ToArray();
                     File.WriteAllLines(hostsPath, text);
                 }
                 MessageBox.Show("You may need to restart Spotify or your computer for this setting to take effect.", "EZBlocker", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -461,10 +472,6 @@ namespace EZBlocker
 
         private void Main_Load(object sender, EventArgs e)
         {
-            LogAction("/launch");
-            
-            CheckUpdate();
-
             // Enable web helper
             if (File.Exists(spotifyPrefsPath))
             {
@@ -513,11 +520,13 @@ namespace EZBlocker
                 Debug.WriteLine(ex);
                 MessageBox.Show("Error loading EZBlocker dependencies. Please run EZBlocker as administrator or put EZBlocker in a user folder.");
             }
+
             // Set up UI
             SpotifyMuteCheckbox.Checked = Properties.Settings.Default.SpotifyMute;
             if (File.Exists(hostsPath))
             {
-                BlockBannersCheckbox.Checked = File.ReadAllText(hostsPath).Contains("doubleclick.net");
+                string hostsFile = File.ReadAllText(hostsPath);
+                BlockBannersCheckbox.Checked = adHosts.All(host => hostsFile.Contains(host));
             }
 
             // Google Analytics
@@ -537,6 +546,10 @@ namespace EZBlocker
             Mute(0);
             
             MainTimer.Enabled = true;
+
+            LogAction("/launch");
+
+            CheckUpdate();
         }
     }
 }
