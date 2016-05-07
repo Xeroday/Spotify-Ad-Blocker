@@ -2,11 +2,10 @@
 using System.Linq;
 using System.Net;
 using System.Text;
-using Newtonsoft.Json;
 using System.IO;
 using System.Diagnostics;
-using System.Configuration;
 using System.Reflection;
+using Newtonsoft.Json;
 
 namespace EZBlocker
 {

@@ -8,6 +8,7 @@ using System.Diagnostics;
 using CoreAudio;
 using System.Runtime.InteropServices;
 using System.Threading;
+using Microsoft.Win32;
 
 namespace EZBlocker
 {
@@ -73,6 +74,7 @@ namespace EZBlocker
             try {
                 if (Process.GetProcessesByName("spotify").Length < 1)
                 {
+                    File.AppendAllText(logPath, "Spotify process not found\r\n");
                     Notify("Exiting EZBlocker.");
                     Application.Exit();
                 }
@@ -269,9 +271,9 @@ namespace EZBlocker
             {
                 try
                 {
-                    File.Delete(nircmdPath);
-                    File.Delete(jsonPath);
-                    File.Delete(coreaudioPath);
+                    if (File.Exists(nircmdPath)) File.Delete(nircmdPath);
+                    if (File.Exists(jsonPath)) File.Delete(jsonPath);
+                    if (File.Exists(coreaudioPath)) File.Delete(coreaudioPath);
                     Properties.Settings.Default.Upgrade();
                     Properties.Settings.Default.UpdateSettings = false;
                     Properties.Settings.Default.Save();
@@ -306,6 +308,19 @@ namespace EZBlocker
         private void Heartbeat_Tick(object sender, EventArgs e)
         {
             LogAction("/heartbeat");
+        }
+
+        private static bool hasNet45()
+        {
+            try
+            {
+                using (RegistryKey ndpKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32).OpenSubKey("SOFTWARE\\Microsoft\\NET Framework Setup\\NDP\\v4\\Full\\"))
+                {
+                    int releaseKey = Convert.ToInt32(ndpKey.GetValue("Release"));
+                    if (releaseKey >= 378389) return true;
+                }
+            } catch (Exception ignore) {}
+            return false;
         }
 
         /**
@@ -542,6 +557,17 @@ namespace EZBlocker
             File.AppendAllText(logPath, "-----------\r\n");
             bool unsafeHeaders = WebHelperHook.SetAllowUnsafeHeaderParsing20();
             Debug.WriteLine("Unsafe Headers: " + unsafeHeaders);
+
+            if (!hasNet45())
+            {
+                if (MessageBox.Show("You do not have .NET Framework 4.5. Download now?", "EZBlocker Error", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk) == DialogResult.Yes)
+                {
+                    Process.Start("https://www.microsoft.com/en-us/download/details.aspx?id=30653");
+                } else
+                {
+                    MessageBox.Show("EZBlocker may not function properly without .NET Framework 4.5 or above.");
+                }
+            }
 
             Mute(0);
             
