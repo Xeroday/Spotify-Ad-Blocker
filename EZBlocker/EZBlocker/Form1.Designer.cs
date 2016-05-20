@@ -67,12 +67,12 @@
             // WebsiteLink
             // 
             this.WebsiteLink.AutoSize = true;
-            this.WebsiteLink.Location = new System.Drawing.Point(140, 94);
+            this.WebsiteLink.Location = new System.Drawing.Point(144, 94);
             this.WebsiteLink.Name = "WebsiteLink";
-            this.WebsiteLink.Size = new System.Drawing.Size(84, 13);
+            this.WebsiteLink.Size = new System.Drawing.Size(80, 13);
             this.WebsiteLink.TabIndex = 5;
             this.WebsiteLink.TabStop = true;
-            this.WebsiteLink.Text = "About/Info/FAQ";
+            this.WebsiteLink.Text = "Report Problem";
             this.WebsiteLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.WebsiteLink_LinkClicked);
             // 
             // Heartbeat

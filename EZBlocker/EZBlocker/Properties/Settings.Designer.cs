@@ -58,5 +58,17 @@ namespace EZBlocker.Properties {
                 this["SpotifyMute"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool UserEducated {
+            get {
+                return ((bool)(this["UserEducated"]));
+            }
+            set {
+                this["UserEducated"] = value;
+            }
+        }
     }
 }
