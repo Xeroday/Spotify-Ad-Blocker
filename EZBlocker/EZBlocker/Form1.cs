@@ -441,7 +441,7 @@ namespace EZBlocker
             {
                 // Always clear hosts
                 string[] text = File.ReadAllLines(hostsPath);
-                text = text.Where(line => !adHosts.Contains(line.Replace("0.0.0.0 ", "")) && line.Length > 0).ToArray();
+                text = text.Where(line => !adHosts.Contains(line.Replace("0.0.0.0 ", "")) && line.Length > 0 && line.Contains("open.spotify.com")).ToArray();
                 File.WriteAllLines(hostsPath, text);
 
                 if (BlockBannersCheckbox.Checked)
