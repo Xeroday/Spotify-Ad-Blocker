@@ -21,7 +21,7 @@ namespace SpotifyMuter
 {
     /// <summary>Configuration for Nlog</summary>
     /// <remarks>https://github.com/NLog/NLog/wiki/Configuration-API</remarks>
-    public static class NlogConfiguration
+    internal static class NlogConfiguration
     {
         public static void Configure()
         {

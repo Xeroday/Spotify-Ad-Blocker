@@ -23,12 +23,12 @@ using View;
 
 namespace SpotifyMuter
 {
-    public partial class Main : Form
+    public partial class MainForm : Form
     {
         private readonly WebHelperHook _webHelperHook;
         private readonly SpotifyStatusProcessor _spotifyStatusProcessor;
 
-        public Main()
+        public MainForm()
         {
             InitializeComponent();
             _webHelperHook = new WebHelperHook();

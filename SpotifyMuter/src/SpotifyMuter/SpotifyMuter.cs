@@ -19,7 +19,7 @@ using AudioSwitcher.AudioApi.CoreAudio;
 
 namespace SpotifyMuter
 {
-    public class SpotifyMuter
+    internal class SpotifyMuter
     {
         private bool _isSpotifyMuted;
 

@@ -18,7 +18,7 @@ using Model;
 
 namespace SpotifyMuter
 {
-    public class SpotifyStatusProcessor
+    internal class SpotifyStatusProcessor
     {
         private readonly SpotifyMuter _spotifyMuter;
 

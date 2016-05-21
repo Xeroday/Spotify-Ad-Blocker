@@ -13,24 +13,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see<http://www.gnu.org/licenses/>.*/
-
 using System;
-using System.Windows.Forms;
-using System.Threading;
-using System.Reflection;
-using System.Runtime.InteropServices;
 using Anotar.NLog;
 
 namespace SpotifyMuter
 {
-    static class Program
+    internal static class Program
     {
-        private static readonly string AppGuid =
-            ((GuidAttribute)Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(GuidAttribute), false).GetValue(0)).Value;
-
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
+        /// <summary>The main entry point for the application.</summary>
         [STAThread]
         static void Main()
         {
@@ -38,19 +28,8 @@ namespace SpotifyMuter
 
             LogTo.Debug("Starting SpotifyMuter.");
 
-            string mutexId = $"Local\\{{{AppGuid}}}"; // unique id for local mutex
-            using (var mutex = new Mutex(false, mutexId))
-            {
-                if (mutex.WaitOne(TimeSpan.Zero))
-                {
-                    Application.Run(new Main());
-                    mutex.ReleaseMutex();
-                }
-                else
-                {
-                    LogTo.Debug("SpotifyMuter is already running. Exiting.");
-                }
-            }
+            var applicationStarter = new ApplicationStarter();
+            applicationStarter.RunApplicationIfItIsNotAlreadyRunning(new MainForm());
 
             LogTo.Debug("SpotifyMuter was closed. Exiting");
         }
