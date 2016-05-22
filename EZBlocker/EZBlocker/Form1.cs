@@ -510,7 +510,7 @@ namespace EZBlocker
             // Start Spotify and give EZBlocker higher priority
             try
             {
-                if (File.Exists(spotifyPath) && GetHandle() == IntPtr.Zero)
+                if (File.Exists(spotifyPath) && Process.GetProcessesByName("spotify").Length < 1)
                 {
                     Process.Start(spotifyPath);
                 }
@@ -583,11 +583,11 @@ namespace EZBlocker
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            if (!Properties.Settings.Default.UserEducated)
+            if (!Properties.Settings.Default.UserEducated || true)
             {
-                var result = MessageBox.Show("Spotify ads will not be blocked if EZBlocker is not running. Are you sure you want to exit?", "EZBlocker",
+                var result = MessageBox.Show("Spotify ads will not be muted if EZBlocker is not running.\r\n\r\nAre you sure you want to exit?", "EZBlocker",
                                  MessageBoxButtons.YesNo,
-                                 MessageBoxIcon.Question);
+                                 MessageBoxIcon.Warning);
 
                 e.Cancel = (result == DialogResult.No);
 
