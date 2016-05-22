@@ -47,9 +47,9 @@ namespace SpotifyMuter
             }
         }
 
-        private void MuteAd(SpotifyStatus result)
+        private void MuteAd(SpotifyStatus status)
         {
-            if (result.Playing)
+            if (status.Playing)
             {
                 LogTo.Debug("Ad is playing");
                 _spotifyMuter.Mute();
@@ -60,15 +60,15 @@ namespace SpotifyMuter
             }
         }
 
-        private void UnmuteAd(SpotifyStatus result)
+        private void UnmuteAd(SpotifyStatus status)
         {
-            if (result.Playing)
+            if (status.Playing)
             {
                 _spotifyMuter.UnMute();
 
-                if (result.Track.ArtistResource != null)
+                if (status.Track.ArtistResource != null)
                 {
-                    LogTo.Debug($"Playing: {result.Track.ArtistResource.Name} - {result.Track.TrackResource.Name}");
+                    LogTo.Debug($"Playing: {status.Track.ArtistResource.Name} - {status.Track.TrackResource.Name}");
                 }
             }
             else

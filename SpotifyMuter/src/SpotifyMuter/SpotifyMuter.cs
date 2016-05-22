@@ -21,17 +21,12 @@ namespace SpotifyMuter
 {
     internal class SpotifyMuter
     {
-        private bool _isSpotifyMuted;
-
-        public bool IsSpotifyMuted
-        {
-            set { _isSpotifyMuted = value; }
-            get { return _isSpotifyMuted; }
-        }
+        private bool? _isSpotifyMuted;
 
         public void UnMute()
         {
-            if (IsSpotifyMuted)
+            if (!_isSpotifyMuted.HasValue
+                || _isSpotifyMuted.Value)
             {
                 LogTo.Debug("Unmuting ad");
                 Mute(false);
@@ -40,7 +35,8 @@ namespace SpotifyMuter
 
         public void Mute()
         {
-            if (!IsSpotifyMuted)
+            if (!_isSpotifyMuted.HasValue
+                || !_isSpotifyMuted.Value)
             {
                 LogTo.Debug("Muting ad");
                 Mute(true);
