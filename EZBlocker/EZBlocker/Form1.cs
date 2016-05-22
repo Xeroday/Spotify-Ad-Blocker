@@ -409,7 +409,7 @@ namespace EZBlocker
             if (this.WindowState == FormWindowState.Minimized)
             {
                 this.ShowInTaskbar = false;
-                this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+                this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
                 Notify("EZBlocker is hidden. Double-click this icon to restore.");
             }
         }
@@ -462,12 +462,27 @@ namespace EZBlocker
                 Debug.WriteLine(ex);
             }
         }
-        
+
+        private void StartupCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (visitorId == null) return; // Still setting up UI
+            RegistryKey startupKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+            if (StartupCheckbox.Checked)
+            {
+                startupKey.SetValue("EZBlocker", "\"" + Application.ExecutablePath + "\"");
+            } else
+            {
+                startupKey.DeleteValue("EZBlocker");
+            }
+            LogAction("/settings/startup/" + StartupCheckbox.Checked.ToString());
+        }
+
         private void VolumeMixerButton_Click(object sender, EventArgs e)
         {
             try
             {
                 Process.Start(volumeMixerPath);
+                LogAction("/button/volumemixer");
             }
             catch (Exception ignore)
             {
@@ -548,6 +563,12 @@ namespace EZBlocker
                 string hostsFile = File.ReadAllText(hostsPath);
                 BlockBannersCheckbox.Checked = adHosts.All(host => hostsFile.Contains("0.0.0.0 " + host));
             }
+            object startupKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", false).GetValue("EZBlocker");
+            if (startupKey != null && startupKey.ToString() == "\"" + Application.ExecutablePath + "\"")
+            {
+                StartupCheckbox.Checked = true;
+                this.WindowState = FormWindowState.Minimized;
+            }
 
             // Google Analytics
             rnd = new Random(Environment.TickCount);
@@ -583,7 +604,7 @@ namespace EZBlocker
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            if (!Properties.Settings.Default.UserEducated || true)
+            if (!Properties.Settings.Default.UserEducated)
             {
                 var result = MessageBox.Show("Spotify ads will not be muted if EZBlocker is not running.\r\n\r\nAre you sure you want to exit?", "EZBlocker",
                                  MessageBoxButtons.YesNo,
