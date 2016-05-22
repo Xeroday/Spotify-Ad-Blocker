@@ -23,7 +23,6 @@ namespace Utilities
         public static string GetUrl(string path)
         {
             return "http://127.0.0.1" + Port + path;
-            //return "http://" + hostname + ".spotilocal.com" + port + path;
         }
     }
 }
