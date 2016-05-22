@@ -580,11 +580,18 @@ namespace EZBlocker
                 string hostsFile = File.ReadAllText(hostsPath);
                 BlockBannersCheckbox.Checked = adHosts.All(host => hostsFile.Contains("0.0.0.0 " + host));
             }
-            object startupKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", false).GetValue("EZBlocker");
-            if (startupKey != null && startupKey.ToString() == "\"" + Application.ExecutablePath + "\"")
+            RegistryKey startupKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+            if (startupKey.GetValue("EZBlocker") != null)
             {
-                StartupCheckbox.Checked = true;
-                this.WindowState = FormWindowState.Minimized;
+                if (startupKey.GetValue("EZBlocker").ToString() == "\"" + Application.ExecutablePath + "\"")
+                {
+                    StartupCheckbox.Checked = true;
+                    this.WindowState = FormWindowState.Minimized;
+                }
+                else // Reg value exists, but not in right path
+                {
+                    startupKey.DeleteValue("EZBlocker");
+                }
             }
 
             // Google Analytics
