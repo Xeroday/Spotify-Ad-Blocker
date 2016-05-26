@@ -23,7 +23,7 @@ namespace Tests.Model
     public class ErrorContainerTest
     {
         [TestMethod]
-        public void HasError_Returns_False_If_Error_Is_Null()
+        public void HasErrorReturnsFalseIfErrorIsNull()
         {
             // Arrange
             var status = new ErrorContainer()
@@ -36,7 +36,7 @@ namespace Tests.Model
         }
 
         [TestMethod]
-        public void HasError_Returns_True_If_Error_Is_Not_Null()
+        public void HasErrorReturnsTrueIfErrorIsNotNull()
         {
             // Arrange
             var status = new ErrorContainer()

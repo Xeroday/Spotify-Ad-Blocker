@@ -23,7 +23,7 @@ namespace Tests.Model
     public class SpotifyStatusTest
     {
         [TestMethod]
-        public void Can_Return_False_If_Spotify_Is_Not_In_Private_Session()
+        public void CanReturnFalseIfSpotifyIsNotInPrivateSession()
         {
             // Arrange
             var status = new SpotifyStatus
@@ -42,7 +42,7 @@ namespace Tests.Model
         }
 
         [TestMethod]
-        public void Can_Return_True_If_Spotify_Is_In_Private_Session()
+        public void CanReturnTrueIfSpotifyIsInPrivateSession()
         {
             // Arrange
             var status = new SpotifyStatus
