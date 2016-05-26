@@ -393,7 +393,7 @@ namespace EZBlocker
 
         private void NotifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (!this.ShowInTaskbar)
+            if (!this.ShowInTaskbar && e.Button == MouseButtons.Left)
             {
                 RestoreFromTray();
             }
