@@ -626,6 +626,16 @@ namespace EZBlocker
             LogAction("/launch");
         }
 
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RestoreFromTray();
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             if (!Properties.Settings.Default.UserEducated)
