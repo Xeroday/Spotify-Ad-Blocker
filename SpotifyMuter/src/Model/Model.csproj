@@ -49,7 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArtistResource.cs" />
-    <Compile Include="CSRF.cs" />
+    <Compile Include="Csrf.cs" />
     <Compile Include="Error.cs" />
     <Compile Include="ErrorContainer.cs" />
     <Compile Include="OAuth.cs" />

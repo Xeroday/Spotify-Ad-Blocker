@@ -21,10 +21,10 @@ using System.Windows.Forms;
 namespace SpotifyMuter
 {
     /// <summary>Class for application handling</summary>
-    public class ApplicationHandler
+    public class ApplicationHandler : IDisposable
     {
         private readonly Form _form;
-        private ApplicationStarter _applicationStarter;
+        private readonly ApplicationStarter _applicationStarter;
 
         public ApplicationHandler(Form form)
         {
@@ -60,6 +60,26 @@ namespace SpotifyMuter
             LogTo.DebugException(message, e);
             MessageBox.Show(message, "SpotifyMuter - Error");
             _form.Close();
+        }
+
+        private void RemoveExceptionHandler()
+        {
+            AppDomain.CurrentDomain.UnhandledException -= CurrentDomainUnhandledException;
+            Application.ThreadException -= ApplicationThreadException;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                RemoveExceptionHandler();
+            }
         }
     }
 }

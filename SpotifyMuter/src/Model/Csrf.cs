@@ -18,7 +18,7 @@ using Newtonsoft.Json;
 
 namespace Model
 {
-    public class CSRF : ErrorContainer
+    public class Csrf : ErrorContainer
     {
         [JsonProperty(PropertyName = "token")]
         public string Token { get; set; }

@@ -71,7 +71,7 @@ namespace SpotifyWebHelper
             string url = UrlBuilder.GetUrl("/simplecsrf/token.json");
             string json = JsonPageLoader.GetPage(url);
             LogTo.Debug(json);
-            CSRF res = JsonConvert.DeserializeObject<CSRF>(json);
+            Csrf res = JsonConvert.DeserializeObject<Csrf>(json);
             if (res.HasError)
             {
                 throw new SetCsrfException("Error hooking Spotify. Please restart SpotifyMuter after restarting Spotify.");

@@ -8,11 +8,11 @@
     <Grid VerticalAlignment="Center"
           HorizontalAlignment="Center">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         
         <TextBlock xml:space="preserve">
