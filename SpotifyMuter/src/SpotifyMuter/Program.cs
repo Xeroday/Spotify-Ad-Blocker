@@ -29,8 +29,9 @@ namespace SpotifyMuter
 
             LogTo.Debug("Starting SpotifyMuter.");
 
-            var applicationStarter = new ApplicationStarter();
-            applicationStarter.RunApplicationIfItIsNotAlreadyRunning(new MainForm());
+            var applicationHandler = new ApplicationHandler(new MainForm());
+            applicationHandler.AddExceptionHandler();
+            applicationHandler.RunApplicationIfItIsNotAlreadyRunning();
 
             LogTo.Debug("SpotifyMuter was closed. Exiting");
         }

@@ -17,6 +17,7 @@
 using System.Net;
 using System.Text;
 using Anotar.NLog;
+using Utilities.Exceptions;
 
 namespace Utilities
 {
@@ -38,8 +39,9 @@ namespace Utilities
             }
             catch (WebException exception)
             {
-                LogTo.DebugException($"Getting page {url} failed", exception);
-                throw;
+                var message = $"Getting page {url} failed.";
+                LogTo.DebugException(message, exception);
+                throw new JsonPageLoadingFailedException(message, exception);
             }
         }
     }
