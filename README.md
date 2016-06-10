@@ -15,6 +15,6 @@ Usage:
 
 1. Start Spotify
 2. Start SpotifyMuter, it will be minimized to tray.
-3. Hear music with Spotify and ads will be muted.
+3. Listen to music with Spotify and ads will be muted.
 
 To close SpotifyMuter double click the trayicon.
