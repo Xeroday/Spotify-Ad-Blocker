@@ -46,18 +46,20 @@ namespace SpotifyMuter
 
         private void Mute(bool mute)
         {
-            var audioController = new CoreAudioController();
-            var defaultDevice = audioController.GetDefaultDevice(AudioSwitcher.AudioApi.DeviceType.Playback, AudioSwitcher.AudioApi.Role.Multimedia);
-            var sessions = defaultDevice.SessionController.ActiveSessions().ToList();
-
-            for (int sessionId = 0; sessionId < sessions.Count; sessionId++)
+            using (var audioController = new CoreAudioController())
             {
-                var currentSession = sessions.ElementAt(sessionId);
-                string displayName = currentSession.DisplayName;
-                if (displayName == "Spotify")
+                var defaultDevice = audioController.GetDefaultDevice(AudioSwitcher.AudioApi.DeviceType.Playback, AudioSwitcher.AudioApi.Role.Multimedia);
+                var sessions = defaultDevice.SessionController.ActiveSessions().ToList();
+
+                for (int sessionId = 0; sessionId < sessions.Count; sessionId++)
                 {
-                    _isSpotifyMuted = mute;
-                    currentSession.IsMuted = mute;
+                    var currentSession = sessions.ElementAt(sessionId);
+                    string displayName = currentSession.DisplayName;
+                    if (displayName == "Spotify")
+                    {
+                        _isSpotifyMuted = mute;
+                        currentSession.IsMuted = mute;
+                    }
                 }
             }
         }
