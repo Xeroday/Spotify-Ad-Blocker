@@ -32,7 +32,7 @@ namespace Utilities
         /// <param name="actionToRunApplicaton">Action which will start the application.</param>
         public void RunApplicationIfItIsNotAlreadyRunning(Action actionToRunApplicaton)
         {
-            string mutexId = $"Local\\{{{_appGuid}}}"; // unique id for local mutex
+            var mutexId = $"Local\\{{{_appGuid}}}"; // unique id for local mutex
             using (var mutex = new Mutex(false, mutexId))
             {
                 if (mutex.WaitOne(TimeSpan.Zero))

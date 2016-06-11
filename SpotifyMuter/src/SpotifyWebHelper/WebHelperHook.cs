@@ -25,8 +25,8 @@ namespace SpotifyWebHelper
 {
     public class WebHelperHook
     {
-        private static string _oauthToken;
-        private static string _csrfToken;
+        private string _oauthToken;
+        private string _csrfToken;
         private readonly SpotifyWebHelperStarter _spotifyWebHelperStarter;
 
         public WebHelperHook()
@@ -39,7 +39,7 @@ namespace SpotifyWebHelper
         /// </summary>
         public SpotifyStatus GetStatus()
         {
-            string jsonString = "";
+            var jsonString = "";
             try
             {
                 jsonString = JsonPageLoader.GetPage(UrlBuilder.GetUrl("/remote/status.json" + "?oauth=" + _oauthToken + "&csrf=" + _csrfToken));
@@ -58,20 +58,20 @@ namespace SpotifyWebHelper
         {
             LogTo.Debug("Getting OAuth Token");
             _spotifyWebHelperStarter.StartWebHelper();
-            string url = "https://open.spotify.com/token";
-            string json = JsonPageLoader.GetPage(url);
+            const string url = "https://open.spotify.com/token";
+            var json = JsonPageLoader.GetPage(url);
             LogTo.Debug(json);
-            OAuth res = JsonConvert.DeserializeObject<OAuth>(json);
+            var res = JsonConvert.DeserializeObject<OAuth>(json);
             _oauthToken = res.Token;
         }
 
         public void SetCsrf()
         {
             LogTo.Debug("Getting CSRF Token");
-            string url = UrlBuilder.GetUrl("/simplecsrf/token.json");
-            string json = JsonPageLoader.GetPage(url);
+            var url = UrlBuilder.GetUrl("/simplecsrf/token.json");
+            var json = JsonPageLoader.GetPage(url);
             LogTo.Debug(json);
-            Csrf res = JsonConvert.DeserializeObject<Csrf>(json);
+            var res = JsonConvert.DeserializeObject<Csrf>(json);
             if (res.HasError)
             {
                 throw new SetCsrfException("Error hooking Spotify. Please restart SpotifyMuter after restarting Spotify.");

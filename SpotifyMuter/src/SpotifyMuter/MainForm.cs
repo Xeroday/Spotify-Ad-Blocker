@@ -37,12 +37,14 @@ namespace SpotifyMuter
 
         private void MainTimer_Tick(object sender, EventArgs e)
         {
-            SpotifyStatus status = _webHelperHook.GetStatus();
+            var status = _webHelperHook.GetStatus();
             _spotifyStatusProcessor.ProcessSpotifyStatus(status);
         }
 
         /// <summary>Close on double click</summary>
-        private void NotifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
+        /// <param name="sender">sender who raised the event</param>
+        /// <param name="eventArgs">MouseEvent arguments</param>
+        private void NotifyIcon_MouseDoubleClick(object sender, MouseEventArgs eventArgs)
         {
             Close();
         }
@@ -74,7 +76,7 @@ namespace SpotifyMuter
         /// <summary>Add ContextMenu to tray</summary>
         private void AddContextMenu()
         {
-            ContextMenu trayMenu = new ContextMenu();
+            var trayMenu = new ContextMenu();
             trayMenu.MenuItems.Add("Exit", (o, args) => { Close(); });
             trayMenu.MenuItems.Add("About", (o, args) => { new AboutWindow().Show(); });
             NotifyIcon.ContextMenu = trayMenu;

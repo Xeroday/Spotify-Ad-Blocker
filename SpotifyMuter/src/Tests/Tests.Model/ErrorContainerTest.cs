@@ -26,7 +26,7 @@ namespace Tests.Model
         public void HasErrorReturnsFalseIfErrorIsNull()
         {
             // Arrange
-            var status = new ErrorContainer()
+            var status = new ErrorContainer
             {
                 Error = null,
             };
@@ -39,7 +39,7 @@ namespace Tests.Model
         public void HasErrorReturnsTrueIfErrorIsNotNull()
         {
             // Arrange
-            var status = new ErrorContainer()
+            var status = new ErrorContainer
             {
                 Error = new Error(),
             };

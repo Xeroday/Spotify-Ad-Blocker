@@ -29,8 +29,8 @@ namespace SpotifyWebHelper
         {
             if (File.Exists(_spotifyPrefsPath))
             {
-                string[] lines = File.ReadAllLines(_spotifyPrefsPath);
-                for (int i = 0; i < lines.Length; i++)
+                var lines = File.ReadAllLines(_spotifyPrefsPath);
+                for (var i = 0; i < lines.Length; i++)
                 {
                     if (lines[i].Contains("webhelper.enabled") && lines[i].Contains("false"))
                     {
