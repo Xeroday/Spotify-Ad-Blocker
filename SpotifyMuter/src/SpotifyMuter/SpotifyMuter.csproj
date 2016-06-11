@@ -87,7 +87,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationHandler.cs" />
-    <Compile Include="ApplicationStarter.cs" />
     <Compile Include="NlogConfiguration.cs" />
     <Compile Include="SpotifyMuter.cs" />
     <Compile Include="SpotifyStatusProcessor.cs" />
@@ -131,6 +130,10 @@
     <ProjectReference Include="..\SpotifyWebHelper\SpotifyWebHelper.csproj">
       <Project>{6b02d4d5-e16c-4b73-91a3-52b6347c44e6}</Project>
       <Name>SpotifyWebHelper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utilities\Utilities.csproj">
+      <Project>{8beecc3a-126c-4d6a-b00b-3b6c98504e38}</Project>
+      <Name>Utilities</Name>
     </ProjectReference>
     <ProjectReference Include="..\View\View.csproj">
       <Project>{5ffd3736-0929-471e-8e5f-8fc368b92e92}</Project>

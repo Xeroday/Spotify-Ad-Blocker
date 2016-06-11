@@ -18,27 +18,26 @@ using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
-using System.Windows.Forms;
 using Anotar.NLog;
 
-namespace SpotifyMuter
+namespace Utilities
 {
     /// <summary>Class to start applications</summary>
-    internal class ApplicationStarter
+    public class ApplicationStarter
     {
         private readonly string _appGuid =
             ((GuidAttribute)Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(GuidAttribute), false).GetValue(0)).Value;
 
-        /// <summary>Starts an application by opening the form. This call will return, when the form is closed.</summary>
-        /// <param name="form">form to open</param>
-        public void RunApplicationIfItIsNotAlreadyRunning(Form form)
+        /// <summary>Starts an application by executing an action. This will return, when the action returns..</summary>
+        /// <param name="actionToRunApplicaton">Action which will start the application.</param>
+        public void RunApplicationIfItIsNotAlreadyRunning(Action actionToRunApplicaton)
         {
             string mutexId = $"Local\\{{{_appGuid}}}"; // unique id for local mutex
             using (var mutex = new Mutex(false, mutexId))
             {
                 if (mutex.WaitOne(TimeSpan.Zero))
                 {
-                    Application.Run(form);
+                    actionToRunApplicaton();
                     mutex.ReleaseMutex();
                 }
                 else

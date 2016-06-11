@@ -17,6 +17,7 @@
 using Anotar.NLog;
 using System;
 using System.Windows.Forms;
+using Utilities;
 
 namespace SpotifyMuter
 {
@@ -35,7 +36,7 @@ namespace SpotifyMuter
         /// <summary>Starts an application by opening the form. This call will return, when the form is closed.</summary>
         public void RunApplicationIfItIsNotAlreadyRunning()
         {
-            _applicationStarter.RunApplicationIfItIsNotAlreadyRunning(_form);
+            _applicationStarter.RunApplicationIfItIsNotAlreadyRunning(() => Application.Run(_form));
         }
 
         public void AddExceptionHandler()
