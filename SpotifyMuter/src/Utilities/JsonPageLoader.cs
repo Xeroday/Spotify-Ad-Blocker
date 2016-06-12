@@ -28,14 +28,14 @@ namespace Utilities
         public static string GetPage(string url)
         {
             LogTo.Debug("Getting page " + url);
-            using (var w = new WebClient())
+            using (var client = new WebClient())
             {
-                w.Headers.Add("user-agent", Ua);
-                w.Headers.Add("Origin", "https://open.spotify.com");
+                client.Headers.Add("user-agent", Ua);
+                client.Headers.Add("Origin", "https://open.spotify.com");
                 ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
                 try
                 {
-                    var bytes = Encoding.Default.GetBytes(w.DownloadString(url));
+                    var bytes = Encoding.Default.GetBytes(client.DownloadString(url));
                     return Encoding.UTF8.GetString(bytes);
                 }
                 catch (WebException exception)

@@ -64,14 +64,6 @@
       <HintPath>..\..\packages\Anotar.NLog.Fody.3.0.1\lib\Anotar.NLog.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="AudioSwitcher.AudioApi, Version=3.0.0.209, Culture=neutral, PublicKeyToken=fda5729e2db3a64f, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\AudioSwitcher.AudioApi.3.0.0\lib\net40\AudioSwitcher.AudioApi.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="AudioSwitcher.AudioApi.CoreAudio, Version=3.0.0.209, Culture=neutral, PublicKeyToken=fda5729e2db3a64f, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\AudioSwitcher.AudioApi.CoreAudio.3.0.0.1\lib\net40\AudioSwitcher.AudioApi.CoreAudio.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\..\packages\NLog.4.3.4\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
@@ -88,8 +80,6 @@
   <ItemGroup>
     <Compile Include="ApplicationHandler.cs" />
     <Compile Include="NlogConfiguration.cs" />
-    <Compile Include="SpotifyMuter.cs" />
-    <Compile Include="SpotifyStatusProcessor.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -126,6 +116,10 @@
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{1B49E4E4-BEDE-4AF7-B7B8-3FA765A83D8A}</Project>
       <Name>Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SpotifyMuter.Logic\SpotifyMuter.Logic.csproj">
+      <Project>{40be4b81-3100-4619-a3fb-389e5859fea6}</Project>
+      <Name>SpotifyMuter.Logic</Name>
     </ProjectReference>
     <ProjectReference Include="..\SpotifyWebHelper\SpotifyWebHelper.csproj">
       <Project>{6b02d4d5-e16c-4b73-91a3-52b6347c44e6}</Project>

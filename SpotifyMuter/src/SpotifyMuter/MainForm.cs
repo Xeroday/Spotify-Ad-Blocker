@@ -17,7 +17,7 @@
 using System;
 using System.Windows.Forms;
 using Anotar.NLog;
-using Model;
+using SpotifyMuter.Logic;
 using SpotifyWebHelper;
 using View;
 
@@ -32,7 +32,7 @@ namespace SpotifyMuter
         {
             InitializeComponent();
             _webHelperHook = new WebHelperHook();
-            _spotifyStatusProcessor = new SpotifyStatusProcessor();
+            _spotifyStatusProcessor = new SpotifyStatusProcessor(new Logic.SpotifyMuter());
         }
 
         private void MainTimer_Tick(object sender, EventArgs e)
