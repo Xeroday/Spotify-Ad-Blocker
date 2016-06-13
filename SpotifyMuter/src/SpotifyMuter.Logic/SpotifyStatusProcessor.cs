@@ -32,7 +32,7 @@ namespace SpotifyMuter.Logic
         /// Contains the logic for when to mute Spotify
         /// </summary>
         /// <param name="status">SpotifyStatus to process</param>
-        public void ProcessSpotifyStatus(SpotifyStatus status)
+        public void ProcessSpotifyStatus(ISpotifyStatus status)
         {
             if (status.HasError || status.SpotifyIsInPrivateSession)
             {
@@ -49,7 +49,7 @@ namespace SpotifyMuter.Logic
             }
         }
 
-        private void MuteAd(SpotifyStatus status)
+        private void MuteAd(ISpotifyStatus status)
         {
             if (status.Playing)
             {
@@ -62,7 +62,7 @@ namespace SpotifyMuter.Logic
             }
         }
 
-        private void UnmuteAd(SpotifyStatus status)
+        private void UnmuteAd(ISpotifyStatus status)
         {
             if (status.Playing)
             {

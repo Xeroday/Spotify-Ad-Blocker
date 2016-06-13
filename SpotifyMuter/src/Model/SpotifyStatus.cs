@@ -19,7 +19,7 @@ using Newtonsoft.Json;
 
 namespace Model
 {
-    public class SpotifyStatus : ErrorContainer
+    public class SpotifyStatus : ErrorContainer, ISpotifyStatus
     {
         [JsonProperty(PropertyName = "running")]
         public bool Running { get; set; }
@@ -43,7 +43,7 @@ namespace Model
         {
             get
             {
-                if (OpenGraphState.PrivateSession)
+                if (OpenGraphState != null && OpenGraphState.PrivateSession)
                 {
                     LogTo.Debug("Playing: *Private Session*");
                     return true;

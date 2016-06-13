@@ -28,7 +28,7 @@ namespace Tests.Model
             // Arrange
             var status = new ErrorContainer
             {
-                Error = null,
+                Error = null
             };
 
             // Act & Assert
@@ -41,7 +41,7 @@ namespace Tests.Model
             // Arrange
             var status = new ErrorContainer
             {
-                Error = new Error(),
+                Error = new Error()
             };
 
             // Act & Assert

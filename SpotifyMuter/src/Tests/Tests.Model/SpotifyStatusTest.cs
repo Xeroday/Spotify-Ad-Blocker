@@ -30,8 +30,8 @@ namespace Tests.Model
             {
                 OpenGraphState = new OpenGraphState
                 {
-                    PrivateSession = false,
-                },
+                    PrivateSession = false
+                }
             };
 
             // Act
@@ -49,8 +49,8 @@ namespace Tests.Model
             {
                 OpenGraphState = new OpenGraphState
                 {
-                    PrivateSession = true,
-                },
+                    PrivateSession = true
+                }
             };
 
             // Act
@@ -58,6 +58,22 @@ namespace Tests.Model
 
             // Assert
             Assert.IsTrue(isPrivateSession);
+        }
+
+        [TestMethod]
+        public void CanReturnFalseIfOpenGraphStateIsNull()
+        {
+            // Arrange
+            var status = new SpotifyStatus
+            {
+                OpenGraphState = null
+            };
+
+            // Act
+            var isPrivateSession = status.SpotifyIsInPrivateSession;
+
+            // Assert
+            Assert.IsFalse(isPrivateSession);
         }
     }
 }

@@ -19,7 +19,7 @@ using Newtonsoft.Json;
 
 namespace Model
 {
-    public class ErrorContainer
+    public class ErrorContainer : IErrorContainer
     {
         [JsonProperty(PropertyName = "error")]
         public Error Error { get; set; }
