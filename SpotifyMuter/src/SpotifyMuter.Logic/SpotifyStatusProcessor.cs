@@ -39,9 +39,15 @@ namespace SpotifyMuter.Logic
                 return;
             }
 
+            if (!status.Playing)
+            {
+                LogTo.Debug("Spotify is paused");
+                return;
+            }
+
             if (!status.NextEnabled) // Track is ad
             {
-                MuteAd(status);
+                MuteAd();
             }
             else
             {
@@ -49,33 +55,19 @@ namespace SpotifyMuter.Logic
             }
         }
 
-        private void MuteAd(ISpotifyStatus status)
+        private void MuteAd()
         {
-            if (status.Playing)
-            {
-                LogTo.Debug("Ad is playing");
-                _spotifyMuter.Mute();
-            }
-            else
-            {
-                LogTo.Debug("Ad is paused.");
-            }
+            LogTo.Debug("Ad is playing");
+            _spotifyMuter.Mute();
         }
 
         private void UnmuteAd(ISpotifyStatus status)
         {
-            if (status.Playing)
-            {
-                _spotifyMuter.UnMute();
+            _spotifyMuter.UnMute();
 
-                if (status.Track.ArtistResource != null)
-                {
-                    LogTo.Debug($"Playing: {status.Track.ArtistResource.Name} - {status.Track.TrackResource.Name}");
-                }
-            }
-            else
+            if (status.Track.ArtistResource != null)
             {
-                LogTo.Debug("Spotify is paused");
+                LogTo.Debug($"Playing: {status.Track.ArtistResource.Name} - {status.Track.TrackResource.Name}");
             }
         }
     }
