@@ -2,4 +2,5 @@ version: 1.0.{build}
 before_build:
 - cmd: nuget restore SpotifyMuter\SpotifyMuter.sln
 build:
+  project: SpotifyMuter\SpotifyMuter.sln
   verbosity: minimal
