@@ -60,9 +60,6 @@ namespace SpotifyMuter
 
         private void Main_Load(object sender, EventArgs e)
         {
-            var webhelperEnabler = new SpotifyWebHelperEnabler();
-            webhelperEnabler.EnableWebhelper();
-
             AddContextMenu();
 
             _webHelperHook.SetOAuth();

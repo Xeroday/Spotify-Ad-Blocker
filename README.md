@@ -16,6 +16,7 @@ The goal of this fork was to make it easier to use than EZBlocker.
 Usage:
 
 1. Start Spotify
+2. Enable 'Allow Spotify to be opened from the web' (Edit -> Preferences... -> Show advanced settings)
 2. Start SpotifyMuter, it will be minimized to tray.
 3. Listen to music with Spotify and ads will be muted.
 

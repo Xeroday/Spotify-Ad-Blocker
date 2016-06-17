@@ -27,12 +27,6 @@ namespace SpotifyWebHelper
     {
         private string _oauthToken;
         private string _csrfToken;
-        private readonly SpotifyWebHelperStarter _spotifyWebHelperStarter;
-
-        public WebHelperHook()
-        {
-            _spotifyWebHelperStarter = new SpotifyWebHelperStarter();
-        }
 
         /// <summary>
         /// Grabs the status of Spotify and returns a SpotifyStatus object.
@@ -57,7 +51,6 @@ namespace SpotifyWebHelper
         public void SetOAuth()
         {
             LogTo.Debug("Getting OAuth Token");
-            _spotifyWebHelperStarter.StartWebHelper();
             const string url = "https://open.spotify.com/token";
             var json = JsonPageLoader.GetPage(url);
             LogTo.Debug(json);
