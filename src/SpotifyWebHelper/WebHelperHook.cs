@@ -26,8 +26,16 @@ namespace SpotifyWebHelper
 {
     public class WebHelperHook
     {
+        private readonly IJsonPageLoader _jsonPageLoader;
+        private readonly IUrlBuilder _urlBuilder;
         private string _oauthToken;
         private string _csrfToken;
+
+        public WebHelperHook(IJsonPageLoader jsonPageLoader, IUrlBuilder urlBuilder)
+        {
+            _jsonPageLoader = jsonPageLoader;
+            _urlBuilder = urlBuilder;
+        }
 
         /// <summary>
         /// Grabs the status of Spotify and returns a SpotifyStatus object.
@@ -37,7 +45,7 @@ namespace SpotifyWebHelper
             var jsonString = "";
             try
             {
-                jsonString = JsonPageLoader.GetPage(UrlBuilder.GetUrl($"/remote/status.json?oauth={_oauthToken}&csrf={_csrfToken}"));
+                jsonString = _jsonPageLoader.GetPage(_urlBuilder.GetUrl($"/remote/status.json?oauth={_oauthToken}&csrf={_csrfToken}"));
                 LogTo.Debug(jsonString);
             }
             catch (WebException ex)
@@ -53,7 +61,7 @@ namespace SpotifyWebHelper
         {
             LogTo.Debug("Getting OAuth Token");
             const string url = "https://open.spotify.com/token";
-            var json = JsonPageLoader.GetPage(url);
+            var json = _jsonPageLoader.GetPage(url);
             LogTo.Debug(json);
             var res = JsonConvert.DeserializeObject<OAuth>(json);
             _oauthToken = res.Token;
@@ -62,17 +70,17 @@ namespace SpotifyWebHelper
         public void SetCsrf()
         {
             LogTo.Debug("Getting CSRF Token");
-            var url = UrlBuilder.GetUrl("/simplecsrf/token.json");
+            var url = _urlBuilder.GetUrl("/simplecsrf/token.json");
             string json;
 
             try
             {
-                json = JsonPageLoader.GetPage(url);
+                json = _jsonPageLoader.GetPage(url);
                 LogTo.Debug(json);
             }
             catch (JsonPageLoadingFailedException exception)
             {
-                var message = "Error hooking Spotify. Make sure you enable 'Allow Spotify to be opened from the web'. Please restart SpotifyMuter.";
+                const string message = "Error hooking Spotify. Make sure you enable 'Allow Spotify to be opened from the web'. Please restart SpotifyMuter.";
                 LogTo.DebugException(message, exception);
                 throw new SetCsrfException(message, exception);
             }

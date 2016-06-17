@@ -21,11 +21,11 @@ using Utilities.Exceptions;
 
 namespace Utilities
 {
-    public static class JsonPageLoader
+    public class JsonPageLoader : IJsonPageLoader
     {
         private const string Ua = @"Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; Trident/4.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; .NET4.0C; .NET4.0E)";
 
-        public static string GetPage(string url)
+        public string GetPage(string url)
         {
             LogTo.Debug("Getting page " + url);
             using (var client = new WebClient())

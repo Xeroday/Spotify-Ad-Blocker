@@ -46,6 +46,8 @@
   <ItemGroup>
     <Compile Include="ApplicationStarter.cs" />
     <Compile Include="Exceptions\JsonPageLoadingFailedException.cs" />
+    <Compile Include="IJsonPageLoader.cs" />
+    <Compile Include="IUrlBuilder.cs" />
     <Compile Include="JsonPageLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UrlBuilder.cs" />

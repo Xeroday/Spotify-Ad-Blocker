@@ -19,6 +19,7 @@ using System.Windows.Forms;
 using Anotar.NLog;
 using SpotifyMuter.Logic;
 using SpotifyWebHelper;
+using Utilities;
 using View;
 
 namespace SpotifyMuter
@@ -31,7 +32,7 @@ namespace SpotifyMuter
         public MainForm()
         {
             InitializeComponent();
-            _webHelperHook = new WebHelperHook();
+            _webHelperHook = new WebHelperHook(new JsonPageLoader(), new UrlBuilder());
             _spotifyStatusProcessor = new SpotifyStatusProcessor(new Logic.SpotifyMuter());
         }
 
