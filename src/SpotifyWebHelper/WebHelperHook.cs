@@ -36,7 +36,7 @@ namespace SpotifyWebHelper
             var jsonString = "";
             try
             {
-                jsonString = JsonPageLoader.GetPage(UrlBuilder.GetUrl("/remote/status.json" + "?oauth=" + _oauthToken + "&csrf=" + _csrfToken));
+                jsonString = JsonPageLoader.GetPage(UrlBuilder.GetUrl($"/remote/status.json?oauth={_oauthToken}&csrf={_csrfToken}"));
                 LogTo.Debug(jsonString);
             }
             catch (WebException ex)
