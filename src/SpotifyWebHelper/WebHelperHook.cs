@@ -20,6 +20,7 @@ using Model;
 using Newtonsoft.Json;
 using SpotifyWebHelper.Exceptions;
 using Utilities;
+using Utilities.Exceptions;
 
 namespace SpotifyWebHelper
 {
@@ -62,14 +63,22 @@ namespace SpotifyWebHelper
         {
             LogTo.Debug("Getting CSRF Token");
             var url = UrlBuilder.GetUrl("/simplecsrf/token.json");
-            var json = JsonPageLoader.GetPage(url);
-            LogTo.Debug(json);
-            var res = JsonConvert.DeserializeObject<Csrf>(json);
-            if (res.HasError)
+            string json;
+
+            try
             {
-                throw new SetCsrfException("Error hooking Spotify. Please restart SpotifyMuter after restarting Spotify.");
+                json = JsonPageLoader.GetPage(url);
+                LogTo.Debug(json);
             }
-            _csrfToken = res.Token;
+            catch (JsonPageLoadingFailedException exception)
+            {
+                var message = "Error hooking Spotify. Make sure you enable 'Allow Spotify to be opened from the web'. Please restart SpotifyMuter.";
+                LogTo.DebugException(message, exception);
+                throw new SetCsrfException(message, exception);
+            }
+
+            var csrf = JsonConvert.DeserializeObject<Csrf>(json);
+            _csrfToken = csrf.Token;
         }
     }
 }
