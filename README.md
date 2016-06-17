@@ -1,8 +1,9 @@
 SpotifyMuter
 ============
 
-[![Build status](https://ci.appveyor.com/api/projects/status/su69kmy9ma8csmma/branch/master?svg=true)](https://ci.appveyor.com/project/Maschmi/spotifymuter/branch/master)
 [![License](https://img.shields.io/github/license/Maschmi/SpotifyMuter.svg)](https://github.com/Maschmi/SpotifyMuter/blob/master/LICENSE)
+[![Build status](https://ci.appveyor.com/api/projects/status/su69kmy9ma8csmma/branch/master?svg=true)](https://ci.appveyor.com/project/Maschmi/spotifymuter/branch/master)
+[![codecov](https://codecov.io/gh/Maschmi/SpotifyMuter/branch/master/graph/badge.svg)](https://codecov.io/gh/Maschmi/SpotifyMuter)
 
 This is a fork of [EZBlocker](https://github.com/Xeroday/Spotify-Ad-Blocker).
 
