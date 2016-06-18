@@ -6,7 +6,7 @@ build:
   verbosity: minimal
 test_script:
 - mkdir TestResults
-- .\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -returntargetcode -register:user -filter:"+[*]* -[Tests*]*" "-target:vstest.console.exe" "-targetargs:.\src\Tests\Tests.Model\bin\Debug\Tests.Model.dll .\src\Tests\Tests.SpotifyMuter.Logic\bin\Debug\Tests.SpotifyMuter.Logic.dll /logger:Appveyor" "-output:.\TestResults\coverage.xml"
+- .\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -returntargetcode -register:user -filter:"+[*]* -[Tests*]*" "-target:vstest.console.exe" "-targetargs:.\src\Tests\Tests.Model\bin\Debug\Tests.Model.dll .\src\Tests\Tests.SpotifyMuter.Logic\bin\Debug\Tests.SpotifyMuter.Logic.dll .\src\Tests\Tests.SpotifyWebHelper\bin\Debug\Tests.SpotifyWebHelper.dll /logger:Appveyor" "-output:.\TestResults\coverage.xml"
 - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
 - pip install codecov
 - codecov -f ".\TestResults\coverage.xml"
