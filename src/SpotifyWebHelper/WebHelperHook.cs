@@ -61,7 +61,19 @@ namespace SpotifyWebHelper
         {
             LogTo.Debug("Getting OAuth Token");
             const string url = "https://open.spotify.com/token";
-            var json = _jsonPageLoader.GetPage(url);
+            string json;
+
+            try
+            {
+                json = _jsonPageLoader.GetPage(url);
+            }
+            catch (JsonPageLoadingFailedException exception)
+            {
+                const string message = "Error connecting to spotify.com. Make sure you have internet access.";
+                LogTo.DebugException(message, exception);
+                throw new SetOAuthException(message, exception);
+            }
+
             LogTo.Debug(json);
             var res = JsonConvert.DeserializeObject<OAuth>(json);
             _oauthToken = res.Token;
@@ -76,7 +88,6 @@ namespace SpotifyWebHelper
             try
             {
                 json = _jsonPageLoader.GetPage(url);
-                LogTo.Debug(json);
             }
             catch (JsonPageLoadingFailedException exception)
             {
@@ -85,6 +96,7 @@ namespace SpotifyWebHelper
                 throw new SetCsrfException(message, exception);
             }
 
+            LogTo.Debug(json);
             var csrf = JsonConvert.DeserializeObject<Csrf>(json);
             _csrfToken = csrf.Token;
         }
