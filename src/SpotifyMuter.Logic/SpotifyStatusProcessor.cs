@@ -63,7 +63,7 @@ namespace SpotifyMuter.Logic
 
         private void UnmuteAd(ISpotifyStatus status)
         {
-            _spotifyMuter.UnMute();
+            _spotifyMuter.Unmute();
 
             if (status.Track.ArtistResource != null)
             {

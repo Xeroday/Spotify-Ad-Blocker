@@ -20,7 +20,7 @@ namespace Utilities
     {
         private const string Port = ":4380";
 
-        public string GetUrl(string path)
+        public string BuildUrl(string path)
         {
             return "http://127.0.0.1" + Port + path;
         }

@@ -24,7 +24,7 @@ namespace SpotifyMuter.Logic
     {
         private bool? _isSpotifyMuted;
 
-        public void UnMute()
+        public void Unmute()
         {
             if (!_isSpotifyMuted.HasValue
                 || _isSpotifyMuted.Value)

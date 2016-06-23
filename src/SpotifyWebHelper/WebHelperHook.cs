@@ -40,12 +40,12 @@ namespace SpotifyWebHelper
         /// <summary>
         /// Grabs the status of Spotify and returns a SpotifyStatus object.
         /// </summary>
-        public SpotifyStatus GetStatus()
+        public SpotifyStatus RetrieveStatus()
         {
             var jsonString = "";
             try
             {
-                jsonString = _jsonPageLoader.GetPage(_urlBuilder.GetUrl($"/remote/status.json?oauth={_oauthToken}&csrf={_csrfToken}"));
+                jsonString = _jsonPageLoader.GetPage(_urlBuilder.BuildUrl($"/remote/status.json?oauth={_oauthToken}&csrf={_csrfToken}"));
                 LogTo.Debug(jsonString);
             }
             catch (WebException ex)
@@ -82,7 +82,7 @@ namespace SpotifyWebHelper
         public void SetCsrf()
         {
             LogTo.Debug("Getting CSRF Token");
-            var url = _urlBuilder.GetUrl("/simplecsrf/token.json");
+            var url = _urlBuilder.BuildUrl("/simplecsrf/token.json");
             string json;
 
             try

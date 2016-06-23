@@ -24,12 +24,12 @@ namespace SpotifyWebHelper.Exceptions
         public SetOAuthException()
         { }
 
-        public SetOAuthException(string excetionMessage)
-            : base(excetionMessage)
+        public SetOAuthException(string exceptionMessage)
+            : base(exceptionMessage)
         { }
 
-        public SetOAuthException(string excetionMessage, Exception innerException)
-            : base(excetionMessage, innerException)
+        public SetOAuthException(string exceptionMessage, Exception innerException)
+            : base(exceptionMessage, innerException)
         { }
     }
 }

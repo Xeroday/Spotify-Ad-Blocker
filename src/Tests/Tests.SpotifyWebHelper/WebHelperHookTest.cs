@@ -42,9 +42,7 @@ namespace Tests.SpotifyWebHelper
         public void SetCsrfThrowsSetCsrfExceptionIfPageLoaderThrowsJsonPageLoadingFailedException()
         {
             // Arrange
-            _stubJsonPageLoader
-                .Setup(x => x.GetPage(It.IsAny<string>()))
-                .Throws(new JsonPageLoadingFailedException(string.Empty, null));
+            SetupJsonPageLoaderToThrowException();
 
             // Act
             _webHelperHook.SetCsrf();
@@ -55,12 +53,17 @@ namespace Tests.SpotifyWebHelper
         public void SetOAuthThrowsSetOAuthExceptionIfPageLoaderThrowsJsonPageLoadingFailedException()
         {
             // Arrange
-            _stubJsonPageLoader
-                .Setup(x => x.GetPage(It.IsAny<string>()))
-                .Throws(new JsonPageLoadingFailedException(string.Empty, null));
+            SetupJsonPageLoaderToThrowException();
 
             // Act
             _webHelperHook.SetOAuth();
+        }
+
+        private void SetupJsonPageLoaderToThrowException()
+        {
+            _stubJsonPageLoader
+                .Setup(x => x.GetPage(It.IsAny<string>()))
+                .Throws(new JsonPageLoadingFailedException(string.Empty, null));
         }
     }
 }

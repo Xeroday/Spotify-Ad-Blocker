@@ -45,7 +45,7 @@ namespace Tests.SpotifyMuter.Logic
 
             // Assert
             _mockSpotifyMuter.Verify(muter => muter.Mute(), Times.Never);
-            _mockSpotifyMuter.Verify(muter => muter.UnMute(), Times.Never);
+            _mockSpotifyMuter.Verify(muter => muter.Unmute(), Times.Never);
         }
 
         [TestMethod]
@@ -61,7 +61,7 @@ namespace Tests.SpotifyMuter.Logic
 
             // Assert
             _mockSpotifyMuter.Verify(muter => muter.Mute(), Times.Never);
-            _mockSpotifyMuter.Verify(muter => muter.UnMute(), Times.Never);
+            _mockSpotifyMuter.Verify(muter => muter.Unmute(), Times.Never);
         }
 
         [TestMethod]
@@ -77,7 +77,7 @@ namespace Tests.SpotifyMuter.Logic
 
             // Assert
             _mockSpotifyMuter.Verify(muter => muter.Mute(), Times.Never);
-            _mockSpotifyMuter.Verify(muter => muter.UnMute(), Times.Never);
+            _mockSpotifyMuter.Verify(muter => muter.Unmute(), Times.Never);
         }
 
         [TestMethod]
@@ -93,7 +93,7 @@ namespace Tests.SpotifyMuter.Logic
 
             // Assert
             _mockSpotifyMuter.Verify(muter => muter.Mute(), Times.Never);
-            _mockSpotifyMuter.Verify(muter => muter.UnMute(), Times.Never);
+            _mockSpotifyMuter.Verify(muter => muter.Unmute(), Times.Never);
         }
 
         [TestMethod]
@@ -109,7 +109,7 @@ namespace Tests.SpotifyMuter.Logic
 
             // Assert
             _mockSpotifyMuter.Verify(muter => muter.Mute(), Times.Once);
-            _mockSpotifyMuter.Verify(muter => muter.UnMute(), Times.Never);
+            _mockSpotifyMuter.Verify(muter => muter.Unmute(), Times.Never);
         }
 
         [TestMethod]
@@ -129,7 +129,7 @@ namespace Tests.SpotifyMuter.Logic
 
             // Assert
             _mockSpotifyMuter.Verify(muter => muter.Mute(), Times.Never);
-            _mockSpotifyMuter.Verify(muter => muter.UnMute(), Times.Once);
+            _mockSpotifyMuter.Verify(muter => muter.Unmute(), Times.Once);
         }
     }
 }

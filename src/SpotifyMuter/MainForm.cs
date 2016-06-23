@@ -38,7 +38,7 @@ namespace SpotifyMuter
 
         private void MainTimer_Tick(object sender, EventArgs e)
         {
-            var status = _webHelperHook.GetStatus();
+            var status = _webHelperHook.RetrieveStatus();
             _spotifyStatusProcessor.ProcessSpotifyStatus(status);
         }
 

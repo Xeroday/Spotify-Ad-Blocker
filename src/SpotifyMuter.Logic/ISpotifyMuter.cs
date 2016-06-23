@@ -19,6 +19,6 @@ namespace SpotifyMuter.Logic
     public interface ISpotifyMuter
     {
         void Mute();
-        void UnMute();
+        void Unmute();
     }
 }

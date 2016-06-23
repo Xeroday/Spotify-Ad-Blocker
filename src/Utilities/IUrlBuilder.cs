@@ -18,6 +18,6 @@ namespace Utilities
 {
     public interface IUrlBuilder
     {
-        string GetUrl(string path);
+        string BuildUrl(string path);
     }
 }
