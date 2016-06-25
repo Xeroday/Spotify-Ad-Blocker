@@ -32,7 +32,9 @@ namespace SpotifyMuter
         public MainForm()
         {
             InitializeComponent();
-            _webHelperHook = new WebHelperHook(new JsonPageLoader(), new UrlBuilder());
+            var pageLoader = new JsonPageLoader();
+            var urlBuilder = new UrlBuilder();
+            _webHelperHook = new WebHelperHook(pageLoader, urlBuilder, new SpotifyOAuthRetriever(pageLoader), new SpotifyCsrfRetriever(pageLoader, urlBuilder));
             _spotifyStatusProcessor = new SpotifyStatusProcessor(new Logic.SpotifyMuter());
         }
 
@@ -62,9 +64,6 @@ namespace SpotifyMuter
         private void Main_Load(object sender, EventArgs e)
         {
             AddContextMenu();
-
-            _webHelperHook.SetOAuth();
-            _webHelperHook.SetCsrf();
 
             MainTimer.Enabled = true;
 

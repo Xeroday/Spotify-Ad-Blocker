@@ -19,16 +19,16 @@ using System;
 namespace SpotifyWebHelper.Exceptions
 {
     [Serializable]
-    public class SetOAuthException : Exception
+    public class RetrieveOAuthException : Exception
     {
-        public SetOAuthException()
+        public RetrieveOAuthException()
         { }
 
-        public SetOAuthException(string exceptionMessage)
+        public RetrieveOAuthException(string exceptionMessage)
             : base(exceptionMessage)
         { }
 
-        public SetOAuthException(string exceptionMessage, Exception innerException)
+        public RetrieveOAuthException(string exceptionMessage, Exception innerException)
             : base(exceptionMessage, innerException)
         { }
     }

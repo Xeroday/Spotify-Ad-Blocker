@@ -24,39 +24,27 @@ using Utilities.Exceptions;
 namespace Tests.SpotifyWebHelper
 {
     [TestClass]
-    public class WebHelperHookTest
+    public class SpotifyOAuthRetrieverTest
     {
-        private WebHelperHook _webHelperHook;
+        private SpotifyOAuthRetriever _spotifyOAuthRetriever;
         private Mock<IJsonPageLoader> _stubJsonPageLoader;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _stubJsonPageLoader = new Mock<IJsonPageLoader>();
-            var stubUrlBuilder = new Mock<IUrlBuilder>();
-            _webHelperHook = new WebHelperHook(_stubJsonPageLoader.Object, stubUrlBuilder.Object);
+            _stubJsonPageLoader = new Mock<IJsonPageLoader>();;
+            _spotifyOAuthRetriever = new SpotifyOAuthRetriever(_stubJsonPageLoader.Object);
         }
 
         [TestMethod]
-        [ExpectedException(typeof(SetCsrfException))]
-        public void SetCsrfThrowsSetCsrfExceptionIfPageLoaderThrowsJsonPageLoadingFailedException()
+        [ExpectedException(typeof(RetrieveOAuthException))]
+        public void RetrieveOAuthThrowsRetrieveOAuthExceptionIfPageLoaderThrowsJsonPageLoadingFailedException()
         {
             // Arrange
             SetupJsonPageLoaderToThrowException();
 
             // Act
-            _webHelperHook.SetCsrf();
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(SetOAuthException))]
-        public void SetOAuthThrowsSetOAuthExceptionIfPageLoaderThrowsJsonPageLoadingFailedException()
-        {
-            // Arrange
-            SetupJsonPageLoaderToThrowException();
-
-            // Act
-            _webHelperHook.SetOAuth();
+            _spotifyOAuthRetriever.RetrieveSpotifyOAuth();
         }
 
         private void SetupJsonPageLoaderToThrowException()

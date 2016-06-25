@@ -58,10 +58,15 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="WebHelperHookTest.cs" />
+    <Compile Include="SpotifyOAuthRetrieverTest.cs" />
+    <Compile Include="SpotifyCsrfRetrieverTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Model\Model.csproj">
+      <Project>{1B49E4E4-BEDE-4AF7-B7B8-3FA765A83D8A}</Project>
+      <Name>Model</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\SpotifyWebHelper\SpotifyWebHelper.csproj">
       <Project>{6B02D4D5-E16C-4B73-91A3-52B6347C44E6}</Project>
       <Name>SpotifyWebHelper</Name>

@@ -48,9 +48,13 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Exceptions\SetOAuthException.cs" />
+    <Compile Include="Exceptions\RetrieveOAuthException.cs" />
+    <Compile Include="ISpotifyCsrfRetriever.cs" />
+    <Compile Include="ISpotifyOAuthRetriever.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Exceptions\SetCsrfException.cs" />
+    <Compile Include="Exceptions\RetrieveCsrfException.cs" />
+    <Compile Include="SpotifyCsrfRetriever.cs" />
+    <Compile Include="SpotifyOAuthRetriever.cs" />
     <Compile Include="WebHelperHook.cs" />
   </ItemGroup>
   <ItemGroup>

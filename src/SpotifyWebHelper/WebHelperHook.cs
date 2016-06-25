@@ -14,27 +14,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see<http://www.gnu.org/licenses/>.*/
 
-using System.Net;
 using Anotar.NLog;
 using Model;
 using Newtonsoft.Json;
-using SpotifyWebHelper.Exceptions;
 using Utilities;
-using Utilities.Exceptions;
 
 namespace SpotifyWebHelper
 {
     public class WebHelperHook
     {
-        private readonly IJsonPageLoader _jsonPageLoader;
+        private IJsonPageLoader _jsonPageLoader;
         private readonly IUrlBuilder _urlBuilder;
+        private readonly ISpotifyOAuthRetriever _spotifyOAuthRetriever;
+        private readonly ISpotifyCsrfRetriever _spotifyCsrfRetriever;
         private string _oauthToken;
         private string _csrfToken;
 
-        public WebHelperHook(IJsonPageLoader jsonPageLoader, IUrlBuilder urlBuilder)
+        public WebHelperHook(IJsonPageLoader jsonPageLoader,
+                             IUrlBuilder urlBuilder,
+                             ISpotifyOAuthRetriever spotifyOAuthRetriever,
+                             ISpotifyCsrfRetriever spotifyCsrfRetriever)
         {
             _jsonPageLoader = jsonPageLoader;
             _urlBuilder = urlBuilder;
+            _spotifyOAuthRetriever = spotifyOAuthRetriever;
+            _spotifyCsrfRetriever = spotifyCsrfRetriever;
+
+            Initialize();
         }
 
         /// <summary>
@@ -42,63 +48,17 @@ namespace SpotifyWebHelper
         /// </summary>
         public SpotifyStatus RetrieveStatus()
         {
-            var jsonString = "";
-            try
-            {
-                jsonString = _jsonPageLoader.GetPage(_urlBuilder.BuildUrl($"/remote/status.json?oauth={_oauthToken}&csrf={_csrfToken}"));
-                LogTo.Debug(jsonString);
-            }
-            catch (WebException ex)
-            {
-                LogTo.DebugException("WebHelperHook: ", ex);
-            }
+            var jsonString = _jsonPageLoader.GetPage(_urlBuilder.BuildUrl($"/remote/status.json?oauth={_oauthToken}&csrf={_csrfToken}"));
+            LogTo.Debug(jsonString);
 
             var result = JsonConvert.DeserializeObject<SpotifyStatus>(jsonString);
             return result;
         }
 
-        public void SetOAuth()
+        private void Initialize()
         {
-            LogTo.Debug("Getting OAuth Token");
-            const string url = "https://open.spotify.com/token";
-            string json;
-
-            try
-            {
-                json = _jsonPageLoader.GetPage(url);
-            }
-            catch (JsonPageLoadingFailedException exception)
-            {
-                const string message = "Error connecting to spotify.com. Make sure you have internet access.";
-                LogTo.DebugException(message, exception);
-                throw new SetOAuthException(message, exception);
-            }
-
-            LogTo.Debug(json);
-            var res = JsonConvert.DeserializeObject<OAuth>(json);
-            _oauthToken = res.Token;
-        }
-
-        public void SetCsrf()
-        {
-            LogTo.Debug("Getting CSRF Token");
-            var url = _urlBuilder.BuildUrl("/simplecsrf/token.json");
-            string json;
-
-            try
-            {
-                json = _jsonPageLoader.GetPage(url);
-            }
-            catch (JsonPageLoadingFailedException exception)
-            {
-                const string message = "Error hooking Spotify. Make sure you enable 'Allow Spotify to be opened from the web'. Please restart SpotifyMuter.";
-                LogTo.DebugException(message, exception);
-                throw new SetCsrfException(message, exception);
-            }
-
-            LogTo.Debug(json);
-            var csrf = JsonConvert.DeserializeObject<Csrf>(json);
-            _csrfToken = csrf.Token;
+            _oauthToken = _spotifyOAuthRetriever.RetrieveSpotifyOAuth().Token;
+            _csrfToken = _spotifyCsrfRetriever.RetrieveSpotifyCsrf().Token;
         }
     }
 }
