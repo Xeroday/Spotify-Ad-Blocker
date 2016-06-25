@@ -26,7 +26,7 @@ namespace SpotifyMuter
 {
     public partial class MainForm : Form
     {
-        private readonly WebHelperHook _webHelperHook;
+        private readonly SpotifyStatusRetriever _spotifyStatusRetriever;
         private readonly SpotifyStatusProcessor _spotifyStatusProcessor;
 
         public MainForm()
@@ -34,13 +34,13 @@ namespace SpotifyMuter
             InitializeComponent();
             var pageLoader = new JsonPageLoader();
             var urlBuilder = new UrlBuilder();
-            _webHelperHook = new WebHelperHook(pageLoader, urlBuilder, new SpotifyOAuthRetriever(pageLoader), new SpotifyCsrfRetriever(pageLoader, urlBuilder));
+            _spotifyStatusRetriever = new SpotifyStatusRetriever(pageLoader, urlBuilder, new SpotifyOAuthRetriever(pageLoader), new SpotifyCsrfRetriever(pageLoader, urlBuilder));
             _spotifyStatusProcessor = new SpotifyStatusProcessor(new Logic.SpotifyMuter());
         }
 
         private void MainTimer_Tick(object sender, EventArgs e)
         {
-            var status = _webHelperHook.RetrieveStatus();
+            var status = _spotifyStatusRetriever.RetrieveStatus();
             _spotifyStatusProcessor.ProcessSpotifyStatus(status);
         }
 

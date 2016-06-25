@@ -55,7 +55,7 @@
     <Compile Include="Exceptions\RetrieveCsrfException.cs" />
     <Compile Include="SpotifyCsrfRetriever.cs" />
     <Compile Include="SpotifyOAuthRetriever.cs" />
-    <Compile Include="WebHelperHook.cs" />
+    <Compile Include="SpotifyStatusRetriever.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="FodyWeavers.xml" />

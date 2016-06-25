@@ -21,16 +21,16 @@ using Utilities;
 
 namespace SpotifyWebHelper
 {
-    public class WebHelperHook
+    public class SpotifyStatusRetriever
     {
-        private IJsonPageLoader _jsonPageLoader;
+        private readonly IJsonPageLoader _jsonPageLoader;
         private readonly IUrlBuilder _urlBuilder;
         private readonly ISpotifyOAuthRetriever _spotifyOAuthRetriever;
         private readonly ISpotifyCsrfRetriever _spotifyCsrfRetriever;
-        private string _oauthToken;
-        private string _csrfToken;
+        private OAuth _oauth;
+        private Csrf _csrf;
 
-        public WebHelperHook(IJsonPageLoader jsonPageLoader,
+        public SpotifyStatusRetriever(IJsonPageLoader jsonPageLoader,
                              IUrlBuilder urlBuilder,
                              ISpotifyOAuthRetriever spotifyOAuthRetriever,
                              ISpotifyCsrfRetriever spotifyCsrfRetriever)
@@ -48,7 +48,7 @@ namespace SpotifyWebHelper
         /// </summary>
         public SpotifyStatus RetrieveStatus()
         {
-            var jsonString = _jsonPageLoader.GetPage(_urlBuilder.BuildUrl($"/remote/status.json?oauth={_oauthToken}&csrf={_csrfToken}"));
+            var jsonString = _jsonPageLoader.GetPage(_urlBuilder.BuildUrl($"/remote/status.json?oauth={_oauth.Token}&csrf={_csrf.Token}"));
             LogTo.Debug(jsonString);
 
             var result = JsonConvert.DeserializeObject<SpotifyStatus>(jsonString);
@@ -57,8 +57,8 @@ namespace SpotifyWebHelper
 
         private void Initialize()
         {
-            _oauthToken = _spotifyOAuthRetriever.RetrieveSpotifyOAuth().Token;
-            _csrfToken = _spotifyCsrfRetriever.RetrieveSpotifyCsrf().Token;
+            _oauth = _spotifyOAuthRetriever.RetrieveSpotifyOAuth();
+            _csrf = _spotifyCsrfRetriever.RetrieveSpotifyCsrf();
         }
     }
 }
