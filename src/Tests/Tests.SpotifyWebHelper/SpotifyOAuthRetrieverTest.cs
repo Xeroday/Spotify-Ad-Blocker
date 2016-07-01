@@ -19,7 +19,6 @@ using Moq;
 using SpotifyWebHelper;
 using SpotifyWebHelper.Exceptions;
 using Utilities;
-using Utilities.Exceptions;
 
 namespace Tests.SpotifyWebHelper
 {
@@ -32,7 +31,7 @@ namespace Tests.SpotifyWebHelper
         [TestInitialize]
         public void TestInitialize()
         {
-            _stubJsonPageLoader = new Mock<IJsonPageLoader>();;
+            _stubJsonPageLoader = new Mock<IJsonPageLoader>();
             _spotifyOAuthRetriever = new SpotifyOAuthRetriever(_stubJsonPageLoader.Object);
         }
 
@@ -41,17 +40,24 @@ namespace Tests.SpotifyWebHelper
         public void RetrieveOAuthThrowsRetrieveOAuthExceptionIfPageLoaderThrowsJsonPageLoadingFailedException()
         {
             // Arrange
-            SetupJsonPageLoaderToThrowException();
+            _stubJsonPageLoader.SetupJsonPageLoaderToThrowException();
 
             // Act
             _spotifyOAuthRetriever.RetrieveSpotifyOAuth();
         }
 
-        private void SetupJsonPageLoaderToThrowException()
+        [TestMethod]
+        public void RetrieveOAuthReturnsOAuth()
         {
-            _stubJsonPageLoader
-                .Setup(x => x.GetPage(It.IsAny<string>()))
-                .Throws(new JsonPageLoadingFailedException(string.Empty, null));
+            // Arrange
+            const string token = "randomTokenText";
+            _stubJsonPageLoader.SetupJsonPageLoaderToReturnJson("{\"t\": \"" + token + "\"}");
+
+            // Act
+            var result = _spotifyOAuthRetriever.RetrieveSpotifyOAuth();
+
+            // Assert
+            Assert.AreEqual(result.Token, token);
         }
     }
 }

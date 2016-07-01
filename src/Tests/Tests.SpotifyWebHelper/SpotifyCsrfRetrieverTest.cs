@@ -19,7 +19,6 @@ using Moq;
 using SpotifyWebHelper;
 using SpotifyWebHelper.Exceptions;
 using Utilities;
-using Utilities.Exceptions;
 
 namespace Tests.SpotifyWebHelper
 {
@@ -42,17 +41,24 @@ namespace Tests.SpotifyWebHelper
         public void RetrieveCsrfThrowsRetrieveCsrfExceptionIfPageLoaderThrowsJsonPageLoadingFailedException()
         {
             // Arrange
-            SetupJsonPageLoaderToThrowException();
+            _stubJsonPageLoader.SetupJsonPageLoaderToThrowException();
 
             // Act
             _spotifyCsrfRetriever.RetrieveSpotifyCsrf();
         }
 
-        private void SetupJsonPageLoaderToThrowException()
+        [TestMethod]
+        public void RetrieveCsrfReturnsCsrf()
         {
-            _stubJsonPageLoader
-                .Setup(x => x.GetPage(It.IsAny<string>()))
-                .Throws(new JsonPageLoadingFailedException(string.Empty, null));
+            // Arrange
+            const string token = "randomTokenText";
+            _stubJsonPageLoader.SetupJsonPageLoaderToReturnJson("{\"token\": \"" + token + "\"}");
+
+            // Act
+            var result = _spotifyCsrfRetriever.RetrieveSpotifyCsrf();
+
+            // Assert
+            Assert.AreEqual(result.Token, token);
         }
     }
 }

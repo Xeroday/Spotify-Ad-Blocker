@@ -58,6 +58,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="MockIJsonPageLoaderExtensions.cs" />
     <Compile Include="SpotifyOAuthRetrieverTest.cs" />
     <Compile Include="SpotifyCsrfRetrieverTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
