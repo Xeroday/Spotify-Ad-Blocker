@@ -18,6 +18,7 @@ namespace EZBlocker
         private bool spotifyMute = false;
         private float volume = 0.9f;
         private string lastArtistName = "";
+        private int exitTolerance = 0;
 
         private string nircmdPath = Application.StartupPath + @"\nircmd.exe";
         private string jsonPath = Application.StartupPath + @"\Newtonsoft.Json.dll";
@@ -76,9 +77,17 @@ namespace EZBlocker
             try {
                 if (Process.GetProcessesByName("spotify").Length < 1)
                 {
-                    File.AppendAllText(logPath, "Spotify process not found\r\n");
-                    Notify("Exiting EZBlocker.");
-                    Application.Exit();
+                    if (exitTolerance > 10)
+                    {
+                        File.AppendAllText(logPath, "Spotify process not found\r\n");
+                        Notify("Spotify not found, exiting EZBlocker.");
+                        Application.Exit();
+                    }
+                    exitTolerance += 1;
+                }
+                else
+                {
+                    exitTolerance = 0;
                 }
 
                 WebHelperResult whr = WebHelperHook.GetStatus();

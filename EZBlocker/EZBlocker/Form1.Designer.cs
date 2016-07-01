@@ -44,7 +44,7 @@
             // 
             // MainTimer
             // 
-            this.MainTimer.Interval = 1000;
+            this.MainTimer.Interval = 600;
             this.MainTimer.Tick += new System.EventHandler(this.MainTimer_Tick);
             // 
             // MuteButton
