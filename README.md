@@ -21,3 +21,7 @@ Usage:
 3. Listen to music with Spotify and ads will be muted.
 
 To close SpotifyMuter double click the trayicon.
+
+Icon
+----
+[Material Design icons](http://google.github.io/material-design-icons/) by Google.
