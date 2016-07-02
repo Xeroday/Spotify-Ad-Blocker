@@ -78,7 +78,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplicationHandler.cs" />
+    <Compile Include="ApplicationExceptionHandler.cs" />
     <Compile Include="NlogConfiguration.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>

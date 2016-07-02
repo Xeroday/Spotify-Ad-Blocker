@@ -17,28 +17,12 @@
 using Anotar.NLog;
 using System;
 using System.Windows.Forms;
-using Utilities;
 
 namespace SpotifyMuter
 {
-    /// <summary>Class for application handling</summary>
-    public class ApplicationHandler : IDisposable
+    /// <summary>Class for registering exception handling</summary>
+    public class ApplicationExceptionHandler : IDisposable
     {
-        private readonly Form _form;
-        private readonly ApplicationStarter _applicationStarter;
-
-        public ApplicationHandler(Form form)
-        {
-            _form = form;
-            _applicationStarter = new ApplicationStarter();
-        }
-
-        /// <summary>Starts an application by opening the form. This call will return, when the form is closed.</summary>
-        public void RunApplicationIfItIsNotAlreadyRunning()
-        {
-            _applicationStarter.RunApplicationIfItIsNotAlreadyRunning(() => Application.Run(_form));
-        }
-
         public void AddExceptionHandler()
         {
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainUnhandledException;
@@ -60,7 +44,7 @@ namespace SpotifyMuter
             var message = $"An Error occured. SpotifyMuter will be closed.\n\n{e.Message}";
             LogTo.DebugException(message, e);
             MessageBox.Show(message, "SpotifyMuter - Error");
-            _form.Close();
+            Application.Exit();
         }
 
         private void RemoveExceptionHandler()

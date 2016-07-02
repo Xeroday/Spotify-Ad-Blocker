@@ -16,6 +16,8 @@
 
 using System;
 using Anotar.NLog;
+using Utilities;
+using System.Windows.Forms;
 
 namespace SpotifyMuter
 {
@@ -29,10 +31,15 @@ namespace SpotifyMuter
 
             LogTo.Debug("Starting SpotifyMuter.");
 
-            using (var applicationHandler = new ApplicationHandler(new MainForm()))
+            using (var applicationHandler = new ApplicationExceptionHandler())
             {
                 applicationHandler.AddExceptionHandler();
-                applicationHandler.RunApplicationIfItIsNotAlreadyRunning();
+
+                var applicationStarter = new ApplicationStarter();
+                using (var form = new MainForm())
+                {
+                    applicationStarter.RunApplicationIfItIsNotAlreadyRunning(() => Application.Run(form));
+                }
             }
 
             LogTo.Debug("SpotifyMuter was closed. Exiting");
