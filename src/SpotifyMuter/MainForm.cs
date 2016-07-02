@@ -20,7 +20,6 @@ using Anotar.NLog;
 using SpotifyMuter.Logic;
 using SpotifyWebHelper;
 using Utilities;
-using View;
 
 namespace SpotifyMuter
 {
@@ -28,6 +27,7 @@ namespace SpotifyMuter
     {
         private readonly SpotifyStatusRetriever _spotifyStatusRetriever;
         private readonly SpotifyStatusProcessor _spotifyStatusProcessor;
+        private readonly NotifyIconManager _notifyIconManager;
 
         public MainForm()
         {
@@ -36,20 +36,13 @@ namespace SpotifyMuter
             var urlBuilder = new UrlBuilder();
             _spotifyStatusRetriever = new SpotifyStatusRetriever(pageLoader, urlBuilder, new SpotifyOAuthRetriever(pageLoader), new SpotifyCsrfRetriever(pageLoader, urlBuilder));
             _spotifyStatusProcessor = new SpotifyStatusProcessor(new Logic.SpotifyMuter());
+            _notifyIconManager = new NotifyIconManager();
         }
 
         private void MainTimer_Tick(object sender, EventArgs e)
         {
             var status = _spotifyStatusRetriever.RetrieveStatus();
             _spotifyStatusProcessor.ProcessSpotifyStatus(status);
-        }
-
-        /// <summary>Close on double click</summary>
-        /// <param name="sender">sender who raised the event</param>
-        /// <param name="eventArgs">MouseEvent arguments</param>
-        private void NotifyIcon_MouseDoubleClick(object sender, MouseEventArgs eventArgs)
-        {
-            Close();
         }
 
         private void HideWindow()
@@ -63,20 +56,35 @@ namespace SpotifyMuter
 
         private void Main_Load(object sender, EventArgs e)
         {
-            AddContextMenu();
+            _notifyIconManager.AddContextMenu(() => Close());
+
+            SubscribeToStatusProcessorEvents();
 
             MainTimer.Enabled = true;
 
             HideWindow();
         }
 
-        /// <summary>Add ContextMenu to tray</summary>
-        private void AddContextMenu()
+        private void SubscribeToStatusProcessorEvents()
         {
-            var trayMenu = new ContextMenu();
-            trayMenu.MenuItems.Add("Exit", (o, args) => { Close(); });
-            trayMenu.MenuItems.Add("About", (o, args) => { new AboutWindow().Show(); });
-            NotifyIcon.ContextMenu = trayMenu;
+            _spotifyStatusProcessor.SpotifyMuted += SpotifyMuted;
+            _spotifyStatusProcessor.SpotifyUnmuted += SpotifyUnmuted;
+        }
+
+        private void UnsubscribeFromStatusProcessorEvents()
+        {
+            _spotifyStatusProcessor.SpotifyMuted -= SpotifyMuted;
+            _spotifyStatusProcessor.SpotifyUnmuted -= SpotifyUnmuted;
+        }
+
+        private void SpotifyMuted(object sender, EventArgs e)
+        {
+            _notifyIconManager.SetMutedTrayIcon();
+        }
+
+        private void SpotifyUnmuted(object sender, EventArgs e)
+        {
+            _notifyIconManager.SetUnmutedTrayIcon();
         }
     }
 }

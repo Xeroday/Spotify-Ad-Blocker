@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see<http://www.gnu.org/licenses/>.*/
 
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Model;
 using Moq;
@@ -100,9 +101,7 @@ namespace Tests.SpotifyMuter.Logic
         public void CanMuteIfAdIsPlaying()
         {
             // Arrange
-            var status = new Mock<ISpotifyStatus>();
-            status.Setup(s => s.Playing)
-                  .Returns(true);
+            var status = GetStatusWhichWillBeMuted();
 
             // Act
             _spotifyStatusProcessor.ProcessSpotifyStatus(status.Object);
@@ -116,6 +115,59 @@ namespace Tests.SpotifyMuter.Logic
         public void CanUnmuteIfSongIsPlaying()
         {
             // Arrange
+            var status = GetStatusWhichWillBeUnmuted();
+
+            // Act
+            _spotifyStatusProcessor.ProcessSpotifyStatus(status.Object);
+
+            // Assert
+            _mockSpotifyMuter.Verify(muter => muter.Mute(), Times.Never);
+            _mockSpotifyMuter.Verify(muter => muter.Unmute(), Times.Once);
+        }
+
+        [TestMethod]
+        public void CanRaiseSpotifyMutedIfSpotifyWasMuted()
+        {
+            // Arrange
+            var spotifyMutedWasCalled = false;
+            _spotifyStatusProcessor.SpotifyMuted += (sender, e) => spotifyMutedWasCalled = true;
+
+            var status = GetStatusWhichWillBeMuted();
+
+            // Act
+            _spotifyStatusProcessor.ProcessSpotifyStatus(status.Object);
+
+            // Assert
+            Assert.IsTrue(spotifyMutedWasCalled);
+        }
+
+        [TestMethod]
+        public void CanRaiseSpotifyUnmutedIfSpotifyWasUnmuted()
+        {
+            // Arrange
+            var spotifyUnmutedWasCalled = false;
+            _spotifyStatusProcessor.SpotifyUnmuted += (sender, e) => spotifyUnmutedWasCalled = true;
+
+            var status = GetStatusWhichWillBeUnmuted();
+
+            // Act
+            _spotifyStatusProcessor.ProcessSpotifyStatus(status.Object);
+
+            // Assert
+            Assert.IsTrue(spotifyUnmutedWasCalled);
+        }
+
+        private static Mock<ISpotifyStatus> GetStatusWhichWillBeMuted()
+        {
+            var status = new Mock<ISpotifyStatus>();
+            status.Setup(s => s.Playing)
+                  .Returns(true);
+
+            return status;
+        }
+
+        private static Mock<ISpotifyStatus> GetStatusWhichWillBeUnmuted()
+        {
             var status = new Mock<ISpotifyStatus>();
             status.Setup(s => s.Playing)
                   .Returns(true);
@@ -124,12 +176,7 @@ namespace Tests.SpotifyMuter.Logic
             status.Setup(s => s.Track)
                   .Returns(new Track());
 
-            // Act
-            _spotifyStatusProcessor.ProcessSpotifyStatus(status.Object);
-
-            // Assert
-            _mockSpotifyMuter.Verify(muter => muter.Mute(), Times.Never);
-            _mockSpotifyMuter.Verify(muter => muter.Unmute(), Times.Once);
+            return status;
         }
     }
 }

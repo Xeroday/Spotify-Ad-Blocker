@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see<http://www.gnu.org/licenses/>.*/
 
+using System;
 using Anotar.NLog;
 using Model;
 
@@ -27,6 +28,12 @@ namespace SpotifyMuter.Logic
         {
             _spotifyMuter = spotifyMuter;
         }
+
+        public delegate void SpotifyMutedEventHandler(object sender, EventArgs e);
+        public event SpotifyMutedEventHandler SpotifyMuted;
+
+        public delegate void SpotifyUnmutedEventHandler(object sender, EventArgs e);
+        public event SpotifyUnmutedEventHandler SpotifyUnmuted;
 
         /// <summary>
         /// Contains the logic for when to mute Spotify
@@ -48,10 +55,12 @@ namespace SpotifyMuter.Logic
             if (!status.NextEnabled) // Track is ad
             {
                 MuteAd();
+                OnSpotifyMuted();
             }
             else
             {
                 UnmuteAd(status);
+                OnSpotifyUnmuted();
             }
         }
 
@@ -69,6 +78,16 @@ namespace SpotifyMuter.Logic
             {
                 LogTo.Debug($"Playing: {status.Track.ArtistResource.Name} - {status.Track.TrackResource.Name}");
             }
+        }
+
+        private void OnSpotifyMuted()
+        {
+            SpotifyMuted?.Invoke(this, new EventArgs());
+        }
+
+        private void OnSpotifyUnmuted()
+        {
+            SpotifyUnmuted?.Invoke(this, new EventArgs());
         }
     }
 }
