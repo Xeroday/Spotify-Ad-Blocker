@@ -29,7 +29,6 @@ artifacts:
   - path: SpotifyMuter.zip
     name: SpotifyMuter
 deploy:
-  release: 'SpotifyMuter $(APPVEYOR_REPO_TAG_NAME)'
   description: ''
   provider: GitHub
   auth_token:
