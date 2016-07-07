@@ -1,12 +1,43 @@
 version: 1.0.{build}
 before_build:
-- nuget restore SpotifyMuter.sln
+  - nuget restore SpotifyMuter.sln
+after_build:
+  - 7z a SpotifyMuter.zip %APPVEYOR_BUILD_FOLDER%\src\SpotifyMuter\bin\%CONFIGURATION%\*.dll
+  - 7z a SpotifyMuter.zip %APPVEYOR_BUILD_FOLDER%\src\SpotifyMuter\bin\%CONFIGURATION%\SpotifyMuter.exe
 build:
   project: SpotifyMuter.sln
   verbosity: minimal
 test_script:
-- mkdir TestResults
-- .\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -returntargetcode -register:user -filter:"+[*]* -[Tests*]*" "-target:vstest.console.exe" "-targetargs:.\src\Tests\Tests.Model\bin\Debug\Tests.Model.dll .\src\Tests\Tests.SpotifyMuter.Logic\bin\Debug\Tests.SpotifyMuter.Logic.dll .\src\Tests\Tests.SpotifyWebHelper\bin\Debug\Tests.SpotifyWebHelper.dll /logger:Appveyor" "-output:.\TestResults\coverage.xml"
-- "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
-- pip install codecov
-- codecov -f ".\TestResults\coverage.xml"
+- ps: >-
+    if($env:CONFIGURATION -eq "Debug")
+    {
+      New-Item -Path . -Name "TestResults" -ItemType "directory"
+      .\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -returntargetcode -register:user -filter:"+[*]* -[Tests*]*" "-target:vstest.console.exe" "-targetargs:.\src\Tests\Tests.Model\bin\Debug\Tests.Model.dll .\src\Tests\Tests.SpotifyMuter.Logic\bin\Debug\Tests.SpotifyMuter.Logic.dll .\src\Tests\Tests.SpotifyWebHelper\bin\Debug\Tests.SpotifyWebHelper.dll /logger:Appveyor" "-output:.\TestResults\coverage.xml"
+      $env:path = "$env:PYTHON;$env:PYTHON\Scripts;$env:path"
+      pip install --disable-pip-version-check codecov
+      codecov -X gcov -f ".\TestResults\coverage.xml"
+    }
+environment:
+  matrix:
+    - PYTHON: "C:\\Python35-x64"
+matrix:
+    fast_finish: true
+configuration:
+  - Debug
+  - Release
+artifacts:
+  - path: SpotifyMuter.zip
+    name: SpotifyMuter
+deploy:
+  release: 'SpotifyMuter $(APPVEYOR_REPO_TAG_NAME)'
+  description: ''
+  provider: GitHub
+  auth_token:
+    secure: sXlaELnt68veG14jZ7zUMpbH9RUqT8/I1m3KLxkPLqJDa0ZwehcB0hSxFwSQgbQA
+  artifact: SpotifyMuter
+  draft: true
+  prerelease: false
+  on:
+    configuration: Release
+    branch: master                 # release from master branch only
+    appveyor_repo_tag: true        # deploy on tag push only
