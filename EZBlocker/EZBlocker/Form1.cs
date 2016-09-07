@@ -142,7 +142,7 @@ namespace EZBlocker
                 else // Song is playing
                 {
                     if (muted) Mute(0);
-                    if (MainTimer.Interval > 1000) MainTimer.Interval = 1000;
+                    if (MainTimer.Interval > 1000) MainTimer.Interval = 600;
                     if (lastArtistName != whr.artistName)
                     {
                         StatusLabel.Text = "Playing: " + ShortenName(whr.artistName);
