@@ -77,7 +77,7 @@ namespace EZBlocker
             try {
                 if (Process.GetProcessesByName("spotify").Length < 1)
                 {
-                    if (exitTolerance > 10)
+                    if (exitTolerance > 20)
                     {
                         File.AppendAllText(logPath, "Spotify process not found\r\n");
                         Notify("Spotify not found, exiting EZBlocker.");
