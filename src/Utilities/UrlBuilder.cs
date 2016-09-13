@@ -14,15 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see<http://www.gnu.org/licenses/>.*/
 
+using System;
+
 namespace Utilities
 {
     public class UrlBuilder : IUrlBuilder
     {
-        private const string Port = ":4380";
+        private const string Port = ":4371";
+        private string hostname = new Random(Environment.TickCount).Next(100000, 100000000).ToString();
 
         public string BuildUrl(string path)
         {
-            return "http://127.0.0.1" + Port + path;
+            return "https://" + hostname + ".spotilocal.com" + Port + path;
         }
     }
 }

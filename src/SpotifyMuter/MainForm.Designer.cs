@@ -15,7 +15,6 @@
         {
             if (disposing && (components != null))
             {
-                UnsubscribeFromStatusProcessorEvents();
                 _notifyIconManager.Dispose();
                 components.Dispose();
             }

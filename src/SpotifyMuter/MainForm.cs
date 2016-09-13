@@ -56,7 +56,7 @@ namespace SpotifyMuter
 
         private void Main_Load(object sender, EventArgs e)
         {
-            _notifyIconManager.AddContextMenu(() => Close());
+            _notifyIconManager.AddContextMenu(Close);
 
             SubscribeToStatusProcessorEvents();
 
@@ -69,12 +69,6 @@ namespace SpotifyMuter
         {
             _spotifyStatusProcessor.SpotifyMuted += SpotifyMuted;
             _spotifyStatusProcessor.SpotifyUnmuted += SpotifyUnmuted;
-        }
-
-        private void UnsubscribeFromStatusProcessorEvents()
-        {
-            _spotifyStatusProcessor.SpotifyMuted -= SpotifyMuted;
-            _spotifyStatusProcessor.SpotifyUnmuted -= SpotifyUnmuted;
         }
 
         private void SpotifyMuted(object sender, EventArgs e)

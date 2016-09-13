@@ -46,7 +46,7 @@ namespace SpotifyWebHelper
             }
             catch (JsonPageLoadingFailedException exception)
             {
-                const string message = "Error hooking Spotify. Make sure you enable 'Allow Spotify to be opened from the web'. Please restart SpotifyMuter.";
+                const string message = "Error hooking Spotify. Please restart SpotifyMuter.";
                 LogTo.DebugException(message, exception);
                 throw new RetrieveCsrfException(message, exception);
             }
