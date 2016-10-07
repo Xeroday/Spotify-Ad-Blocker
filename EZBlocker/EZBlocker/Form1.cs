@@ -19,6 +19,7 @@ namespace EZBlocker
         private float volume = 0.9f;
         private string lastArtistName = "";
         private int exitTolerance = 0;
+        private ToolTip artistTooltip = new ToolTip();
 
         private string nircmdPath = Application.StartupPath + @"\nircmd.exe";
         private string jsonPath = Application.StartupPath + @"\Newtonsoft.Json.dll";
@@ -100,7 +101,7 @@ namespace EZBlocker
                         if (lastArtistName != whr.artistName)
                         {
                             if (!muted) Mute(1);
-                            StatusLabel.Text = "Muting ad";
+                            artistTooltip.SetToolTip(StatusLabel, StatusLabel.Text = "Muting ad");
                             lastArtistName = whr.artistName;
                             LogAction("/mute/" + whr.artistName);
                             Debug.WriteLine("Blocked " + whr.artistName);
@@ -117,6 +118,7 @@ namespace EZBlocker
                     if (lastArtistName != whr.artistName)
                     {
                         StatusLabel.Text = "Playing: *Private Session*";
+                        artistTooltip.SetToolTip(StatusLabel, "");
                         lastArtistName = whr.artistName;
                         MessageBox.Show("Please disable 'Private Session' on Spotify for EZBlocker to function properly.", "EZBlocker", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, (MessageBoxOptions)0x40000);
                     }
@@ -124,6 +126,7 @@ namespace EZBlocker
                 else if (!whr.isRunning)
                 {
                     StatusLabel.Text = "Spotify is not running";
+                    artistTooltip.SetToolTip(StatusLabel, "");
                     //Notify("Error connecting to Spotify. Retrying...");
                     File.AppendAllText(logPath, "Not running.\r\n");
                     MainTimer.Interval = 5000;
@@ -137,7 +140,7 @@ namespace EZBlocker
                 else if (!whr.isPlaying)
                 {
                     StatusLabel.Text = "Spotify is paused";
-                    lastArtistName = "";
+                    artistTooltip.SetToolTip(StatusLabel, lastArtistName = "");
                 }
                 else // Song is playing
                 {
@@ -146,7 +149,7 @@ namespace EZBlocker
                     if (lastArtistName != whr.artistName)
                     {
                         StatusLabel.Text = "Playing: " + ShortenName(whr.artistName);
-                        lastArtistName = whr.artistName;
+                        artistTooltip.SetToolTip(StatusLabel, lastArtistName = whr.artistName);
                     }
                 }
             }
