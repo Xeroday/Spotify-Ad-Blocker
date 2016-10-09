@@ -17,32 +17,30 @@
 using System;
 using System.Windows.Forms;
 using Anotar.NLog;
-using SpotifyMuter.Logic;
-using SpotifyWebHelper;
-using Utilities;
+using SpotifyAPI.Local;
+using SpotifyAPI.Local.Models;
 
 namespace SpotifyMuter
 {
     public partial class MainForm : Form
     {
-        private readonly SpotifyStatusRetriever _spotifyStatusRetriever;
-        private readonly SpotifyStatusProcessor _spotifyStatusProcessor;
         private readonly NotifyIconManager _notifyIconManager;
+        private SpotifyLocalAPI _spotifyLocalApi;
+        private readonly Logic.SpotifyMuter _spotifyMuter;
 
         public MainForm()
         {
             InitializeComponent();
-            var pageLoader = new JsonPageLoader();
-            var urlBuilder = new UrlBuilder();
-            _spotifyStatusRetriever = new SpotifyStatusRetriever(pageLoader, urlBuilder, new SpotifyOAuthRetriever(pageLoader), new SpotifyCsrfRetriever(pageLoader, urlBuilder));
-            _spotifyStatusProcessor = new SpotifyStatusProcessor(new Logic.SpotifyMuter());
+            _spotifyMuter = new Logic.SpotifyMuter();
             _notifyIconManager = new NotifyIconManager();
         }
 
-        private void MainTimer_Tick(object sender, EventArgs e)
+        private void Main_Load(object sender, EventArgs e)
         {
-            var status = _spotifyStatusRetriever.RetrieveStatus();
-            _spotifyStatusProcessor.ProcessSpotifyStatus(status);
+            _notifyIconManager.AddContextMenu(Close);
+            _spotifyLocalApi = SetupSpotifyLocalAPI();
+            CheckForAdOnStartup();
+            HideWindow();
         }
 
         private void HideWindow()
@@ -54,29 +52,51 @@ namespace SpotifyMuter
             LogTo.Debug("Window was hidden to tray.");
         }
 
-        private void Main_Load(object sender, EventArgs e)
+        private void CheckForAdOnStartup()
         {
-            _notifyIconManager.AddContextMenu(Close);
-
-            SubscribeToStatusProcessorEvents();
-
-            MainTimer.Enabled = true;
-
-            HideWindow();
+            var status = _spotifyLocalApi.GetStatus();
+            MuteSpotify(status.Track);
         }
 
-        private void SubscribeToStatusProcessorEvents()
+        private SpotifyLocalAPI SetupSpotifyLocalAPI()
         {
-            _spotifyStatusProcessor.SpotifyMuted += SpotifyMuted;
-            _spotifyStatusProcessor.SpotifyUnmuted += SpotifyUnmuted;
+            var spotifyLocalApi = new SpotifyLocalAPI();
+            if (!spotifyLocalApi.Connect())
+            {
+                throw new InvalidProgramException("Can not connect to Spotify.");
+            }
+
+            spotifyLocalApi.OnTrackChange += OnTrackChange;
+            spotifyLocalApi.ListenForEvents = true;
+
+            return spotifyLocalApi;
         }
 
-        private void SpotifyMuted(object sender, EventArgs e)
+        private void OnTrackChange(object sender, TrackChangeEventArgs e)
+        {
+            MuteSpotify(e.NewTrack);
+        }
+
+        private void MuteSpotify(Track track)
+        {
+            if (track.IsAd())
+            {
+                _spotifyMuter.Mute();
+                SpotifyMuted();
+            }
+            else
+            {
+                _spotifyMuter.Unmute();
+                SpotifyUnmuted();
+            }
+        }
+
+        private void SpotifyMuted()
         {
             _notifyIconManager.SetMutedTrayIcon();
         }
 
-        private void SpotifyUnmuted(object sender, EventArgs e)
+        private void SpotifyUnmuted()
         {
             _notifyIconManager.SetUnmutedTrayIcon();
         }

@@ -29,14 +29,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.MainTimer = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
-            // 
-            // MainTimer
-            // 
-            this.MainTimer.Interval = 1000;
-            this.MainTimer.Tick += new System.EventHandler(this.MainTimer_Tick);
             // 
             // MainForm
             // 
@@ -55,7 +48,6 @@
         }
 
         #endregion
-        private System.Windows.Forms.Timer MainTimer;
     }
 }
 

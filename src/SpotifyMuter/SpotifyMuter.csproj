@@ -64,14 +64,21 @@
       <HintPath>..\..\packages\Anotar.NLog.Fody.3.1.0\lib\Anotar.NLog.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\..\packages\NLog.4.3.9\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="SpotifyAPI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SpotifyAPI-NET.2.12.0\lib\SpotifyAPI.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
@@ -103,7 +110,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -124,17 +131,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Model\Model.csproj">
-      <Project>{1B49E4E4-BEDE-4AF7-B7B8-3FA765A83D8A}</Project>
-      <Name>Model</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SpotifyMuter.Logic\SpotifyMuter.Logic.csproj">
       <Project>{40be4b81-3100-4619-a3fb-389e5859fea6}</Project>
       <Name>SpotifyMuter.Logic</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SpotifyWebHelper\SpotifyWebHelper.csproj">
-      <Project>{6b02d4d5-e16c-4b73-91a3-52b6347c44e6}</Project>
-      <Name>SpotifyWebHelper</Name>
     </ProjectReference>
     <ProjectReference Include="..\Utilities\Utilities.csproj">
       <Project>{8beecc3a-126c-4d6a-b00b-3b6c98504e38}</Project>

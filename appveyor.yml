@@ -7,17 +7,6 @@ after_build:
 build:
   project: SpotifyMuter.sln
   verbosity: minimal
-test_script:
-- ps: >-
-    if($env:CONFIGURATION -eq "Debug")
-    {
-      New-Item -Path . -Name "TestResults" -ItemType "directory"
-      nuget install OpenCover -ExcludeVersion -NonInteractive -OutputDirectory packages
-      .\packages\OpenCover\tools\OpenCover.Console.exe -returntargetcode -register:user -filter:"+[*]* -[Tests*]*" "-target:vstest.console.exe" "-targetargs:.\src\Tests\Tests.Model\bin\Debug\Tests.Model.dll .\src\Tests\Tests.SpotifyMuter.Logic\bin\Debug\Tests.SpotifyMuter.Logic.dll .\src\Tests\Tests.SpotifyWebHelper\bin\Debug\Tests.SpotifyWebHelper.dll /logger:Appveyor" "-output:.\TestResults\coverage.xml"
-      $env:path = "$env:PYTHON;$env:PYTHON\Scripts;$env:path"
-      pip install --disable-pip-version-check codecov
-      codecov -X gcov -f ".\TestResults\coverage.xml"
-    }
 environment:
   matrix:
     - PYTHON: "C:\\Python35-x64"
