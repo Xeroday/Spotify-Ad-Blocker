@@ -1,3 +1,9 @@
+=====================
+Novaki92-Custom Edits
+=====================
+-Diabled 'Private Session' Warning Message
+
+=========
 EZBlocker
 =========
 
