@@ -370,9 +370,9 @@ namespace EZBlocker
 
         private void RestoreFromTray()
         {
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.WindowState = FormWindowState.Normal;
             this.ShowInTaskbar = true;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
         }
         
         /**
@@ -420,10 +420,6 @@ namespace EZBlocker
                 this.ShowInTaskbar = false;
                 this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
              // Notify("EZBlocker is hidden. Double-click this icon to restore.");
-            }
-            if (this.WindowState == FormWindowState.Normal)
-            {
-                this.FormBorderStyle = FormBorderStyle.FixedSingle;
             }
         }
 
