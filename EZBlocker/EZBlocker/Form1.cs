@@ -419,7 +419,7 @@ namespace EZBlocker
             {
                 this.ShowInTaskbar = false;
                 this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
-                Notify("EZBlocker is hidden. Double-click this icon to restore.");
+             // Notify("EZBlocker is hidden. Double-click this icon to restore.");
             }
         }
 
