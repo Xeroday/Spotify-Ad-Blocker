@@ -370,9 +370,9 @@ namespace EZBlocker
 
         private void RestoreFromTray()
         {
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.WindowState = FormWindowState.Normal;
             this.ShowInTaskbar = true;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
         }
         
         /**
