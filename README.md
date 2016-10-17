@@ -1,8 +1,9 @@
-=====================
-Novaki92-Custom Edits
-=====================
+===========================
+Novaki92-Custom Edits/Fixes
+===========================
 - Diabled 'Private Session' Warning Message (10/12/2016)
 - Disabled 'EZBlocker is Hidden' Notification (10/16/2016)
+- Fixed Icon issue after opening from system tray (10/16/2016)
 
 =========
 EZBlocker
