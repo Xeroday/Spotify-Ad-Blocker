@@ -2,7 +2,7 @@
 Novaki92-Custom Edits
 =====================
 -Diabled 'Private Session' Warning Message (10/12/2016)
-\n-Disabled 'EZZBlocker is Hidden' Notification (10/16/2016)
+-Disabled 'EZZBlocker is Hidden' Notification (10/16/2016)
 
 =========
 EZBlocker
