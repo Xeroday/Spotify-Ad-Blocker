@@ -421,6 +421,10 @@ namespace EZBlocker
                 this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
                 Notify("EZBlocker is hidden. Double-click this icon to restore.");
             }
+            if (this.WindowState == FormWindowState.Normal)
+            {
+                this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            }
         }
 
         private void SpotifyMuteCheckBox_CheckedChanged(object sender, EventArgs e)
