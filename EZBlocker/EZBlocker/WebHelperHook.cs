@@ -89,6 +89,28 @@ namespace EZBlocker
                             }
                         }
                     }
+                    else if (line.Contains("\"album_resource\":"))
+                    {
+                        while ((line = reader.ReadLine()) != null) // Read until we find the "name" field
+                        {
+                            if (line.Contains("\"name\":"))
+                            {
+                                whr.albumName = (line.Replace("\"name\":", "").Split('"')[1]);
+                                break;
+                            }
+                        }
+                    }
+                    else if (line.Contains("\"track_resource\":"))
+                    {
+                        while ((line = reader.ReadLine()) != null) // Read until we find the "name" field
+                        {
+                            if (line.Contains("\"name\":"))
+                            {
+                                whr.songName = (line.Replace("\"name\":", "").Split('"')[1]);
+                                break;
+                            }
+                        }
+                    }
                     else if (line.Contains("Invalid Csrf token"))
                     {
                         Debug.WriteLine("Invalid CSRF token");

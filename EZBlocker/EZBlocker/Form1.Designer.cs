@@ -40,6 +40,8 @@
             this.StatusLabel = new System.Windows.Forms.Label();
             this.BlockBannersCheckbox = new System.Windows.Forms.CheckBox();
             this.StartupCheckbox = new System.Windows.Forms.CheckBox();
+            this.AlbumLabel = new System.Windows.Forms.Label();
+            this.SongLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // MainTimer
@@ -68,7 +70,7 @@
             // WebsiteLink
             // 
             this.WebsiteLink.AutoSize = true;
-            this.WebsiteLink.Location = new System.Drawing.Point(144, 117);
+            this.WebsiteLink.Location = new System.Drawing.Point(153, 143);
             this.WebsiteLink.Name = "WebsiteLink";
             this.WebsiteLink.Size = new System.Drawing.Size(80, 13);
             this.WebsiteLink.TabIndex = 5;
@@ -135,18 +137,40 @@
             this.StartupCheckbox.UseVisualStyleBackColor = true;
             this.StartupCheckbox.CheckedChanged += new System.EventHandler(this.StartupCheckbox_CheckedChanged);
             // 
+            // AlbumLabel
+            // 
+            this.AlbumLabel.AutoSize = true;
+            this.AlbumLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AlbumLabel.Location = new System.Drawing.Point(9, 130);
+            this.AlbumLabel.Name = "AlbumLabel";
+            this.AlbumLabel.Size = new System.Drawing.Size(54, 13);
+            this.AlbumLabel.TabIndex = 12;
+            this.AlbumLabel.Text = "Loading...";
+            // 
+            // SongLabel
+            // 
+            this.SongLabel.AutoSize = true;
+            this.SongLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SongLabel.Location = new System.Drawing.Point(9, 143);
+            this.SongLabel.Name = "SongLabel";
+            this.SongLabel.Size = new System.Drawing.Size(54, 13);
+            this.SongLabel.TabIndex = 13;
+            this.SongLabel.Text = "Loading...";
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(230, 139);
+            this.ClientSize = new System.Drawing.Size(245, 160);
+            this.Controls.Add(this.SongLabel);
+            this.Controls.Add(this.AlbumLabel);
             this.Controls.Add(this.StartupCheckbox);
             this.Controls.Add(this.BlockBannersCheckbox);
             this.Controls.Add(this.StatusLabel);
             this.Controls.Add(this.VolumeMixerButton);
             this.Controls.Add(this.SpotifyMuteCheckbox);
-            this.Controls.Add(this.WebsiteLink);
             this.Controls.Add(this.MuteButton);
+            this.Controls.Add(this.WebsiteLink);
             this.Cursor = System.Windows.Forms.Cursors.Default;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -173,6 +197,8 @@
         private System.Windows.Forms.CheckBox BlockBannersCheckbox;
         private System.Windows.Forms.Timer MainTimer;
         private System.Windows.Forms.CheckBox StartupCheckbox;
+        private System.Windows.Forms.Label AlbumLabel;
+        private System.Windows.Forms.Label SongLabel;
     }
 }
 
