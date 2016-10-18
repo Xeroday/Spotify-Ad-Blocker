@@ -139,8 +139,9 @@ namespace EZBlocker
                 }
                 else if (!whr.isPlaying)
                 {
-                    StatusLabel.Text = "Spotify is paused";
-                    lastArtistName = "";
+                    StatusLabel.Text = "------------------------------";
+                    AlbumLabel.Text = "| Spotify is paused |";
+                    SongLabel.Text = "------------------------------";
                 }
                 else // Song is playing
                 {
