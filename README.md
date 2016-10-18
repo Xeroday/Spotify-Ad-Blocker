@@ -5,7 +5,7 @@ Novaki92-Custom Edits/Fixes
 - Disabled 'EZBlocker is Hidden' Notification (10/16/2016)
 - Fixed Icon issue after opening from system tray (10/17/2016)
 - Added Album and Song labels (10/18/2016)
-- Report Problem links to this repos 'Issues' page (10/18/2016)
+- 'Report Problem' label links to this repos 'Issues' page (10/18/2016)
 
 
 =========
