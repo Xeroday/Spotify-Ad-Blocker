@@ -51,6 +51,7 @@ namespace EZBlocker
         
         private string EZBlockerUA = "EZBlocker " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " " + System.Environment.OSVersion;
         private const string website = @"https://www.ericzhang.me/projects/spotify-ad-blocker-ezblocker/";
+        private const string issueLink = @"https://github.com/Novaki92/Spotify-Ad-Blocker/issues/new";
 
         // Google Analytics stuff
         private Random rnd;
@@ -520,9 +521,12 @@ namespace EZBlocker
 
         private void WebsiteLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            MessageBox.Show("Please leave a comment describing one of these problems:\r\n\r\n1. Audio ads are not muted\r\n2. Audio ads are not blocked but muted\r\n3. Banner ads are not blocked\r\n\r\nNot using one of these will cause your comment to be deleted.\r\n\r\nPlease note that #2 and #3 are experimental features and not guaranteed to work.", "EZBlocker");
-            Process.Start(website);
-            LogAction("/button/website");
+            var mb_result = MessageBox.Show("Please leave a comment descibing your issue in as much detail as possible.", "EZBlocker", MessageBoxButtons.OKCancel);
+            if (mb_result == DialogResult.OK)
+            {
+                Process.Start(issueLink);
+                LogAction("/button/issueLink");
+            }
         }
 
         private void Main_Load(object sender, EventArgs e)
