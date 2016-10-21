@@ -37,7 +37,7 @@
             this.Heartbeat = new System.Windows.Forms.Timer(this.components);
             this.SpotifyMuteCheckbox = new System.Windows.Forms.CheckBox();
             this.VolumeMixerButton = new System.Windows.Forms.Button();
-            this.StatusLabel = new System.Windows.Forms.Label();
+            this.ArtistLabel = new System.Windows.Forms.Label();
             this.BlockBannersCheckbox = new System.Windows.Forms.CheckBox();
             this.StartupCheckbox = new System.Windows.Forms.CheckBox();
             this.AlbumLabel = new System.Windows.Forms.Label();
@@ -105,15 +105,15 @@
             this.VolumeMixerButton.UseVisualStyleBackColor = true;
             this.VolumeMixerButton.Click += new System.EventHandler(this.VolumeMixerButton_Click);
             // 
-            // StatusLabel
+            // ArtistLabel
             // 
-            this.StatusLabel.AutoSize = true;
-            this.StatusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.StatusLabel.Location = new System.Drawing.Point(9, 117);
-            this.StatusLabel.Name = "StatusLabel";
-            this.StatusLabel.Size = new System.Drawing.Size(54, 13);
-            this.StatusLabel.TabIndex = 9;
-            this.StatusLabel.Text = "Loading...";
+            this.ArtistLabel.AutoSize = true;
+            this.ArtistLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ArtistLabel.Location = new System.Drawing.Point(9, 117);
+            this.ArtistLabel.Name = "ArtistLabel";
+            this.ArtistLabel.Size = new System.Drawing.Size(54, 13);
+            this.ArtistLabel.TabIndex = 9;
+            this.ArtistLabel.Text = "Loading...";
             // 
             // BlockBannersCheckbox
             // 
@@ -166,7 +166,7 @@
             this.Controls.Add(this.AlbumLabel);
             this.Controls.Add(this.StartupCheckbox);
             this.Controls.Add(this.BlockBannersCheckbox);
-            this.Controls.Add(this.StatusLabel);
+            this.Controls.Add(this.ArtistLabel);
             this.Controls.Add(this.VolumeMixerButton);
             this.Controls.Add(this.SpotifyMuteCheckbox);
             this.Controls.Add(this.MuteButton);
@@ -193,7 +193,7 @@
         private System.Windows.Forms.Timer Heartbeat;
         private System.Windows.Forms.CheckBox SpotifyMuteCheckbox;
         private System.Windows.Forms.Button VolumeMixerButton;
-        private System.Windows.Forms.Label StatusLabel;
+        private System.Windows.Forms.Label ArtistLabel;
         private System.Windows.Forms.CheckBox BlockBannersCheckbox;
         private System.Windows.Forms.Timer MainTimer;
         private System.Windows.Forms.CheckBox StartupCheckbox;
