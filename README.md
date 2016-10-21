@@ -2,9 +2,9 @@
 Novaki92-Custom Edits/Fixes
 ===========================
 
-### Custom Edits
+Changelog (October 2016)
 
- #### October 2016
+### Custom Edits
  
    - Diabled 'Private Session' Warning Message (10/12/2016)
    - Disabled 'EZBlocker is Hidden' Notification (10/16/2016)
@@ -13,8 +13,6 @@ Novaki92-Custom Edits/Fixes
    - Labels rearranged and now crop to screen (10/21/2016) 
  
 ### Fixes
-
- #### October 2016
  
    - Fixed Icon issue after opening from system tray (10/17/2016)
    - Fixed Label issue where artist/album/song label wouldn't change (10/21/2016)
