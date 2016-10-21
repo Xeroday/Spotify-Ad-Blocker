@@ -1,7 +1,7 @@
 ===========================
 Novaki92-Custom Edits/Fixes
 ===========================
-
+To download a pre-compiled binary of the latest version, click [here][3].
 Changelog (Major releases):
  - V 1.7 (October 21, 2016)
   - Diabled 'Private Session' Warning Message
@@ -72,3 +72,4 @@ Changelog (Major releases only):
 
   [1]: http://www.ericzhang.me/dl/?file=EZBlocker.php
   [2]: http://www.ericzhang.me/projects/spotify-ad-blocker-ezblocker/
+  [3]: https://github.com/Novaki92/Spotify-Ad-Blocker/raw/master/Latest%20Executable/EZBlocker.exe
