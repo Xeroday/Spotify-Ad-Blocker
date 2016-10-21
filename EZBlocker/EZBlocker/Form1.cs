@@ -145,18 +145,18 @@ namespace EZBlocker
                 {
                     if (muted) Mute(0);
                     if (MainTimer.Interval > 1000) MainTimer.Interval = 600;
-                    if (ArtistLabel.Text != whr.artistName)
+                    if (SongLabel.Text != whr.songName)
                     {
-                        ArtistLabel.Text = "Artist:   " + whr.artistName;
-                        lastArtistName = whr.artistName;
+                        SongLabel.Text = "Song:  " + ShortenName(whr.songName, 34);
                     }
                     if (AlbumLabel.Text != whr.albumName)
                     {
-                        AlbumLabel.Text = "Album: " + whr.albumName;
+                        AlbumLabel.Text = "Album: " + ShortenName(whr.albumName, 36);
                     }
-                    if (SongLabel.Text != whr.songName)
+                    if (ArtistLabel.Text != whr.artistName)
                     {
-                        SongLabel.Text = "Song:  " + ShortenName(whr.songName);
+                        ArtistLabel.Text = "Artist:   " + ShortenName(whr.artistName, 19);
+                        lastArtistName = whr.artistName;
                     }
                 }
             }
@@ -277,9 +277,9 @@ namespace EZBlocker
         /**
          * Cuts off text if name is too long. Removes space from end of text if present.
          **/
-        private string ShortenName(string name)
+        private string ShortenName(string name, int length)
         {
-            int maxLength = 19;
+            int maxLength = length;
             if (name.Length > maxLength)
             {
                 name = name.Substring(0, maxLength);
@@ -354,7 +354,7 @@ namespace EZBlocker
                     int releaseKey = Convert.ToInt32(ndpKey.GetValue("Release"));
                     if (releaseKey >= 378389) return true;
                 }
-            } catch (Exception ignore) {}
+            } catch (Exception /*ignore*/) {}
             return false;
         }
 
@@ -517,7 +517,7 @@ namespace EZBlocker
                 Process.Start(volumeMixerPath);
                 LogAction("/button/volumemixer");
             }
-            catch (Exception ignore)
+            catch (Exception /*ignore*/)
             {
                 MessageBox.Show("Could not open Volume Mixer. This is only available on Windows 7/8/10", "EZBlocker");
             }
