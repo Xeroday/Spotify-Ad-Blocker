@@ -2,20 +2,15 @@
 Novaki92-Custom Edits/Fixes
 ===========================
 
-Changelog (October 2016)
-
-### Custom Edits
- 
-   - Diabled 'Private Session' Warning Message (10/12/2016)
-   - Disabled 'EZBlocker is Hidden' Notification (10/16/2016)
-   - Added Album and Song labels (10/18/2016)
-   - 'Report Problem' label links to this repos 'Issues' page (10/18/2016)
-   - Labels rearranged and now crop to screen (10/21/2016) 
- 
-### Fixes
- 
-   - Fixed Icon issue after opening from system tray (10/17/2016)
-   - Fixed Label issue where artist/album/song label wouldn't change (10/21/2016)
+Changelog (Monthy):
+ - V 1.7 (October 21, 2016)
+  - Diabled 'Private Session' Warning Message
+  - Disabled 'EZBlocker is Hidden' Notification
+  - Added Album and Song labels
+  - 'Report Problem' label links to this repos 'Issues' page
+  - Labels rearranged and now crop to screen
+  - Fixed Icon issue after opening from system tray
+  - Fixed Label issue where artist/album/song label wouldn't change
 
 
 =========
