@@ -109,7 +109,7 @@
             // 
             this.ArtistLabel.AutoSize = true;
             this.ArtistLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ArtistLabel.Location = new System.Drawing.Point(9, 117);
+            this.ArtistLabel.Location = new System.Drawing.Point(9, 143);
             this.ArtistLabel.Name = "ArtistLabel";
             this.ArtistLabel.Size = new System.Drawing.Size(54, 13);
             this.ArtistLabel.TabIndex = 9;
@@ -151,7 +151,7 @@
             // 
             this.SongLabel.AutoSize = true;
             this.SongLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SongLabel.Location = new System.Drawing.Point(9, 143);
+            this.SongLabel.Location = new System.Drawing.Point(9, 117);
             this.SongLabel.Name = "SongLabel";
             this.SongLabel.Size = new System.Drawing.Size(54, 13);
             this.SongLabel.TabIndex = 13;
