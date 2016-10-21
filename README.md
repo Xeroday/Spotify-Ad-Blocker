@@ -1,7 +1,11 @@
 ===========================
 Novaki92-Custom Edits/Fixes
 ===========================
+
+This is my own personal spin on EZBlocker by Xeroday.
+
 To download a pre-compiled binary of the latest version, click [here][3].
+
 Changelog (Major releases):
  - V 1.7 (October 21, 2016)
   - Diabled 'Private Session' Warning Message
