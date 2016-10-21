@@ -18,8 +18,6 @@ namespace EZBlocker
         private bool spotifyMute = false;
         private float volume = 0.9f;
         private string lastArtistName = "";
-        private string lastAlbumName = "";
-        private string lastSongName = "";
         private int exitTolerance = 0;
 
         private string nircmdPath = Application.StartupPath + @"\nircmd.exe";
@@ -147,20 +145,18 @@ namespace EZBlocker
                 {
                     if (muted) Mute(0);
                     if (MainTimer.Interval > 1000) MainTimer.Interval = 600;
-                    if (lastArtistName != whr.artistName)
+                    if (StatusLabel.Text != whr.artistName)
                     {
                         StatusLabel.Text = "Artist:   " + whr.artistName;
                         lastArtistName = whr.artistName;
                     }
-                    if (lastAlbumName != whr.albumName)
+                    if (AlbumLabel.Text != whr.albumName)
                     {
                         AlbumLabel.Text = "Album: " + whr.albumName;
-                        lastAlbumName = whr.albumName;
                     }
-                    if (lastSongName != whr.songName)
+                    if (SongLabel.Text != whr.songName)
                     {
                         SongLabel.Text = "Song:  " + whr.songName;
-                        lastSongName = whr.songName;
                     }
                 }
             }
