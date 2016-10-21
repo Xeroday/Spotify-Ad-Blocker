@@ -49,6 +49,7 @@ namespace EZBlocker
         
         private string EZBlockerUA = "EZBlocker " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " " + System.Environment.OSVersion;
         private const string website = @"https://www.ericzhang.me/projects/spotify-ad-blocker-ezblocker/";
+        private const string issueLink = @"https://github.com/Novaki92/Spotify-Ad-Blocker/issues/new";
 
         // Google Analytics stuff
         private Random rnd;
@@ -100,7 +101,7 @@ namespace EZBlocker
                         if (lastArtistName != whr.artistName)
                         {
                             if (!muted) Mute(1);
-                            StatusLabel.Text = "Muting ad";
+                            ArtistLabel.Text = "Muting ad";
                             lastArtistName = whr.artistName;
                             LogAction("/mute/" + whr.artistName);
                             Debug.WriteLine("Blocked " + whr.artistName);
@@ -116,14 +117,14 @@ namespace EZBlocker
                 {
                     if (lastArtistName != whr.artistName)
                     {
-                        StatusLabel.Text = "Playing: *Private Session*";
+                        ArtistLabel.Text = "Playing: *Private Session*";
                         lastArtistName = whr.artistName;
-                        MessageBox.Show("Please disable 'Private Session' on Spotify for EZBlocker to function properly.", "EZBlocker", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, (MessageBoxOptions)0x40000);
+                        //MessageBox.Show("Please disable 'Private Session' on Spotify for EZBlocker to function properly.", "EZBlocker", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, (MessageBoxOptions)0x40000);
                     }
                 }
                 else if (!whr.isRunning)
                 {
-                    StatusLabel.Text = "Spotify is not running";
+                    ArtistLabel.Text = "Spotify is not running";
                     //Notify("Error connecting to Spotify. Retrying...");
                     File.AppendAllText(logPath, "Not running.\r\n");
                     MainTimer.Interval = 5000;
@@ -136,17 +137,26 @@ namespace EZBlocker
                 }
                 else if (!whr.isPlaying)
                 {
-                    StatusLabel.Text = "Spotify is paused";
-                    lastArtistName = "";
+                    ArtistLabel.Text = "------------------------------";
+                    AlbumLabel.Text = "| Spotify is paused |";
+                    SongLabel.Text = "------------------------------";
                 }
                 else // Song is playing
                 {
                     if (muted) Mute(0);
                     if (MainTimer.Interval > 1000) MainTimer.Interval = 600;
-                    if (lastArtistName != whr.artistName)
+                    if (ArtistLabel.Text != whr.artistName)
                     {
-                        StatusLabel.Text = "Playing: " + ShortenName(whr.artistName);
+                        ArtistLabel.Text = "Artist:   " + whr.artistName;
                         lastArtistName = whr.artistName;
+                    }
+                    if (AlbumLabel.Text != whr.albumName)
+                    {
+                        AlbumLabel.Text = "Album: " + whr.albumName;
+                    }
+                    if (SongLabel.Text != whr.songName)
+                    {
+                        SongLabel.Text = "Song:  " + ShortenName(whr.songName);
                     }
                 }
             }
@@ -264,11 +274,24 @@ namespace EZBlocker
             return s;
         }
 
+        /**
+         * Cuts off text if name is too long. Removes space from end of text if present.
+         **/
         private string ShortenName(string name)
         {
-            if (name.Length > 12)
+            int maxLength = 19;
+            if (name.Length > maxLength)
             {
-                return name.Substring(0, 12) + "...";
+                name = name.Substring(0, maxLength);
+                if (name.EndsWith(" "))
+                {
+                    name = name.Substring(0, maxLength - 1);
+                    return name + "...";
+                }
+                else
+                {
+                    return name + "...";
+                }
             }
             return name;
         }
@@ -370,9 +393,9 @@ namespace EZBlocker
 
         private void RestoreFromTray()
         {
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.WindowState = FormWindowState.Normal;
             this.ShowInTaskbar = true;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
         }
         
         /**
@@ -419,7 +442,7 @@ namespace EZBlocker
             {
                 this.ShowInTaskbar = false;
                 this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
-                Notify("EZBlocker is hidden. Double-click this icon to restore.");
+             // Notify("EZBlocker is hidden. Double-click this icon to restore.");
             }
         }
 
@@ -508,9 +531,12 @@ namespace EZBlocker
 
         private void WebsiteLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            MessageBox.Show("Please leave a comment describing one of these problems:\r\n\r\n1. Audio ads are not muted\r\n2. Audio ads are not blocked but muted\r\n3. Banner ads are not blocked\r\n\r\nNot using one of these will cause your comment to be deleted.\r\n\r\nPlease note that #2 and #3 are experimental features and not guaranteed to work.", "EZBlocker");
-            Process.Start(website);
-            LogAction("/button/website");
+            var mb_result = MessageBox.Show("Please leave a comment descibing your issue in as much detail as possible.", "EZBlocker", MessageBoxButtons.OKCancel);
+            if (mb_result == DialogResult.OK)
+            {
+                Process.Start(issueLink);
+                LogAction("/button/issueLink");
+            }
         }
 
         private void Main_Load(object sender, EventArgs e)
