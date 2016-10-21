@@ -2,7 +2,7 @@
 Novaki92-Custom Edits/Fixes
 ===========================
 
-Changelog (Monthy):
+Changelog (Major releases):
  - V 1.7 (October 21, 2016)
   - Diabled 'Private Session' Warning Message
   - Disabled 'EZBlocker is Hidden' Notification
