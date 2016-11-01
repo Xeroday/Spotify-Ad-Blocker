@@ -648,6 +648,11 @@ namespace EZBlocker
             Close();
         }
 
+        private void websiteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start(website);
+        }
+
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             if (!Properties.Settings.Default.UserEducated)
