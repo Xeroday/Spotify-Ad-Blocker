@@ -405,7 +405,7 @@ namespace EZBlocker
 
         private void NotifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (!this.ShowInTaskbar)
+            if (!this.ShowInTaskbar && e.Button == MouseButtons.Left)
             {
                 RestoreFromTray();
             }
@@ -636,6 +636,16 @@ namespace EZBlocker
             MainTimer.Enabled = true;
 
             LogAction("/launch");
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RestoreFromTray();
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
