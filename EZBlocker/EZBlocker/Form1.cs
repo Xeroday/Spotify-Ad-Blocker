@@ -81,14 +81,24 @@ namespace EZBlocker
                     if (exitTolerance > 20)
                     {
                         File.AppendAllText(logPath, "Spotify process not found\r\n");
-                        Notify("Spotify not found, exiting EZBlocker.");
-                        Application.Exit();
+                        Notify("Spotify not found, please restart EZBlocker.");
+                        if (exitTolerance > 22)
+                        {
+                            Notify("Exiting EZBlocker.");
+                            Application.Exit();
+                        }
                     }
                     exitTolerance += 1;
                 }
                 else
                 {
                     exitTolerance = 0;
+                }
+
+                if (Process.GetProcessesByName("spotifywebhelper").Length < 1)
+                {
+                    Notify("Please enable 'Allow Spotify to be opened from the web' in your Spotify 'Preferences' -> 'Advanced settings'.");
+                    return;
                 }
 
                 WebHelperResult whr = WebHelperHook.GetStatus();
@@ -522,14 +532,23 @@ namespace EZBlocker
             if (File.Exists(spotifyPrefsPath))
             {
                 String[] lines = File.ReadAllLines(spotifyPrefsPath);
+                bool webhelperEnabled = false;
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    if (lines[i].Contains("webhelper.enabled") && lines[i].Contains("false"))
-                    {
-                        lines[i] = "webhelper.enabled=true";
-                        File.WriteAllLines(spotifyPrefsPath, lines);
+                    if (lines[i].Contains("webhelper.enabled"))
+                    {   
+                        if (lines[i].Contains("false"))
+                        {
+                            lines[i] = "webhelper.enabled=true";
+                            File.WriteAllLines(spotifyPrefsPath, lines);
+                        }
+                        webhelperEnabled = true;
                         break;
                     }
+                }
+                if (!webhelperEnabled)
+                {
+                    File.AppendAllText(spotifyPrefsPath, "\r\nwebhelper.enabled=true");
                 }
             }
 
