@@ -272,6 +272,7 @@ namespace EZBlocker
         private string GetPage(string URL, string ua)
         {
             WebClient w = new WebClient();
+            w.Proxy = WebRequest.GetSystemWebProxy();
             w.Headers.Add("user-agent", ua);
             string s = w.DownloadString(URL);
             return s;
@@ -375,6 +376,7 @@ namespace EZBlocker
                         "%3B%2B__utmz%3D" + domainHash + "." + lasttime + "." + sessionNumber + "." + campaignNumber + ".utmcsr%3D" + source + "%7Cutmccn%3D(" + medium + ")%7Cutmcmd%3D" + medium + "%7Cutmcct%3D%2Fd31AaOM%3B";
                 using (var client = new WebClient())
                 {
+                    client.Proxy = WebRequest.GetSystemWebProxy();
                     client.DownloadData(statsRequest);
                 }
             }
