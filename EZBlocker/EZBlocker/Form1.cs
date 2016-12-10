@@ -130,7 +130,7 @@ namespace EZBlocker
                         StatusLabel.Text = "Playing: *Private Session*";
                         artistTooltip.SetToolTip(StatusLabel, "");
                         lastArtistName = whr.artistName;
-                        MessageBox.Show("Please disable 'Private Session' on Spotify for EZBlocker to function properly.", "EZBlocker", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, (MessageBoxOptions)0x40000);
+                        //MessageBox.Show("Please disable 'Private Session' on Spotify for EZBlocker to function properly.", "EZBlocker", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, (MessageBoxOptions)0x40000);
                     }
                 }
                 else if (!whr.isRunning)
