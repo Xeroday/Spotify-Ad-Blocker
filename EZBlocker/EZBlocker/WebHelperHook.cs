@@ -33,6 +33,9 @@ namespace EZBlocker
             }
 
             string result = "";
+
+            WebHelperResult whr = new WebHelperResult();
+
             try
             {
                 result = GetPage(GetURL("/remote/status.json" + "?oauth=" + oauthToken + "&csrf=" + csrfToken));
@@ -42,9 +45,10 @@ namespace EZBlocker
             {
                 Debug.WriteLine(ex);
                 File.AppendAllText(Main.logPath, "WebHelperHook: " + ex.Message + "\r\n");
+                whr.isRunning = false;
+                return whr;
             }
             
-            WebHelperResult whr = new WebHelperResult();
 
             // Process data
             using (StringReader reader = new StringReader(result))
