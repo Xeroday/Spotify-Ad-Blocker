@@ -9,11 +9,16 @@ using CoreAudio;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Microsoft.Win32;
+using System.Drawing;
 
 namespace EZBlocker
 {
     public partial class Main : Form
     {
+        private bool dragging = false;
+        private Point dragCursorPoint;
+        private Point dragFormPoint;
+
         private bool muted = false;
         private bool spotifyMute = false;
         private float volume = 0.9f;
@@ -417,7 +422,8 @@ namespace EZBlocker
         {
             if (!this.ShowInTaskbar && e.Button == MouseButtons.Left)
             {
-                RestoreFromTray();
+                this.FormBorderStyle = FormBorderStyle.None;
+                this.WindowState = FormWindowState.Normal;
             }
         }
 
@@ -524,6 +530,11 @@ namespace EZBlocker
             MessageBox.Show("Please leave a comment describing one of these problems:\r\n\r\n1. Audio ads are not muted\r\n2. Audio ads are not blocked but muted\r\n3. Banner ads are not blocked\r\n\r\nNot using one of these will cause your comment to be deleted.\r\n\r\nPlease note that #2 and #3 are experimental features and not guaranteed to work.", "EZBlocker");
             Process.Start(website);
             LogAction("/button/website");
+        }
+
+        private void DesignWebLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start(@"http://www.bruske.com.br/");
         }
 
         private void Main_Load(object sender, EventArgs e)
@@ -659,7 +670,8 @@ namespace EZBlocker
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            RestoreFromTray();
+            this.FormBorderStyle = FormBorderStyle.None;
+            this.WindowState = FormWindowState.Normal;
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -670,6 +682,53 @@ namespace EZBlocker
         private void websiteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start(website);
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void btnMinimized_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void Form_MouseDown(object sender, MouseEventArgs e)
+        {
+            dragging = true;
+            dragCursorPoint = Cursor.Position;
+            dragFormPoint = this.Location;
+        }
+
+        private void Form_MouseMove(object sender, MouseEventArgs e)
+        {
+
+            if (dragging)
+            {
+                Point dif = Point.Subtract(Cursor.Position, new Size(dragCursorPoint));
+                this.Location = Point.Add(dragFormPoint, new Size(dif));
+            }
+        }
+
+        private void Form_MouseUp(object sender, MouseEventArgs e)
+        {
+            dragging = false;
+        }
+
+        private void VolumeMixerButton_MouseHover(object sender, EventArgs e)
+        {
+            VolumeMixerButton.BackgroundImage = Properties.Resources.options_mouse;
+        }
+
+        private void VolumeMixerButton_MouseLeave(object sender, EventArgs e)
+        {
+            VolumeMixerButton.BackgroundImage = Properties.Resources.options;
+        }
+
+        private void VolumeMixerButton_MouseDown(object sender, MouseEventArgs e)
+        {
+            VolumeMixerButton.BackgroundImage = Properties.Resources.options;
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
