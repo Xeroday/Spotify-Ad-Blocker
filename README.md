@@ -20,6 +20,11 @@ Usage:
 
 To close SpotifyMuter double click the trayicon.
 
+Alternative
+-----------
+An easy way to block all ads without muting them is to block websites by editing your hosts file.
+For more information check out Steven Black's [hosts](https://github.com/StevenBlack/hosts) repository.
+
 Icon
 ----
-[Material Design icons](http://google.github.io/material-design-icons/) by Google.
+[Material Design icons](https://google.github.io/material-design-icons/) by Google.
