@@ -16,7 +16,8 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TextBlock xml:space="preserve">SpotifyMuter - A simple Spotify Ad Muter for Windows
+        <TextBlock xml:space="preserve"
+                   Margin="10">SpotifyMuter - A simple Spotify Ad Muter for Windows
 Copyright(C) 2012-2016 Eric Zhang, 2016 Maschmi
 
 This program is free software: you can redistribute it and/or modify

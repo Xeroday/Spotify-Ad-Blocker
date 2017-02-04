@@ -42,8 +42,8 @@ namespace SpotifyMuter
             _notifyIcon.MouseDoubleClick += (o, args) => closeAction();
 
             var trayMenu = new ContextMenu();
-            trayMenu.MenuItems.Add("Exit", (o, args) => { closeAction(); });
             trayMenu.MenuItems.Add("About", (o, args) => { new AboutWindow().Show(); });
+            trayMenu.MenuItems.Add("Exit", (o, args) => { closeAction(); });
             _notifyIcon.ContextMenu = trayMenu;
         }
 
