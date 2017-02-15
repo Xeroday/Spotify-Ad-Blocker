@@ -66,7 +66,6 @@
       <HintPath>Resources\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -80,9 +79,7 @@
     <Compile Include="Json\CSRF.cs" />
     <Compile Include="Json\OAuth.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="WebHelperHook.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="WebHelperHook.cs" />
     <Compile Include="WebHelperResult.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

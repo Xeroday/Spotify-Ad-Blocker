@@ -162,13 +162,6 @@ namespace EZBlocker
         {
             Debug.WriteLine("Getting page " + URL);
             WebClient w = new WebClient();
-
-            if (Properties.Settings.Default.BypassProxyForLocalControl && URL.Contains("spotilocal"))
-            {
-                Debug.WriteLine("Bypassing proxy for local address: " + URL);
-                w.Proxy = null;
-            }
-
             w.Headers.Add("user-agent", ua);
             w.Headers.Add("Origin", "https://open.spotify.com");
             ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };

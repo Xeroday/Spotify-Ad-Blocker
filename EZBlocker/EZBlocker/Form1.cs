@@ -16,7 +16,6 @@ namespace EZBlocker
     {
         private bool muted = false;
         private bool spotifyMute = false;
-        private bool bypassProxyForLocalControl = false;
         private float volume = 0.9f;
         private string lastArtistName = "";
         private int exitTolerance = 0;
@@ -437,14 +436,6 @@ namespace EZBlocker
             }
         }
 
-        private void BypassProxyCheckbox_CheckedChanged(object sender, EventArgs e)
-        {
-            bypassProxyForLocalControl = BypassProxyCheckbox.Checked;
-            if (visitorId == null) return; // Still setting up UI
-            Properties.Settings.Default.BypassProxyForLocalControl = bypassProxyForLocalControl;
-            Properties.Settings.Default.Save();
-        }
-
         private void SpotifyMuteCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             spotifyMute = SpotifyMuteCheckbox.Checked;
@@ -615,7 +606,6 @@ namespace EZBlocker
 
             // Set up UI
             SpotifyMuteCheckbox.Checked = Properties.Settings.Default.SpotifyMute;
-            BypassProxyCheckbox.Checked = Properties.Settings.Default.BypassProxyForLocalControl;
             if (File.Exists(hostsPath))
             {
                 string hostsFile = File.ReadAllText(hostsPath);
