@@ -1,5 +1,5 @@
 
-Novaki92-Custom Edits/Fixes
+#Novaki92-Custom Edits/Fixes
 
 
 This is my own personal spin on EZBlocker by Xeroday.
@@ -18,7 +18,7 @@ Changelog (Major releases):
 
 
 
-EZBlocker
+#EZBlocker
 
 
 EZBlocker is a Spotify Ad Blocker written in C# for Windows 7/8/10.
