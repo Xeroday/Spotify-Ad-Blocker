@@ -1,6 +1,6 @@
-===========================
+
 Novaki92-Custom Edits/Fixes
-===========================
+
 
 This is my own personal spin on EZBlocker by Xeroday.
 
@@ -17,9 +17,9 @@ Changelog (Major releases):
   - Fixed Label issue where artist/album/song label wouldn't change
 
 
-=========
+
 EZBlocker
-=========
+
 
 EZBlocker is a Spotify Ad Blocker written in C# for Windows 7/8/10.
 
