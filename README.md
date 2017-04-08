@@ -25,6 +25,8 @@ Alternative
 An easy way to block all ads without muting them is to block websites by editing your hosts file.
 For more information check out Steven Black's [hosts](https://github.com/StevenBlack/hosts) repository.
 
+Check [this](https://github.com/FadeMind/hosts.extras/blob/master/SpotifyAds/hosts) for just the Spotifyentries.
+
 Icon
 ----
 [Material Design icons](https://google.github.io/material-design-icons/) by Google.
