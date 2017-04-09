@@ -4,6 +4,7 @@ before_build:
 after_build:
   - 7z a SpotifyMuter.zip %APPVEYOR_BUILD_FOLDER%\src\SpotifyMuter\bin\%CONFIGURATION%\*.dll
   - 7z a SpotifyMuter.zip %APPVEYOR_BUILD_FOLDER%\src\SpotifyMuter\bin\%CONFIGURATION%\SpotifyMuter.exe
+  - 7z a SpotifyMuter.zip %APPVEYOR_BUILD_FOLDER%\src\SpotifyMuter\bin\%CONFIGURATION%\SpotifyMuter.exe.config
 build:
   project: SpotifyMuter.sln
   verbosity: minimal
