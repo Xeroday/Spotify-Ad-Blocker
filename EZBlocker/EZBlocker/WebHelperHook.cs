@@ -78,6 +78,18 @@ namespace EZBlocker
                     {
                         whr.length = Convert.ToInt32(line.Split(new char[] { ':', ',' })[1]);
                     }
+                    // This section get the current track name and passes it to whr.songtitle
+                    else if (line.Contains("\"track_resource\":"))
+                    {
+                        while ((line = reader.ReadLine()) != null) // Read until we find the "name" field
+                        {
+                            if (line.Contains("\"name\":"))
+                            {
+                                whr.songtitle = (line.Replace("\"name\":", "").Split('"')[1]);
+                                break;
+                            }
+                        }
+                    }
                     else if (line.Contains("\"artist_resource\":"))
                     {
                         while ((line = reader.ReadLine()) != null) // Read until we find the "name" field

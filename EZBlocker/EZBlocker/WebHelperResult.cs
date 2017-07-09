@@ -11,5 +11,6 @@
         public int length = 1234;
 
         public string artistName = "N/A";
+        public string songtitle = "N/A";
     }
 }
