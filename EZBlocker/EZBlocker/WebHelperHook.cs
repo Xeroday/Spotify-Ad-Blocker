@@ -99,6 +99,11 @@ namespace EZBlocker
                         Debug.WriteLine("Invalid OAuth token");
                         SetOAuth();
                     }
+                    else if (line.Contains("Expired OAuth token"))
+                    {
+                        Debug.WriteLine("Expired OAuth token");
+                        SetOAuth();
+                    }
                 }
             }
 
