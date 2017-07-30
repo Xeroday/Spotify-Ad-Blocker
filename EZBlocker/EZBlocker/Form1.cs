@@ -95,16 +95,11 @@ namespace EZBlocker
                     exitTolerance = 0;
                 }
 
-                if (Process.GetProcessesByName("spotifywebhelper").Length < 1)
-                {
-                    Notify("Please enable 'Allow Spotify to be opened from the web' in your Spotify 'Preferences' -> 'Advanced settings'.");
-                    return;
-                }
-
                 WebHelperResult whr = WebHelperHook.GetStatus();
 
                 if (whr.isAd) // Track is ad
                 {
+                    MainTimer.Interval = 1000;
                     if (whr.isPlaying)
                     {
                         Debug.WriteLine("Ad is playing");
@@ -155,7 +150,7 @@ namespace EZBlocker
                 else // Song is playing
                 {
                     if (muted) Mute(0);
-                    if (MainTimer.Interval > 1000) MainTimer.Interval = 600;
+                    if (MainTimer.Interval > 600) MainTimer.Interval = 600;
                     if (lastArtistName != whr.artistName)
                     {
                         StatusLabel.Text = "Playing: " + ShortenName(whr.artistName);
@@ -653,6 +648,12 @@ namespace EZBlocker
             Mute(0);
             
             MainTimer.Enabled = true;
+
+            if (Process.GetProcessesByName("spotifywebhelper").Length < 1)
+            {
+                Notify("Please enable 'Allow Spotify to be opened from the web' in your Spotify 'Preferences' -> 'Advanced settings'.");
+
+            }
 
             LogAction("/launch");
         }
