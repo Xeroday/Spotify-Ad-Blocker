@@ -14,6 +14,11 @@ namespace EZBlocker
 {
     public partial class Main : Form
     {
+        //Lyrics Variables
+        private bool bShowLyrics = false;
+        private string ArtistName;
+        private string SongTitle;
+
         private bool muted = false;
         private bool spotifyMute = false;
         private float volume = 0.9f;
@@ -68,6 +73,25 @@ namespace EZBlocker
         public Main()
         {
             InitializeComponent();
+        }
+
+        // This is the function that is called when song changes and user 
+        // wants the lyrics to be shown (currently it will be shown in a browser)
+
+        void LaunchLyrics()
+        {
+            //launches browser to lyrics website
+            //Later Make it so that user can change what site that they want to use for lyrics
+            // This proccesses the variables to make them url friendly, it is a very rough way to do it but it works
+            // TO-DO : Rework this area to clean up the sloppy code
+            string TempRefinedArtistName = ArtistName.Replace(" ", "");
+            string RefinedArtistName = TempRefinedArtistName.ToLower();
+            string TempRefinedSongTitle = SongTitle.Replace(" ", "");
+            string RefinedSongTitle = TempRefinedSongTitle.ToLower();
+            //searches a tested lyrics site for the aritist and title that matches their url standards
+            //TO-DO : Still needs to make it work with titles with special characters like (' , - ) and such
+            Process.Start("http://www.azlyrics.com/lyrics/" + RefinedArtistName + "/" + RefinedSongTitle + ".html");
+
         }
 
         /**
@@ -155,6 +179,16 @@ namespace EZBlocker
                     {
                         StatusLabel.Text = "Playing: " + ShortenName(whr.artistName);
                         artistTooltip.SetToolTip(StatusLabel, lastArtistName = whr.artistName);
+
+                        //changes lyrics variables to the current track informtation from Web Hook Results
+                        ArtistName = whr.artistName;
+                        SongTitle = whr.songtitle;
+
+                        if (bShowLyrics)
+                        {
+                            LaunchLyrics();
+                        }
+                        
                     }
                 }
             }
@@ -671,6 +705,18 @@ namespace EZBlocker
         private void websiteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start(website);
+        }
+
+        private void lyricsCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if(bShowLyrics == false)
+            {
+                bShowLyrics = true;
+            }
+            else
+            {
+                bShowLyrics = false;
+            }
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
