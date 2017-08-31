@@ -675,20 +675,24 @@ namespace EZBlocker
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            if (!Properties.Settings.Default.UserEducated)
+            if(Properties.Settings.Default.ConfirmOnExit)
             {
-                var result = MessageBox.Show("Spotify ads will not be muted if EZBlocker is not running.\r\n\r\nAre you sure you want to exit?", "EZBlocker",
-                                 MessageBoxButtons.YesNo,
-                                 MessageBoxIcon.Warning);
-
-                e.Cancel = (result == DialogResult.No);
-
-                if (result == DialogResult.Yes)
+                if (!Properties.Settings.Default.UserEducated)
                 {
-                    Properties.Settings.Default.UserEducated = true;
-                    Properties.Settings.Default.Save();
+                    var result = MessageBox.Show("Spotify ads will not be muted if EZBlocker is not running.\r\n\r\nAre you sure you want to exit?", "EZBlocker",
+                                     MessageBoxButtons.YesNo,
+                                     MessageBoxIcon.Warning);
+
+                    e.Cancel = (result == DialogResult.No);
+
+                    if (result == DialogResult.Yes)
+                    {
+                        Properties.Settings.Default.UserEducated = true;
+                        Properties.Settings.Default.Save();
+                    }
                 }
             }
+            Properties.Settings.Default.Save();
         }
     }
 }

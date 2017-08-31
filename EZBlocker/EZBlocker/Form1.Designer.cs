@@ -35,6 +35,7 @@
             this.NotifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.NotifyIconContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.websiteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.separatorToolStripMenuItem = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.WebsiteLink = new System.Windows.Forms.LinkLabel();
@@ -44,7 +45,7 @@
             this.StatusLabel = new System.Windows.Forms.Label();
             this.BlockBannersCheckbox = new System.Windows.Forms.CheckBox();
             this.StartupCheckbox = new System.Windows.Forms.CheckBox();
-            this.websiteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ConfirmCheckbox = new System.Windows.Forms.CheckBox();
             this.NotifyIconContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -81,31 +82,38 @@
             this.separatorToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.NotifyIconContextMenu.Name = "NotifyIconContextMenu";
-            this.NotifyIconContextMenu.Size = new System.Drawing.Size(153, 98);
+            this.NotifyIconContextMenu.Size = new System.Drawing.Size(117, 76);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
+            // 
+            // websiteToolStripMenuItem
+            // 
+            this.websiteToolStripMenuItem.Name = "websiteToolStripMenuItem";
+            this.websiteToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.websiteToolStripMenuItem.Text = "Website";
+            this.websiteToolStripMenuItem.Click += new System.EventHandler(this.websiteToolStripMenuItem_Click);
             // 
             // separatorToolStripMenuItem
             // 
             this.separatorToolStripMenuItem.Name = "separatorToolStripMenuItem";
-            this.separatorToolStripMenuItem.Size = new System.Drawing.Size(149, 6);
+            this.separatorToolStripMenuItem.Size = new System.Drawing.Size(113, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.exitToolStripMenuItem.Text = "&Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // WebsiteLink
             // 
             this.WebsiteLink.AutoSize = true;
-            this.WebsiteLink.Location = new System.Drawing.Point(144, 117);
+            this.WebsiteLink.Location = new System.Drawing.Point(144, 139);
             this.WebsiteLink.Name = "WebsiteLink";
             this.WebsiteLink.Size = new System.Drawing.Size(80, 13);
             this.WebsiteLink.TabIndex = 5;
@@ -144,7 +152,7 @@
             // 
             this.StatusLabel.AutoSize = true;
             this.StatusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.StatusLabel.Location = new System.Drawing.Point(9, 117);
+            this.StatusLabel.Location = new System.Drawing.Point(9, 139);
             this.StatusLabel.Name = "StatusLabel";
             this.StatusLabel.Size = new System.Drawing.Size(54, 13);
             this.StatusLabel.TabIndex = 9;
@@ -172,18 +180,25 @@
             this.StartupCheckbox.UseVisualStyleBackColor = true;
             this.StartupCheckbox.CheckedChanged += new System.EventHandler(this.StartupCheckbox_CheckedChanged);
             // 
-            // websiteToolStripMenuItem
+            // ConfirmCheckbox
             // 
-            this.websiteToolStripMenuItem.Name = "websiteToolStripMenuItem";
-            this.websiteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.websiteToolStripMenuItem.Text = "Website";
-            this.websiteToolStripMenuItem.Click += new System.EventHandler(this.websiteToolStripMenuItem_Click);
+            this.ConfirmCheckbox.AutoSize = true;
+            this.ConfirmCheckbox.Checked = global::EZBlocker.Properties.Settings.Default.ConfirmOnExit;
+            this.ConfirmCheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ConfirmCheckbox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::EZBlocker.Properties.Settings.Default, "ConfirmOnExit", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.ConfirmCheckbox.Location = new System.Drawing.Point(12, 117);
+            this.ConfirmCheckbox.Name = "ConfirmCheckbox";
+            this.ConfirmCheckbox.Size = new System.Drawing.Size(96, 17);
+            this.ConfirmCheckbox.TabIndex = 12;
+            this.ConfirmCheckbox.Text = "Confirm on Exit";
+            this.ConfirmCheckbox.UseVisualStyleBackColor = true;
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(230, 139);
+            this.ClientSize = new System.Drawing.Size(230, 161);
+            this.Controls.Add(this.ConfirmCheckbox);
             this.Controls.Add(this.StartupCheckbox);
             this.Controls.Add(this.BlockBannersCheckbox);
             this.Controls.Add(this.StatusLabel);
@@ -224,6 +239,7 @@
         private System.Windows.Forms.ToolStripSeparator separatorToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem websiteToolStripMenuItem;
+        private System.Windows.Forms.CheckBox ConfirmCheckbox;
     }
 }
 

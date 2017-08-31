@@ -70,5 +70,17 @@ namespace EZBlocker.Properties {
                 this["UserEducated"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ConfirmOnExit {
+            get {
+                return ((bool)(this["ConfirmOnExit"]));
+            }
+            set {
+                this["ConfirmOnExit"] = value;
+            }
+        }
     }
 }
