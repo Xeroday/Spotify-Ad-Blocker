@@ -51,7 +51,7 @@
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>my_music.ico</ApplicationIcon>
+    <ApplicationIcon>EZ-Free-ico.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>EZBlocker.Program</StartupObject>
@@ -118,8 +118,21 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="my_music.ico" />
+    <Content Include="EZ-Free-ico.ico" />
+    <None Include="Resources\spotify.png" />
+    <None Include="Resources\sound.png" />
+    <None Include="Resources\options-mouse.png" />
+    <None Include="Resources\options.png" />
+    <None Include="Resources\simbol.png" />
+    <None Include="Resources\close.png" />
     <Content Include="Resources\CoreAudio.dll" />
+    <None Include="Resources\minimized.png" />
+    <None Include="Resources\ez-free-1.jpg" />
+    <None Include="Resources\ez-free-2.jpg" />
+    <None Include="Resources\ez-free-3.jpg" />
+    <None Include="Resources\ez-free-4.jpg" />
+    <None Include="Resources\ez-free-5.jpg" />
+    <None Include="Resources\EZ-Free-logo.png" />
     <Content Include="Resources\Newtonsoft.Json.dll" />
     <None Include="Resources\nircmd32.exe" />
   </ItemGroup>
