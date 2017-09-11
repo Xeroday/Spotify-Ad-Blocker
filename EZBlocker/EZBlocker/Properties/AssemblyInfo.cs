@@ -7,9 +7,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("EZBlocker")]
 [assembly: AssemblyDescription("http://www.ericzhang.me")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Eric Zhang")]
+[assembly: AssemblyCompany("Eric Zhang, MatrixDJ96")]
 [assembly: AssemblyProduct("EZBlocker")]
-[assembly: AssemblyCopyright("Copyright ©  2012-2017 Eric Zhang")]
+[assembly: AssemblyCopyright("Copyright © 2012-2017 Eric Zhang")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

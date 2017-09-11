@@ -150,7 +150,8 @@ $RECYCLE.BIN/
 # Mac crap
 .DS_Store
 
-#Private files
-#EZBlocker/EZBlocker/AudioUtilities.cs#
-#EZBlocker/EZBlocker/Volume.cs
-signing.txt
+# CoreAudio
+/EZBlocker/EZBlocker/Resources/CoreAudio.dll
+
+# Visual Studio cache/options directory
+.vs/

@@ -48,7 +48,6 @@ namespace EZBlocker
                 whr.isRunning = false;
                 return whr;
             }
-            
 
             // Process data
             using (StringReader reader = new StringReader(result))
@@ -139,7 +138,7 @@ namespace EZBlocker
             String json = GetPage(url);
             Debug.WriteLine(json);
             OAuth res = JsonConvert.DeserializeObject<OAuth>(json);
-            oauthToken = res.t;
+            oauthToken = res.T;
         }
 
         private static void SetCSRF()
@@ -155,7 +154,7 @@ namespace EZBlocker
                 System.Windows.Forms.Application.Exit();
             }
             CSRF res = JsonConvert.DeserializeObject<CSRF>(json);
-            csrfToken = res.token;
+            csrfToken = res.Token;
         }
 
         private static string GetURL(string path)
@@ -179,6 +178,7 @@ namespace EZBlocker
 
             w.Headers.Add("user-agent", ua);
             w.Headers.Add("Origin", "https://open.spotify.com");
+
             ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
             byte[] bytes = Encoding.Default.GetBytes(w.DownloadString(URL));
             return Encoding.UTF8.GetString(bytes);

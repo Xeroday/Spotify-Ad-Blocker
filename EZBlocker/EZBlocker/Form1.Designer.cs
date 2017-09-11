@@ -35,6 +35,7 @@
             this.NotifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.NotifyIconContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.websiteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.separatorToolStripMenuItem = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.WebsiteLink = new System.Windows.Forms.LinkLabel();
@@ -44,7 +45,6 @@
             this.StatusLabel = new System.Windows.Forms.Label();
             this.BlockBannersCheckbox = new System.Windows.Forms.CheckBox();
             this.StartupCheckbox = new System.Windows.Forms.CheckBox();
-            this.websiteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.NotifyIconContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -81,26 +81,33 @@
             this.separatorToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.NotifyIconContextMenu.Name = "NotifyIconContextMenu";
-            this.NotifyIconContextMenu.Size = new System.Drawing.Size(153, 98);
+            this.NotifyIconContextMenu.Size = new System.Drawing.Size(117, 76);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.openToolStripMenuItem.Text = "Open";
-            this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
+            this.openToolStripMenuItem.Click += new System.EventHandler(this.OpenToolStripMenuItem_Click);
+            // 
+            // websiteToolStripMenuItem
+            // 
+            this.websiteToolStripMenuItem.Name = "websiteToolStripMenuItem";
+            this.websiteToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.websiteToolStripMenuItem.Text = "Website";
+            this.websiteToolStripMenuItem.Click += new System.EventHandler(this.WebsiteToolStripMenuItem_Click);
             // 
             // separatorToolStripMenuItem
             // 
             this.separatorToolStripMenuItem.Name = "separatorToolStripMenuItem";
-            this.separatorToolStripMenuItem.Size = new System.Drawing.Size(149, 6);
+            this.separatorToolStripMenuItem.Size = new System.Drawing.Size(113, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.exitToolStripMenuItem.Text = "&Exit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
             // 
             // WebsiteLink
             // 
@@ -155,9 +162,9 @@
             this.BlockBannersCheckbox.AutoSize = true;
             this.BlockBannersCheckbox.Location = new System.Drawing.Point(12, 71);
             this.BlockBannersCheckbox.Name = "BlockBannersCheckbox";
-            this.BlockBannersCheckbox.Size = new System.Drawing.Size(165, 17);
+            this.BlockBannersCheckbox.Size = new System.Drawing.Size(96, 17);
             this.BlockBannersCheckbox.TabIndex = 10;
-            this.BlockBannersCheckbox.Text = "Disable All Ads (Experimental)";
+            this.BlockBannersCheckbox.Text = "Disable All Ads";
             this.BlockBannersCheckbox.UseVisualStyleBackColor = true;
             this.BlockBannersCheckbox.Click += new System.EventHandler(this.SkipAdsCheckbox_Click);
             // 
@@ -171,13 +178,6 @@
             this.StartupCheckbox.Text = "Start EZBlocker on Login";
             this.StartupCheckbox.UseVisualStyleBackColor = true;
             this.StartupCheckbox.CheckedChanged += new System.EventHandler(this.StartupCheckbox_CheckedChanged);
-            // 
-            // websiteToolStripMenuItem
-            // 
-            this.websiteToolStripMenuItem.Name = "websiteToolStripMenuItem";
-            this.websiteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.websiteToolStripMenuItem.Text = "Website";
-            this.websiteToolStripMenuItem.Click += new System.EventHandler(this.websiteToolStripMenuItem_Click);
             // 
             // Main
             // 
@@ -211,7 +211,6 @@
 
         private System.Windows.Forms.Button MuteButton;
         private System.Windows.Forms.NotifyIcon NotifyIcon;
-        private System.Windows.Forms.LinkLabel WebsiteLink;
         private System.Windows.Forms.Timer Heartbeat;
         private System.Windows.Forms.CheckBox SpotifyMuteCheckbox;
         private System.Windows.Forms.Button VolumeMixerButton;
@@ -224,6 +223,7 @@
         private System.Windows.Forms.ToolStripSeparator separatorToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem websiteToolStripMenuItem;
+        private System.Windows.Forms.LinkLabel WebsiteLink;
     }
 }
 

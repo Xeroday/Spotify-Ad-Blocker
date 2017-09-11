@@ -2,6 +2,8 @@
 {
     class CSRF
     {
-        public string token;
+        private string token;
+
+        public string Token { get => token; set => token = value; }
     }
 }
