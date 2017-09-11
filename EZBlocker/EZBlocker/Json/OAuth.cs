@@ -2,6 +2,8 @@
 {
     class OAuth
     {
-        public string t; // OAuth token
+        private string t;
+
+        public string T { get => t; set => t = value; }
     }
 }

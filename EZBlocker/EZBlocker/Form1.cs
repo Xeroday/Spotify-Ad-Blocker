@@ -1,14 +1,15 @@
-﻿using System;
+﻿using CoreAudio;
+using Microsoft.Win32;
+using System;
+using System.Diagnostics;
+using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Reflection;
-using System.Linq;
-using System.Windows.Forms;
-using System.Diagnostics;
-using CoreAudio;
 using System.Runtime.InteropServices;
 using System.Threading;
-using Microsoft.Win32;
+using System.Windows.Forms;
 
 namespace EZBlocker
 {
@@ -24,14 +25,15 @@ namespace EZBlocker
         private string nircmdPath = Application.StartupPath + @"\nircmd.exe";
         private string jsonPath = Application.StartupPath + @"\Newtonsoft.Json.dll";
         private string coreaudioPath = Application.StartupPath + @"\CoreAudio.dll";
-        public static string logPath = Application.StartupPath + @"\EZBlocker-log.txt";
+        public static string logPath = Application.StartupPath + @"\EZBlocker.log";
 
         private string spotifyPath = Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe";
         private string spotifyPrefsPath = Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\prefs";
         private string volumeMixerPath = Environment.GetEnvironmentVariable("WINDIR") + @"\System32\SndVol.exe";
         private string hostsPath = Environment.GetEnvironmentVariable("WINDIR") + @"\System32\drivers\etc\hosts";
 
-        private string[] adHosts = { "pubads.g.doubleclick.net", "securepubads.g.doubleclick.net", "www.googletagservices.com", "gads.pubmatic.com", "ads.pubmatic.com", "spclient.wg.spotify.com"};
+        private int numAdPatches = 6;
+        private string[] adHosts = { "pubads.g.doubleclick.net", "securepubads.g.doubleclick.net", "www.googletagservices.com", "gads.pubmatic.com", "ads.pubmatic.com", "spclient.wg.spotify.com" };
 
         [DllImport("user32.dll")]
         private static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
@@ -47,9 +49,9 @@ namespace EZBlocker
         private const int APPCOMMAND_VOLUME_MUTE = 0x80000;
         private const int MEDIA_PLAYPAUSE = 0xE0000;
         private const int MEDIA_NEXTTRACK = 0xB0000;
-        
+
         private string EZBlockerUA = "EZBlocker " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " " + System.Environment.OSVersion;
-        private const string website = @"https://www.ericzhang.me/projects/spotify-ad-blocker-ezblocker/";
+        private const string website = @"https://github.com/MatrixDJ96/Spotify-Ad-Blocker/issues";
 
         // Google Analytics stuff
         private Random rnd;
@@ -65,26 +67,47 @@ namespace EZBlocker
         private string screenRes = Screen.PrimaryScreen.Bounds.Width + "x" + Screen.PrimaryScreen.Bounds.Height;
         private const string trackingId = "UA-42480515-3";
 
+        private bool NoError = false;
+        private int hostsPatched = 0; // In final state => 0 - not patched; 1 - something wrong; 2 - patched;
+        private string[] appliedPatchesLines = { null, null, null, null, null, null };
+        private string[] invalidPatchesLines = { null, null, null, null, null, null };
+        private string[] hostsContentLines;
+        private string hostsContentText;
+
         public Main()
         {
             InitializeComponent();
         }
 
+        private bool ExecuteSpotify()
+        {
+            if (File.Exists(spotifyPath) && Process.GetProcessesByName("spotify").Length < 1)
+            {
+                Process.Start(spotifyPath);
+                return true;
+            }
+            return false;
+        }
+
         /**
          * Contains the logic for when to mute Spotify
          **/
+
+        bool not_found_notify = false;
+
         private void MainTimer_Tick(object sender, EventArgs e)
         {
-            try {
+            try
+            {
                 if (Process.GetProcessesByName("spotify").Length < 1)
                 {
                     if (exitTolerance > 20)
                     {
-                        File.AppendAllText(logPath, "Spotify process not found\r\n");
-                        Notify("Spotify not found, please restart EZBlocker.");
-                        if (exitTolerance > 22)
+                        if (not_found_notify == false)
                         {
-                            Notify("Exiting EZBlocker.");
+                            File.AppendAllText(logPath, "Spotify process not found\r\n");
+                            Notify("Spotify not found.\r\nExiting EZBlocker.");
+                            not_found_notify = true;
                             Application.Exit();
                         }
                     }
@@ -164,7 +187,7 @@ namespace EZBlocker
                 File.AppendAllText(logPath, ex.Message);
             }
         }
-       
+
         /**
          * Mutes/Unmutes Spotify.
          
@@ -206,10 +229,12 @@ namespace EZBlocker
             else // Mute all of Windows
             {
                 Process process = new Process();
-                ProcessStartInfo startInfo = new ProcessStartInfo();
-                startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                startInfo.FileName = "cmd.exe";
-                startInfo.Arguments = "/C nircmd mutesysvolume " + i.ToString();
+                ProcessStartInfo startInfo = new ProcessStartInfo()
+                {
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    FileName = "cmd.exe",
+                    Arguments = "/C nircmd mutesysvolume " + i.ToString()
+                };
                 process.StartInfo = startInfo;
                 process.Start();
             }
@@ -282,47 +307,6 @@ namespace EZBlocker
         }
 
         /**
-         * Checks if the current installation is the latest version. Prompts user if not.
-         **/
-        private void CheckUpdate()
-        {
-            if (Properties.Settings.Default.UpdateSettings) // If true, then first launch of latest EZBlocker
-            {
-                try
-                {
-                    if (File.Exists(nircmdPath)) File.Delete(nircmdPath);
-                    if (File.Exists(jsonPath)) File.Delete(jsonPath);
-                    if (File.Exists(coreaudioPath)) File.Delete(coreaudioPath);
-                    Properties.Settings.Default.Upgrade();
-                    Properties.Settings.Default.UpdateSettings = false;
-                    Properties.Settings.Default.UserEducated = false;
-                    Properties.Settings.Default.Save();
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex);
-                    MessageBox.Show("There was an error updating EZBlocker. Please run as Administrator to update.");
-                }
-            }
-            try
-            {
-                int latest = Convert.ToInt32(GetPage("https://www.ericzhang.me/dl/?file=EZBlocker-version.txt", EZBlockerUA));
-                int current = Convert.ToInt32(Assembly.GetExecutingAssembly().GetName().Version.ToString().Replace(".", ""));
-                if (latest <= current)
-                    return;
-                if (MessageBox.Show("There is a newer version of EZBlocker available. Would you like to upgrade?", "EZBlocker", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                {
-                    Process.Start(website);
-                    Application.Exit();
-                }
-            }
-            catch
-            {
-                MessageBox.Show("Error checking for update.", "EZBlocker");
-            }
-        }
-
-        /**
          * Send a request every 5 minutes to Google Analytics
          **/
         private void Heartbeat_Tick(object sender, EventArgs e)
@@ -330,16 +314,22 @@ namespace EZBlocker
             LogAction("/heartbeat");
         }
 
-        private static bool hasNet45()
+        private static bool HasNet40()
         {
             try
             {
-                using (RegistryKey ndpKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32).OpenSubKey("SOFTWARE\\Microsoft\\NET Framework Setup\\NDP\\v4\\Full\\"))
+                using (RegistryKey installed_versions = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP"))
                 {
-                    int releaseKey = Convert.ToInt32(ndpKey.GetValue("Release"));
-                    if (releaseKey >= 378389) return true;
+                    string[] version_names = installed_versions.GetSubKeyNames();
+                    //version names start with 'v', eg, 'v3.5' which needs to be trimmed off before conversion
+                    double version = Convert.ToDouble(version_names[version_names.Length - 1].Remove(0, 1), CultureInfo.InvariantCulture);
+                    if (version >= 4) return true;
                 }
-            } catch (Exception ignore) {}
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
             return false;
         }
 
@@ -382,7 +372,7 @@ namespace EZBlocker
             this.WindowState = FormWindowState.Normal;
             this.ShowInTaskbar = true;
         }
-        
+
         /**
          * Processes window message and shows EZBlocker when attempting to launch a second instance.
          **/
@@ -398,12 +388,15 @@ namespace EZBlocker
                 {
                     this.Activate();
                 }
-                Notify("EZBlocker is already open.");
+                if (ExecuteSpotify() == true)
+                {
+                    Notify("Restarting Spotify.");
+                }
             }
             base.WndProc(ref m);
         }
 
-        private void Notify(String message)
+        private void Notify(string message)
         {
             NotifyIcon.ShowBalloonTip(10000, "EZBlocker", message, ToolTipIcon.None);
         }
@@ -427,7 +420,6 @@ namespace EZBlocker
             {
                 this.ShowInTaskbar = false;
                 this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
-                Notify("EZBlocker is hidden. Double-click this icon to restore.");
             }
         }
 
@@ -440,12 +432,88 @@ namespace EZBlocker
             Properties.Settings.Default.Save();
         }
 
+        private string[] GetHostsContentLines()
+        {
+            return File.ReadAllLines(hostsPath);
+        }
+
+        private string GetTextFromLines(string[] lines)
+        {
+            string newText = "";
+            foreach (string line in lines)
+            {
+                newText += line + "\r\n"; // Windows format
+            }
+            return newText;
+        }
+
+        private void RemoveString(ref string workingString, string stringToRemove)
+        {
+            int times = 0;
+            string newString = workingString.Replace(stringToRemove + "\r\n", "");
+            while (newString == workingString)
+            {
+                if (times == 0)
+                {
+                    newString = workingString.Replace("\r\n" + stringToRemove, "");
+                }
+                else if (times == 1)
+                {
+                    newString = workingString.Replace(stringToRemove, "");
+                    break;
+                }
+                times++;
+            }
+            workingString = newString;
+        }
+
+        private void SetHostsPatches()
+        {
+            hostsContentLines = GetHostsContentLines();
+            hostsContentText = GetTextFromLines(hostsContentLines);
+            File.WriteAllText(hostsPath, hostsContentText); // Reformat text to Windows format
+
+            if (BlockBannersCheckbox.Checked)
+            {
+                using (StreamWriter sw = File.AppendText(hostsPath))
+                {
+                    if (hostsPatched == 0)
+                    {
+                        sw.WriteLine();
+                    }
+                    for (int i = 0; i < numAdPatches; i++)
+                    {
+                        if (!hostsContentText.Contains("0.0.0.0 " + adHosts[i]))
+                        {
+                            sw.WriteLine("0.0.0.0 " + adHosts[i]);
+                        }
+                    }
+                    hostsPatched = 2;
+                }
+            }
+            else
+            {
+                hostsContentText += "\r\nRemoving hosts patches...";
+                for (int i = 0; i < numAdPatches; i++)
+                {
+                    if (hostsContentText.Contains("0.0.0.0 " + adHosts[i]))
+                    {
+                        RemoveString(ref hostsContentText, "0.0.0.0 " + adHosts[i]);
+                    }
+                }
+                RemoveString(ref hostsContentText, "\r\nRemoving hosts patches...");
+                hostsPatched = 0;
+                File.WriteAllText(hostsPath, hostsContentText);
+            }
+        }
+
         private void SkipAdsCheckbox_Click(object sender, EventArgs e)
         {
             if (visitorId == null) return; // Still setting up UI
+
             if (!IsUserAnAdmin())
             {
-                MessageBox.Show("Enabling/Disabling this option requires Administrator privileges.\n\nPlease reopen EZBlocker with \"Run as Administrator\".", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Enabling/Disabling this option requires Administrator privileges.\r\nPlease restart EZBlocker with \"Run as Administrator\".", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 BlockBannersCheckbox.Checked = !BlockBannersCheckbox.Checked;
                 return;
             }
@@ -455,27 +523,21 @@ namespace EZBlocker
             }
             try
             {
-                // Always clear hosts
-                string[] text = File.ReadAllLines(hostsPath);
-                text = text.Where(line => !adHosts.Contains(line.Replace("0.0.0.0 ", "")) && line.Length > 0 && !line.Contains("open.spotify.com")).ToArray();
-                File.WriteAllLines(hostsPath, text);
-
-                if (BlockBannersCheckbox.Checked)
-                {
-                    using (StreamWriter sw = File.AppendText(hostsPath))
-                    {
-                        sw.WriteLine();
-                        foreach (string host in adHosts)
-                        {
-                            sw.WriteLine("0.0.0.0 " + host);
-                        }
-                    }
-                }
+                SetHostsPatches();
+                Properties.Settings.Default.SkipAds = BlockBannersCheckbox.Checked;
+                Properties.Settings.Default.Save();
                 MessageBox.Show("You may need to restart Spotify or your computer for this setting to take effect.", "EZBlocker", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 LogAction("/settings/blockBanners/" + BlockBannersCheckbox.Checked.ToString());
             }
             catch (Exception ex)
             {
+                string option = "applying";
+                if (!BlockBannersCheckbox.Checked)
+                {
+                    option = "removing";
+                }
+                MessageBox.Show("Something went wrong while " + option + " hosts patches...\r\nProbably hosts file is set in read-only mode.", "EZBlocker", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                BlockBannersCheckbox.Checked = !BlockBannersCheckbox.Checked;
                 Debug.WriteLine(ex);
             }
         }
@@ -502,9 +564,10 @@ namespace EZBlocker
                 Process.Start(volumeMixerPath);
                 LogAction("/button/volumemixer");
             }
-            catch (Exception ignore)
+            catch (Exception ex)
             {
                 MessageBox.Show("Could not open Volume Mixer. This is only available on Windows 7/8/10", "EZBlocker");
+                Debug.WriteLine(ex);
             }
         }
 
@@ -526,12 +589,12 @@ namespace EZBlocker
             // Enable web helper
             if (File.Exists(spotifyPrefsPath))
             {
-                String[] lines = File.ReadAllLines(spotifyPrefsPath);
+                string[] lines = File.ReadAllLines(spotifyPrefsPath);
                 bool webhelperEnabled = false;
                 for (int i = 0; i < lines.Length; i++)
                 {
                     if (lines[i].Contains("webhelper.enabled"))
-                    {   
+                    {
                         if (lines[i].Contains("false"))
                         {
                             lines[i] = "webhelper.enabled=true";
@@ -547,32 +610,13 @@ namespace EZBlocker
                 }
             }
 
-            CheckUpdate();
+            //CheckUpdate();
 
             // Start Spotify and give EZBlocker higher priority
             try
             {
-                if (File.Exists(spotifyPath) && Process.GetProcessesByName("spotify").Length < 1)
-                {
-                    Process.Start(spotifyPath);
-                }
+                ExecuteSpotify();
                 Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High; // Windows throttles down when minimized to task tray, so make sure EZBlocker runs smoothly
-
-                // Check for open.spotify.com in hosts
-                String hostsContent = File.ReadAllText(hostsPath);
-                if (hostsContent.Contains("open.spotify.com"))
-                {
-                    if (IsUserAnAdmin())
-                    {
-                        File.WriteAllText(hostsPath, hostsContent.Replace("open.spotify.com", "localhost"));
-                        MessageBox.Show("An EZBlocker patch has been applied to your hosts file. If EZBlocker is stuck at 'Loading', please restart your computer.", "EZBlocker", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    else
-                    {
-                        MessageBox.Show("EZBlocker has detected an error in your hosts file.\r\n\r\nPlease re-run EZBlocker as Administrator or remove 'open.spotify.com' from your hosts file.", "EZBlocker", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        Application.Exit();
-                    }
-                }
             }
             catch (Exception ex)
             {
@@ -580,20 +624,16 @@ namespace EZBlocker
             }
 
             // Extract dependencies
-            try {
-                if (!File.Exists(nircmdPath))
-                {
-                    File.WriteAllBytes(nircmdPath, Properties.Resources.nircmd32);
-                }
-                if (!File.Exists(jsonPath))
-                {
-                    File.WriteAllBytes(jsonPath, Properties.Resources.Newtonsoft_Json);
-                }
-                if (!File.Exists(coreaudioPath))
-                {
-                    File.WriteAllBytes(coreaudioPath, Properties.Resources.CoreAudio);
-                }
-            } catch (Exception ex)
+            try
+            {
+                if (File.Exists(nircmdPath)) File.Delete(nircmdPath);
+                if (File.Exists(jsonPath)) File.Delete(jsonPath);
+                if (File.Exists(coreaudioPath)) File.Delete(coreaudioPath);
+                File.WriteAllBytes(nircmdPath, Properties.Resources.nircmd);
+                File.WriteAllBytes(jsonPath, Properties.Resources.Newtonsoft_Json);
+                File.WriteAllBytes(coreaudioPath, Properties.Resources.CoreAudio);
+            }
+            catch (Exception ex)
             {
                 Debug.WriteLine(ex);
                 MessageBox.Show("Error loading EZBlocker dependencies. Please run EZBlocker as administrator or put EZBlocker in a user folder.");
@@ -601,11 +641,149 @@ namespace EZBlocker
 
             // Set up UI
             SpotifyMuteCheckbox.Checked = Properties.Settings.Default.SpotifyMute;
+
+            BlockBannersCheckbox.Checked = Properties.Settings.Default.SkipAds;
+            hostsContentLines = GetHostsContentLines();
+
+            int loadingStuck = -1; // Used to check error and save position from hostsContentLines
+
             if (File.Exists(hostsPath))
             {
-                string hostsFile = File.ReadAllText(hostsPath);
-                BlockBannersCheckbox.Checked = adHosts.All(host => hostsFile.Contains("0.0.0.0 " + host));
+                int posInv = 0;
+                foreach (string line in hostsContentLines)
+                {
+                    if (hostsContentLines[posInv].Contains("open.spotify.com"))
+                    {
+                        loadingStuck = posInv;
+                        break;
+                    }
+                    posInv++;
+                }
+                if (loadingStuck == -1)
+                {
+                    posInv = 0;
+                    int posVal = 0;
+                    foreach (string line in hostsContentLines)
+                    {
+                        for (int i = 0; i < numAdPatches; i++)
+                        {
+                            if (line.Contains(" " + adHosts[i])) // check with space to avoid conflit with (for example) 'pubads.g.doubleclick.net' and 'securepubads.g.doubleclick.net'
+                            {
+                                if (line.Contains("0.0.0.0 " + adHosts[i]))
+                                {
+                                    hostsPatched++;
+                                    appliedPatchesLines[posVal] = line;
+                                    posVal++;
+                                }
+                                else
+                                {
+                                    invalidPatchesLines[posInv] = line;
+                                    posInv++;
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
             }
+
+            if (hostsPatched > 0)
+            {
+                if (hostsPatched == numAdPatches)
+                {
+                    hostsPatched = 2; // patched
+                }
+                else
+                {
+                    hostsPatched = 1; // something wrong
+                }
+            }
+
+            if (hostsPatched == 1 || loadingStuck > -1)
+            {
+                if (IsUserAnAdmin())
+                {
+                    int error = 0;
+                    if (loadingStuck > -1)
+                    {
+                        try
+                        {
+                            hostsContentText = GetTextFromLines(hostsContentLines);
+                            RemoveString(ref hostsContentText, hostsContentLines[loadingStuck]);
+                            File.WriteAllText(hostsPath, hostsContentText);
+                        }
+                        catch (Exception ex)
+                        {
+                            error = 1;
+                            MessageBox.Show("An error has been detected in your hosts file but it couldn't be fixed.\r\nTry to remove manually from that file this line:\r\n\r\n" + hostsContentLines[loadingStuck], "EZBlocker", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            Debug.WriteLine(ex);
+                            Application.Exit();
+                        }
+                    }
+                    if (hostsPatched == 1)
+                    {
+                        try
+                        {
+                            SetHostsPatches();
+                            hostsContentText = GetTextFromLines(GetHostsContentLines());
+                            foreach (string line in invalidPatchesLines)
+                            {
+                                if (line != null)
+                                {
+                                    RemoveString(ref hostsContentText, line);
+                                }
+                            }
+                            File.WriteAllText(hostsPath, hostsContentText);
+                            LogAction("/settings/blockBanners/" + BlockBannersCheckbox.Checked.ToString());
+                        }
+                        catch (Exception ex)
+                        {
+                            error = 1;
+                            hostsContentText = GetTextFromLines(GetHostsContentLines());
+                            string invalidPatchesText = "\r\n";
+                            string toAddPatchesText = "\r\n";
+                            for (int i = 0; i < numAdPatches; i++)
+                            {
+                                if (invalidPatchesLines[i] != null)
+                                {
+                                    invalidPatchesText += "\r\n" + invalidPatchesLines[i];
+                                }
+                                if (hostsContentText.Contains("0.0.0.0 " + adHosts[i]))
+                                {
+                                    invalidPatchesText += "\r\n0.0.0.0 " + adHosts[i];
+                                }
+                                else
+                                {
+                                    toAddPatchesText += "\r\n0.0.0.0 " + adHosts[i];
+                                }
+                            }
+                            if (toAddPatchesText != "\r\n")
+                            {
+                                invalidPatchesText += "\r\n\r\nOr try to change/add manually these lines to enable SkipAds feature:" + toAddPatchesText;
+                            }
+                            MessageBox.Show("An error has been detected in your hosts file but it couldn't be fixed.\r\nTry to remove manually these lines to disable SkipAds feature:" + invalidPatchesText, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            Debug.WriteLine(ex);
+                            Application.Exit();
+                        }
+                    }
+                    if (error == 0) {
+                        MessageBox.Show("There was/were an error/s in your hosts file and a patch has been applied so you may need to restart Spotify or your computer for this setting to take effect.", "EZBlocker", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("An error has been detected in your hosts file but it couldn't be fixed.\r\nPlease run EZBlocker as administrator to try fixing this problem.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Application.Exit();
+                }
+            }
+            else if ((BlockBannersCheckbox.Checked && hostsPatched == 0) || (!BlockBannersCheckbox.Checked && hostsPatched == 2))
+            {
+                BlockBannersCheckbox.Checked = !BlockBannersCheckbox.Checked;
+                Properties.Settings.Default.SkipAds = BlockBannersCheckbox.Checked;
+                Properties.Settings.Default.Save();
+
+            }
+
             RegistryKey startupKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
             if (startupKey.GetValue("EZBlocker") != null)
             {
@@ -623,71 +801,67 @@ namespace EZBlocker
             // Google Analytics
             rnd = new Random(Environment.TickCount);
             starttime = DateTime.Now.Ticks;
-            if (String.IsNullOrEmpty(Properties.Settings.Default.UID))
+            if (string.IsNullOrEmpty(Properties.Settings.Default.UID))
             {
                 Properties.Settings.Default.UID = rnd.Next(100000000, 999999999).ToString(); // Build unique visitorId;
                 Properties.Settings.Default.Save();
             }
             visitorId = Properties.Settings.Default.UID;
-            
+
             File.AppendAllText(logPath, "-----------\r\n");
             bool unsafeHeaders = WebHelperHook.SetAllowUnsafeHeaderParsing20();
             Debug.WriteLine("Unsafe Headers: " + unsafeHeaders);
 
-            if (!hasNet45())
+            if (!HasNet40())
             {
-                if (MessageBox.Show("You do not have .NET Framework 4.5. Download now?", "EZBlocker Error", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk) == DialogResult.Yes)
+                if (MessageBox.Show("You do not have .NET Framework 4.0. Download now?", "EZBlocker Error", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk) == DialogResult.Yes)
                 {
-                    Process.Start("https://www.microsoft.com/en-us/download/details.aspx?id=30653");
-                } else
+                    Process.Start("https://www.microsoft.com/en-US/download/details.aspx?id=17718");
+                }
+                else
                 {
-                    MessageBox.Show("EZBlocker may not function properly without .NET Framework 4.5 or above.");
+                    MessageBox.Show("EZBlocker may not function properly without .NET Framework 4.0 or above.");
                 }
             }
 
             Mute(0);
-            
+
             MainTimer.Enabled = true;
 
             if (Process.GetProcessesByName("spotifywebhelper").Length < 1)
             {
                 Notify("Please enable 'Allow Spotify to be opened from the web' in your Spotify 'Preferences' -> 'Advanced settings'.");
-
             }
 
             LogAction("/launch");
+
+            NoError = true; // All went fine
         }
 
-        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
         {
             RestoreFromTray();
         }
 
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Close();
         }
 
-        private void websiteToolStripMenuItem_Click(object sender, EventArgs e)
+        private void WebsiteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start(website);
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            if (!Properties.Settings.Default.UserEducated)
+            if (Properties.Settings.Default.SpotifyMute && NoError && !Properties.Settings.Default.SkipAds)
             {
                 var result = MessageBox.Show("Spotify ads will not be muted if EZBlocker is not running.\r\n\r\nAre you sure you want to exit?", "EZBlocker",
                                  MessageBoxButtons.YesNo,
                                  MessageBoxIcon.Warning);
 
                 e.Cancel = (result == DialogResult.No);
-
-                if (result == DialogResult.Yes)
-                {
-                    Properties.Settings.Default.UserEducated = true;
-                    Properties.Settings.Default.Save();
-                }
             }
         }
     }
