@@ -38,24 +38,24 @@ namespace EZBlocker.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool SpotifyMute {
+        public bool MuteAds {
             get {
-                return ((bool)(this["SpotifyMute"]));
+                return ((bool)(this["MuteAds"]));
             }
             set {
-                this["SpotifyMute"] = value;
+                this["MuteAds"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool SkipAds {
+        public bool BlockAds {
             get {
-                return ((bool)(this["SkipAds"]));
+                return ((bool)(this["BlockAds"]));
             }
             set {
-                this["SkipAds"] = value;
+                this["BlockAds"] = value;
             }
         }
     }

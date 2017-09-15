@@ -120,7 +120,6 @@
   <ItemGroup>
     <Content Include="EZBlocker.ico" />
     <Content Include="Resources\CoreAudio.dll" />
-    <None Include="Resources\Issue.png" />
     <Content Include="Resources\Newtonsoft.Json.dll" />
     <Content Include="Resources\nircmd.exe" />
   </ItemGroup>

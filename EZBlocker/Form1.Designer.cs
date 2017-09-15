@@ -56,7 +56,7 @@
             this.checkBoxBlockAds = new System.Windows.Forms.CheckBox();
             this.linkLabelDesigner = new System.Windows.Forms.LinkLabel();
             this.linkLabelAuthor = new System.Windows.Forms.LinkLabel();
-            this.checkBoxMute = new System.Windows.Forms.CheckBox();
+            this.checkBoxMuteAds = new System.Windows.Forms.CheckBox();
             this.picBoxSpotifyLogo = new System.Windows.Forms.PictureBox();
             this.panelTitle = new System.Windows.Forms.Panel();
             this.contextMenuStrip.SuspendLayout();
@@ -280,7 +280,7 @@
             this.pnlContainer.Controls.Add(this.checkBoxBlockAds);
             this.pnlContainer.Controls.Add(this.linkLabelDesigner);
             this.pnlContainer.Controls.Add(this.linkLabelAuthor);
-            this.pnlContainer.Controls.Add(this.checkBoxMute);
+            this.pnlContainer.Controls.Add(this.checkBoxMuteAds);
             this.pnlContainer.Controls.Add(this.labelSongName);
             this.pnlContainer.Controls.Add(this.picBoxSpotifyLogo);
             this.pnlContainer.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -394,20 +394,20 @@
             this.linkLabelAuthor.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.linkLabelAuthor.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabelAuthor_Click);
             // 
-            // checkBoxMute
+            // checkBoxMuteAds
             // 
-            this.checkBoxMute.AutoSize = true;
-            this.checkBoxMute.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.checkBoxMute.FlatAppearance.BorderSize = 0;
-            this.checkBoxMute.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
-            this.checkBoxMute.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxMute.Location = new System.Drawing.Point(217, 76);
-            this.checkBoxMute.Name = "checkBoxMute";
-            this.checkBoxMute.Size = new System.Drawing.Size(132, 21);
-            this.checkBoxMute.TabIndex = 1;
-            this.checkBoxMute.Text = "Mute only Spotify";
-            this.checkBoxMute.UseVisualStyleBackColor = true;
-            this.checkBoxMute.CheckedChanged += new System.EventHandler(this.CheckBoxMute_CheckedChanged);
+            this.checkBoxMuteAds.AutoSize = true;
+            this.checkBoxMuteAds.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.checkBoxMuteAds.FlatAppearance.BorderSize = 0;
+            this.checkBoxMuteAds.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.checkBoxMuteAds.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.checkBoxMuteAds.Location = new System.Drawing.Point(217, 76);
+            this.checkBoxMuteAds.Name = "checkBoxMuteAds";
+            this.checkBoxMuteAds.Size = new System.Drawing.Size(132, 21);
+            this.checkBoxMuteAds.TabIndex = 1;
+            this.checkBoxMuteAds.Text = "Mute only Spotify";
+            this.checkBoxMuteAds.UseVisualStyleBackColor = true;
+            this.checkBoxMuteAds.CheckedChanged += new System.EventHandler(this.CheckBoxMute_CheckedChanged);
             // 
             // picBoxSpotifyLogo
             // 
@@ -470,7 +470,7 @@
         private System.Windows.Forms.NotifyIcon notifyIcon;
         private System.Windows.Forms.LinkLabel linkLabelModder;
         private System.Windows.Forms.Timer timerHeartbeat;
-        private System.Windows.Forms.CheckBox checkBoxMute;
+        private System.Windows.Forms.CheckBox checkBoxMuteAds;
         private System.Windows.Forms.Button btnMixer;
         private System.Windows.Forms.Label labelSongName;
         private System.Windows.Forms.CheckBox checkBoxBlockAds;

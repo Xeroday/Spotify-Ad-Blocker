@@ -4,15 +4,19 @@ This modded version is based on the latest official release (1.6.8.6)
 
 --- Changelogs ---
 
+ Version 1.0.1.0:
+ - Added support for Spotify from Windows Store
+ - Updated checking of Spotify process
+
  Version 1.0.0.2-1:
  - Updated assembly version
- 
+
  Version 1.0.0.2:
  - Fixed Website link
 
  Version 1.0.0.1:
  - Fixed ToolTip info
- 
+
  Version 1.0.0.0:
  - Removed annoying notifications
  - Modded checking of Spotify process on re-opening of the EZBlocker (to update)
