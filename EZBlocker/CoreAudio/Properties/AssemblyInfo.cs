@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("CoreAudio EZBlocker")]
-[assembly: AssemblyCopyright("Copyright ©2007-2010 Ray Molenkamp")]
+[assembly: AssemblyCopyright("Copyright © 2007-2010 Ray Molenkamp")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("07999b05-adc1-4c8c-89e2-5d1f2a710e54")]
+[assembly: Guid("b9ae5352-e55b-4126-9b63-349b02a252d3")]
 
 // Version information for an assembly consists of the following four values:
 //

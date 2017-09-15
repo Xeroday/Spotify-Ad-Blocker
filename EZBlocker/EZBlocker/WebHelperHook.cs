@@ -39,16 +39,12 @@ namespace EZBlocker
             try
             {
                 result = GetPage(GetURL("/remote/status.json" + "?oauth=" + oauthToken + "&csrf=" + csrfToken));
-                Debug.WriteLine(result);
             }
             catch (WebException ex)
             {
-                Debug.WriteLine(ex);
-                File.AppendAllText(Main.logPath, "WebHelperHook: " + ex.Message + "\r\n");
                 whr.isRunning = false;
                 return whr;
             }
-            
 
             // Process data
             using (StringReader reader = new StringReader(result))
@@ -60,7 +56,6 @@ namespace EZBlocker
                     {
                         whr.isRunning = line.Contains("true");
                     }
-                    // else if (line.Contains("\"track_type\":"))
                     else if (line.Contains("\"next_enabled\":"))
                     {
                         whr.isAd = line.Contains("false");
@@ -73,14 +68,20 @@ namespace EZBlocker
                     {
                         whr.isPlaying = line.Contains("true");
                     }
-                    /*else if (line.Contains("\"playing_position\":"))
-                    {
-                        if (!line.Contains("0,")) // Song isn't at 0 position
-                            whr.position = Convert.ToSingle(line.Split(new char[] { ':', ',' })[1]);
-                    }*/
                     else if (line.Contains("\"length\":"))
                     {
                         whr.length = Convert.ToInt32(line.Split(new char[] { ':', ',' })[1]);
+                    }
+                    else if (line.Contains("\"track_resource\":"))
+                    {
+                        while ((line = reader.ReadLine()) != null) // Read until we find the "name" field
+                        {
+                            if (line.Contains("\"name\":"))
+                            {
+                                whr.songName = (line.Replace("\"name\":", "").Split('"')[1]);
+                                break;
+                            }
+                        }
                     }
                     else if (line.Contains("\"artist_resource\":"))
                     {
@@ -95,17 +96,14 @@ namespace EZBlocker
                     }
                     else if (line.Contains("Invalid Csrf token"))
                     {
-                        Debug.WriteLine("Invalid CSRF token");
                         SetCSRF();
                     }
                     else if (line.Contains("Invalid OAuth token"))
                     {
-                        Debug.WriteLine("Invalid OAuth token");
                         SetOAuth();
                     }
                     else if (line.Contains("Expired OAuth token"))
                     {
-                        Debug.WriteLine("Expired OAuth token");
                         SetOAuth();
                     }
                 }
@@ -114,13 +112,13 @@ namespace EZBlocker
             return whr;
         }
 
+        // MUST BE CHANGED!!!
         public static void CheckWebHelper()
         {
             foreach (Process t in Process.GetProcesses().Where(t => t.ProcessName.ToLower().Equals("spotifywebhelper"))) // Check that SpotifyWebHelper.exe is running
             {
                 return;
             }
-            Debug.WriteLine("Starting SpotifyWebHelper");
             if (File.Exists(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\Data\SpotifyWebHelper.exe"))
             {
                 Process.Start(Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\Data\SpotifyWebHelper.exe");
@@ -133,21 +131,17 @@ namespace EZBlocker
 
         private static void SetOAuth()
         {
-            Debug.WriteLine("Getting OAuth Token");
             CheckWebHelper();
             String url = "https://open.spotify.com/token";
             String json = GetPage(url);
-            Debug.WriteLine(json);
             OAuth res = JsonConvert.DeserializeObject<OAuth>(json);
-            oauthToken = res.t;
+            oauthToken = res.T;
         }
 
         private static void SetCSRF()
         {
-            Debug.WriteLine("Getting CSRF Token");
             String url = GetURL("/simplecsrf/token.json");
             String json = GetPage(url);
-            Debug.WriteLine(json);
             if (json.Contains("\"error\":"))
             {
                 csrfToken = "";  // Block rest of CSRF calls
@@ -155,7 +149,7 @@ namespace EZBlocker
                 System.Windows.Forms.Application.Exit();
             }
             CSRF res = JsonConvert.DeserializeObject<CSRF>(json);
-            csrfToken = res.token;
+            csrfToken = res.Token;
         }
 
         private static string GetURL(string path)
@@ -169,7 +163,6 @@ namespace EZBlocker
 
         private static string GetPage(string URL)
         {
-            Debug.WriteLine("Getting page " + URL);
             WebClient w = new WebClient();
 
             if (URL.Contains("spotilocal"))
@@ -179,6 +172,7 @@ namespace EZBlocker
 
             w.Headers.Add("user-agent", ua);
             w.Headers.Add("Origin", "https://open.spotify.com");
+
             ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
             byte[] bytes = Encoding.Default.GetBytes(w.DownloadString(URL));
             return Encoding.UTF8.GetString(bytes);
@@ -221,7 +215,7 @@ namespace EZBlocker
                     //Use the internal static property to get an instance of the internal settings class.
                     //If the static instance isn't created allready the property will create it for us.
                     object anInstance = aSettingsType.InvokeMember("Section",
-                      BindingFlags.Static | BindingFlags.GetProperty | BindingFlags.NonPublic, null, null, new object[] { });
+                      BindingFlags.Static | BindingFlags.GetProperty | BindingFlags.NonPublic, null, null, new object[] {});
 
                     if (anInstance != null)
                     {
