@@ -314,7 +314,7 @@ namespace EZBlocker
                 return;
             if (MessageBox.Show("There is a newer version of EZBlocker available. Would you like to upgrade?", "EZBlocker", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                Process.Start(modder_website);
+                Process.Start(update_website);
                 Application.Exit();
             }
         }
