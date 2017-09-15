@@ -23,6 +23,7 @@ This modded version is based on the latest official release (1.6.8.6)
  - Downgraded to .NET v4.0 (need testing)
  - Updated resources
  - Cleaned source code
+ - Display current song instead of artist
  - Removed logs (for now)
  - New amazing GUI by Bruske (with some changes by me)
  - Bug fixes
