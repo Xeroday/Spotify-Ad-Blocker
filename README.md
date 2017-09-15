@@ -2,7 +2,7 @@ EZBlocker-Modded
 ================
 This modded version is based on the latest official release (1.6.8.6)
 
-Changelog
+-- Changelogs --
  Version 1.0.0.2:
  - Fixed Website link
 
