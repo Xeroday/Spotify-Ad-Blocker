@@ -140,12 +140,14 @@ namespace EZBlocker
                             }
                             lastSongName = whr.songName;
                             labelSongName.Text = "Muting Ad";
+                            songToolTip.SetToolTip(labelSongName, "");
                         }
                     }
                     else // Ad is paused
                     {
-                        labelSongName.Text = "Ad is paused";
                         Resume();
+                        labelSongName.Text = "Ad is paused";
+                        songToolTip.SetToolTip(labelSongName, "");
                     }
                 }
                 else if (whr.isPrivateSession)
@@ -159,13 +161,15 @@ namespace EZBlocker
                 }
                 else if (!whr.isRunning)
                 {
-                    labelSongName.Text = "Spotify is not running";
                     timerMain.Interval = 5000;
+                    labelSongName.Text = "Spotify is not running";
+                    songToolTip.SetToolTip(labelSongName, "");
                 }
                 else if (!whr.isPlaying)
                 {
                     lastSongName = "";
                     labelSongName.Text = "Spotify is paused";
+                    songToolTip.SetToolTip(labelSongName, "");
                 }
                 else // Song is playing
                 {

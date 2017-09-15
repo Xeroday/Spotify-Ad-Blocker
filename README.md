@@ -3,6 +3,9 @@ EZBlocker-Modded
 This modded version is based on the latest official release (1.6.8.6)
 
 Changelog
+ Version 1.0.0.1:
+ - Fixed ToolTip info
+ 
  Version 1.0.0.0:
  - Removed annoying notifications
  - Modded checking of Spotify process on re-opening of the EZBlocker (to update)

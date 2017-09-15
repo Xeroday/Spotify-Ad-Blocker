@@ -151,7 +151,7 @@ $RECYCLE.BIN/
 .DS_Store
 
 # CoreAudio
-/EZBlocker/EZBlocker/Resources/CoreAudio.dll
+/EZBlocker/Resources/CoreAudio.dll
 
 # Visual Studio cache/options directory
 .vs/

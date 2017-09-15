@@ -42,6 +42,7 @@
             this.btnMinimize = new System.Windows.Forms.Button();
             this.btnIssue = new System.Windows.Forms.Button();
             this.btnClose = new System.Windows.Forms.Button();
+            this.labelSongName = new System.Windows.Forms.Label();
             this.btnMute = new System.Windows.Forms.Button();
             this.appLabel = new System.Windows.Forms.Label();
             this.pnlMain = new System.Windows.Forms.Panel();
@@ -56,7 +57,6 @@
             this.linkLabelDesigner = new System.Windows.Forms.LinkLabel();
             this.linkLabelAuthor = new System.Windows.Forms.LinkLabel();
             this.checkBoxMute = new System.Windows.Forms.CheckBox();
-            this.labelSongName = new System.Windows.Forms.Label();
             this.picBoxSpotifyLogo = new System.Windows.Forms.PictureBox();
             this.panelTitle = new System.Windows.Forms.Panel();
             this.contextMenuStrip.SuspendLayout();
@@ -197,6 +197,16 @@
             this.toolTip.SetToolTip(this.btnClose, "Close EZBlocker");
             this.btnClose.UseVisualStyleBackColor = true;
             this.btnClose.Click += new System.EventHandler(this.BtnClose_Click);
+            // 
+            // labelSongName
+            // 
+            this.labelSongName.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F);
+            this.labelSongName.Location = new System.Drawing.Point(104, 12);
+            this.labelSongName.Name = "labelSongName";
+            this.labelSongName.Size = new System.Drawing.Size(386, 50);
+            this.labelSongName.TabIndex = 9;
+            this.labelSongName.Text = "Loading...";
+            this.labelSongName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // btnMute
             // 
@@ -398,17 +408,6 @@
             this.checkBoxMute.Text = "Mute only Spotify";
             this.checkBoxMute.UseVisualStyleBackColor = true;
             this.checkBoxMute.CheckedChanged += new System.EventHandler(this.CheckBoxMute_CheckedChanged);
-            // 
-            // labelSongName
-            // 
-            this.labelSongName.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F);
-            this.labelSongName.Location = new System.Drawing.Point(104, 12);
-            this.labelSongName.Name = "labelSongName";
-            this.labelSongName.Size = new System.Drawing.Size(386, 50);
-            this.labelSongName.TabIndex = 9;
-            this.labelSongName.Text = "Loading...";
-            this.labelSongName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.toolTip.SetToolTip(this.labelSongName, "a");
             // 
             // picBoxSpotifyLogo
             // 
