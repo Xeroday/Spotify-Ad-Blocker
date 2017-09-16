@@ -180,7 +180,7 @@ namespace EZBlocker
             // 
             // btnClose
             // 
-            this.btnClose.BackgroundImage = global::EZBlocker.Properties.Resources.Close;
+            this.btnClose.BackgroundImage = global::EZBlocker.Properties.Resources.Exit;
             this.btnClose.Dock = System.Windows.Forms.DockStyle.Right;
             this.btnClose.FlatAppearance.BorderSize = 0;
             this.btnClose.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Silver;
@@ -228,7 +228,7 @@ namespace EZBlocker
             this.appLabel.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.appLabel.Size = new System.Drawing.Size(446, 30);
             this.appLabel.TabIndex = 0;
-            this.appLabel.Text = "EZBlocker " + Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            this.appLabel.Text = "v" + Assembly.GetExecutingAssembly().GetName().Version.ToString();
             this.appLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.appLabel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form_MouseDown);
             this.appLabel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form_MouseMove);

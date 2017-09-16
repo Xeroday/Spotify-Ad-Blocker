@@ -61,16 +61,6 @@ namespace EZBlocker.Properties {
         }
         
         /// <summary>
-        ///   Cerca una risorsa localizzata di tipo System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Close {
-            get {
-                object obj = ResourceManager.GetObject("Close", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Cerca una risorsa localizzata di tipo System.Byte[].
         /// </summary>
         public static byte[] CoreAudio {
@@ -83,49 +73,19 @@ namespace EZBlocker.Properties {
         /// <summary>
         ///   Cerca una risorsa localizzata di tipo System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap Exit {
+            get {
+                object obj = ResourceManager.GetObject("Exit", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una risorsa localizzata di tipo System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap EZBlocker_1 {
             get {
-                object obj = ResourceManager.GetObject("EZBlocker-1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Cerca una risorsa localizzata di tipo System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap EZBlocker_2 {
-            get {
-                object obj = ResourceManager.GetObject("EZBlocker-2", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Cerca una risorsa localizzata di tipo System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap EZBlocker_3 {
-            get {
-                object obj = ResourceManager.GetObject("EZBlocker-3", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Cerca una risorsa localizzata di tipo System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap EZBlocker_4 {
-            get {
-                object obj = ResourceManager.GetObject("EZBlocker-4", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Cerca una risorsa localizzata di tipo System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap EZBlocker_5 {
-            get {
-                object obj = ResourceManager.GetObject("EZBlocker-5", resourceCulture);
+                object obj = ResourceManager.GetObject("EZBlocker_1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -135,7 +95,7 @@ namespace EZBlocker.Properties {
         /// </summary>
         public static System.Drawing.Bitmap EZBlocker_Logo {
             get {
-                object obj = ResourceManager.GetObject("EZBlocker-Logo", resourceCulture);
+                object obj = ResourceManager.GetObject("EZBlocker_Logo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -185,7 +145,7 @@ namespace EZBlocker.Properties {
         /// </summary>
         public static System.Drawing.Bitmap Options_1 {
             get {
-                object obj = ResourceManager.GetObject("Options-1", resourceCulture);
+                object obj = ResourceManager.GetObject("Options_1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -195,7 +155,7 @@ namespace EZBlocker.Properties {
         /// </summary>
         public static System.Drawing.Bitmap Options_2 {
             get {
-                object obj = ResourceManager.GetObject("Options-2", resourceCulture);
+                object obj = ResourceManager.GetObject("Options_2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -225,7 +185,7 @@ namespace EZBlocker.Properties {
         /// </summary>
         public static System.Drawing.Bitmap Spotify_Logo {
             get {
-                object obj = ResourceManager.GetObject("Spotify-Logo", resourceCulture);
+                object obj = ResourceManager.GetObject("Spotify_Logo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
