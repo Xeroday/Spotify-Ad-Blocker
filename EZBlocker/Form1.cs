@@ -55,7 +55,6 @@ namespace EZBlocker
         private const int MEDIA_NEXTTRACK = 0xB0000;
 
         private string EZBlockerUA = "EZBlocker " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " " + System.Environment.OSVersion;
-        public bool isRunning = false;
 
         // Websites
         private const string issue_website = @"https://github.com/MatrixDJ96/EZBlocker-Modded/issues";
@@ -79,7 +78,6 @@ namespace EZBlocker
         private const string trackingId = "UA-42480515-3";
 
         // Hosts stuffs
-        private bool noErrors = false;
         private int numAdPatches = 6;
         private string[] adHosts = { "pubads.g.doubleclick.net", "securepubads.g.doubleclick.net", "www.googletagservices.com", "gads.pubmatic.com", "ads.pubmatic.com", "spclient.wg.spotify.com" };
         private int hostsPatched = 0; // In final state => 0 - not patched; 1 - something wrong; 2 - patched;
@@ -88,19 +86,62 @@ namespace EZBlocker
         private string[] hostsContentLines;
         private string hostsContentText;
 
+        // Usefull booleans
+        private bool noErrors = false;
+
         public Main()
         {
             InitializeComponent();
         }
 
-        private bool ExecuteSpotify()
+        // Kill Spotify processes
+        private Process[] spotifyProc = null;
+        private string[] spotifyProcPath = null;
+        private void KillSpotify()
         {
-            if (File.Exists(spotifyExec) && Process.GetProcessesByName("spotify").Length < 1)
+            if (Process.GetProcessesByName("spotify").Length > 1)
             {
-                Process.Start(spotifyExec);
-                return true;
+                spotifyProc = Process.GetProcessesByName("spotify");
+                spotifyProcPath = new string[spotifyProc.Length];
+                for (int i = 0; i < spotifyProc.Length; i++)
+                {
+                    spotifyProcPath[i] = spotifyProc[i].MainModule.FileName;
+                    spotifyProc[i].Kill();
+                }
             }
-            return false;
+        }
+
+        // Execute Spotify processes
+        private void ExecuteSpotify()
+        {
+            if (spotifyProc != null)
+            {
+                for (int i = 0; i < spotifyProcPath.Length; i++)
+                {
+                    Process.Start(spotifyProcPath[i]);
+                }
+                Application.Restart();
+                Environment.Exit(0);
+            }
+            else
+            {
+                if (!storeApp)
+                {
+                    if (Process.GetProcessesByName("spotify").Length < 1)
+                    {
+                        Process.Start(spotifyExec);
+                        Application.Restart();
+                        Environment.Exit(0);
+                    }
+                }
+            }
+
+        }
+
+        private void LabelMessage(string text, string hint)
+        {
+            labelSongName.Text = text;
+            songToolTip.SetToolTip(labelSongName, hint);
         }
 
         /**
@@ -110,86 +151,67 @@ namespace EZBlocker
         {
             try
             {
-                while (Process.GetProcessesByName("spotify").Length < 1)
+                if (Process.GetProcessesByName("spotify").Length < 1)
                 {
-                    timerMain.Interval = 5000;
-                    labelSongName.Text = "Spotify is not running";
-                    songToolTip.SetToolTip(labelSongName, "");
-                    isRunning = false;
-                    return;
+                    NotifyBalloon("Exiting EZBlocker...", 10000);
+                    Application.Exit();
                 }
 
                 WebHelperResult whr = WebHelperHook.GetStatus();
-
-                isRunning = true;
-                if (whr.isAd) // Track is Ad
+                
+                if (whr.isAd)
                 {
-                    timerMain.Interval = 1000;
                     if (whr.isPlaying)
                     {
                         if (lastSongName != whr.songName)
                         {
-                            if (!muted)
-                            {
-                                Mute(1);
-                            }
-                            lastSongName = whr.songName;
-                            labelSongName.Text = "Muting Ad";
-                            songToolTip.SetToolTip(labelSongName, "");
+                            if (!muted) Mute(1);
+                            lastSongName = "";
+                            LabelMessage("Playing: Muted ad!", "");
                         }
                     }
-                    else // Ad is paused
+                    else
                     {
-                        Resume();
-                        labelSongName.Text = "Ad is paused";
-                        songToolTip.SetToolTip(labelSongName, "");
+                        lastSongName = "";
+                        LabelMessage("Ad is paused!? Why?", "Resume it now please");
                     }
                 }
                 else if (whr.isPrivateSession)
                 {
-                    timerMain.Interval = 600;
                     if (lastSongName != whr.songName)
                     {
                         lastSongName = whr.songName;
-                        labelSongName.Text = "Playing: *Private Session*";
-                        songToolTip.SetToolTip(labelSongName, "Please disable 'Private Session' on Spotify for EZBlocker to function properly.");
-                        isRunning = false;
+                        LabelMessage("Playing: *Private Session*", "Please disable 'Private Session' on Spotify for EZBlocker to function properly.");
                     }
                 }
                 else if (!whr.isRunning)
                 {
-                    timerMain.Interval = 5000;
-                    labelSongName.Text = "Spotify is not running";
-                    songToolTip.SetToolTip(labelSongName, "");
-                    isRunning = false;
+                    lastSongName = "";
+                    LabelMessage("Spotify is not playing", "");
                 }
                 else if (!whr.isPlaying)
                 {
                     lastSongName = "";
-                    labelSongName.Text = "Spotify is paused";
-                    songToolTip.SetToolTip(labelSongName, "");
+                    LabelMessage("Spotify is paused", "");
                 }
                 else // Song is playing
                 {
-                    timerMain.Interval = 600;
-                    if (muted)
-                    {
-                        Mute(0);
-                    }
+                    if (muted) Mute(0);
                     if (lastSongName != whr.songName)
                     {
                         lastSongName = whr.songName;
-                        labelSongName.Text = "Playing: " + ShortenName(whr.songName);
-                        songToolTip.SetToolTip(labelSongName, "Artist: " + ShortenName(whr.artistName));
+                        LabelMessage("Playing: " + ShortenName(whr.songName), "Artist: " + ShortenName(whr.artistName));
                     }
                 }
             }
-            catch (Exception ex) {}
+            catch (Exception ex)
+            {
+                LabelMessage("Is Internet availble?", "");
+            }
         }
 
         /**
          * Mutes/Unmutes Spotify.
-         
          * i: 0 = unmute, 1 = mute, 2 = toggle
          **/
         private void Mute(int i)
@@ -240,7 +262,7 @@ namespace EZBlocker
         /**
          * Resumes playing Spotify
          **/
-        private void Resume()
+        /*private void Resume()
         {
             if (spotifyMute)
             {
@@ -250,7 +272,7 @@ namespace EZBlocker
             {
                 SendMessage(this.Handle, WM_APPCOMMAND, this.Handle, (IntPtr)MEDIA_PLAYPAUSE);
             }
-        }
+        }*/
 
         /**
          *  Plays next track queued on Spotify
@@ -280,41 +302,33 @@ namespace EZBlocker
             return IntPtr.Zero;
         }
 
-        /**
-         * Gets the source of a given URL
-         **/
-        private string GetPage(string URL, string ua)
-        {
-            WebClient w = new WebClient();
-            w.Headers.Add("user-agent", ua);
-            string s = w.DownloadString(URL);
-            return s;
-        }
-
         private string ShortenName(string name)
         {
-            if (name.Length > 25)
+            if (name.Length > 24)
             {
-                return name.Substring(0, 25) + "...";
+                return name.Substring(0, 24) + "...";
             }
             return name;
         }
 
         /**
          * Checks if the current installation is the latest version. Prompts user if not.
-         * Need testing
          **/
         private void CheckUpdate()
         {
-            int latest = Convert.ToInt32(GetPage("https://raw.githubusercontent.com/MatrixDJ96/EZBlocker/master/Version.txt", EZBlockerUA));
-            int current = Convert.ToInt32(Assembly.GetExecutingAssembly().GetName().Version.ToString().Replace(".", ""));
-            if (latest <= current)
-                return;
-            if (MessageBox.Show("There is a newer version of EZBlocker available. Would you like to upgrade?", "EZBlocker", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            try
             {
-                Process.Start(update_website);
-                Application.Exit();
+                int latest = Convert.ToInt32(WebHelperHook.GetPage("https://raw.githubusercontent.com/MatrixDJ96/EZBlocker/master/Version.txt"));
+                int current = Convert.ToInt32(Assembly.GetExecutingAssembly().GetName().Version.ToString().Replace(".", ""));
+                if (latest <= current)
+                    return;
+                if (MessageBox.Show("There is a newer version of EZBlocker available. Would you like to download?", "EZBlocker", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    Process.Start(update_website);
+                    Application.Exit();
+                }
             }
+            catch (Exception ex) {}
         }
 
         /**
@@ -378,6 +392,7 @@ namespace EZBlocker
         {
             this.FormBorderStyle = FormBorderStyle.None;
             this.WindowState = FormWindowState.Normal;
+            this.ShowInTaskbar = true;
         }
 
         /**
@@ -395,17 +410,13 @@ namespace EZBlocker
                 {
                     this.Activate();
                 }
-                if (ExecuteSpotify() == true)
-                {
-                    Notify("Restarting Spotify.");
-                }
             }
             base.WndProc(ref m);
         }
 
-        private void Notify(string message)
+        private void NotifyBalloon(string message, int time_ms)
         {
-            notifyIcon.ShowBalloonTip(10000, "EZBlocker", message, ToolTipIcon.None);
+            notifyIcon.ShowBalloonTip(time_ms, "EZBlocker", message, ToolTipIcon.Info);
         }
 
         private void NotifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -572,7 +583,7 @@ namespace EZBlocker
             }
         }
 
-        private void BtnMute_Click(object sender, EventArgs e)
+        private void BtnMuteAds_Click(object sender, EventArgs e)
         {
             Mute(2);
         }
@@ -594,22 +605,17 @@ namespace EZBlocker
 
         private void ToolStripMenuItemOpen_Click(object sender, EventArgs e)
         {
-            this.FormBorderStyle = FormBorderStyle.None;
-            this.WindowState = FormWindowState.Normal;
-        }
-
-        private void ToolStripMenuItemExit_Click(object sender, EventArgs e)
-        {
-            Close();
+            RestoreFromTray();
         }
 
         private void BtnClose_Click(object sender, EventArgs e)
         {
-            Close();
+            Application.Exit();
         }
 
         private void BtnMinimize_Click(object sender, EventArgs e)
         {
+            this.FormBorderStyle = FormBorderStyle.None;
             this.WindowState = FormWindowState.Minimized;
         }
 
@@ -652,37 +658,52 @@ namespace EZBlocker
         private void Main_Load(object sender, EventArgs e)
         {
             CheckUpdate();
-
-            // Checking for Spotify (App from Store)
-            if (!File.Exists(spotifyExec))
+            
+            // Checking for Spotify (Windows Store App)
+            if (!File.Exists(spotifyPrefsFile))
             {
-                try
+                if (File.Exists(spotifyExec))
                 {
-                    string[] lines_1 = Directory.GetDirectories(Environment.GetEnvironmentVariable("PROGRAMFILES") + @"\WindowsApps");
-                    for (int i = 0; i < lines_1.Length; i++)
-                    {
-                        if (lines_1[i].Contains("SpotifyAB.SpotifyMusic"))
-                        {
-                            spotifyExec = lines_1[i] + @"\Spotify.exe"; // For now it is useless
-                            storeApp = true;
-                            break;
-                        }
-                    }
-                    lines_1 = Directory.GetDirectories(Environment.GetEnvironmentVariable("LOCALAPPDATA") + @"\Packages");
-                    for (int i = 0; i < lines_1.Length; i++)
-                    {
-                        if (lines_1[i].Contains("SpotifyAB.SpotifyMusic"))
-                        {
-                            spotifyPrefsFile = lines_1[i] + @"\LocalState\Spotify\prefs";
-                            break;
-                        }
-                    }
-
+                    MessageBox.Show("Start Spotify at least once before using EZBlocker", "EZBlocker", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    Application.Exit();
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show("Unable to find Spotify.exe\r\nI'm going blind...", "EZBlocker", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    blindMode = true;
+                    string[] lines_1 = null;
+                    if (File.Exists(Environment.GetEnvironmentVariable("LOCALAPPDATA") + @"\Packages"))
+                    {
+                        lines_1 = Directory.GetDirectories(Environment.GetEnvironmentVariable("LOCALAPPDATA") + @"\Packages");
+                        for (int i = 0; i < lines_1.Length; i++)
+                        {
+                            if (lines_1[i].Contains("SpotifyAB.SpotifyMusic"))
+                            {
+                                spotifyPrefsFile = lines_1[i] + @"\LocalState\Spotify\prefs";
+                                storeApp = true;
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        try
+                        {
+                            lines_1 = Directory.GetDirectories(Environment.GetEnvironmentVariable("PROGRAMFILES") + @"\WindowsApps");
+                            for (int i = 0; i < lines_1.Length; i++)
+                            {
+                                if (lines_1[i].Contains("SpotifyAB.SpotifyMusic"))
+                                {
+                                    spotifyExec = lines_1[i] + @"\Spotify.exe"; // For now it is useless
+                                    storeApp = true;
+                                    break;
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Unable to find Spotify.exe\r\nI'm going blind...", "EZBlocker", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            blindMode = true;
+                        }
+                    }
                 }
             }
 
@@ -701,6 +722,7 @@ namespace EZBlocker
                             {
                                 lines_2[i] = "webhelper.enabled=true";
                                 File.WriteAllLines(spotifyPrefsFile, lines_2);
+                                KillSpotify();
                             }
                             webhelperEnabled = true;
                             break;
@@ -708,22 +730,21 @@ namespace EZBlocker
                     }
                     if (!webhelperEnabled)
                     {
-                        File.AppendAllText(spotifyPrefsFile, "\r\nwebhelper.enabled=true");
+                        File.AppendAllText(spotifyPrefsFile, "\r\nwebhelper.enabled=true"); // TO CHANGE
+                        KillSpotify();
                     }
                 }
-                catch (Exception ex) { }
-                
-                // Start Spotify and give EZBlocker higher priority
-                if (!storeApp)
+                catch (Exception ex)
                 {
-                    try
-                    {
-                        ExecuteSpotify();
-                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High; // Windows throttles down when minimized to task tray, so make sure EZBlocker runs smoothly
-                    }
-                    catch (Exception ex) {}
+                    NotifyBalloon("Enable 'Allow Spotify to be opened from the web' in your Spotify 'Preferences' -> 'Advanced settings'. to use EZBlocker", 10000);
+                    Application.Exit();
                 }
             }
+
+            ExecuteSpotify();
+
+            // Give to EZBlocker higher priority
+            Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High; // Windows throttles down when minimized to task tray, so make sure EZBlocker runs smoothly
 
             // Extract dependencies
             try
@@ -918,20 +939,19 @@ namespace EZBlocker
 
             Mute(0);
 
-            timerMain.Enabled = true;            
-
             noErrors = true; // All went fine
+
+            timerMain.Enabled = true;
+            timerMain.Interval = 600;
+            timerMain.Tick += new System.EventHandler(this.TimerMain_Tick);
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            if (Properties.Settings.Default.MuteAds && noErrors && isRunning && !Properties.Settings.Default.BlockAds)
+            if (Properties.Settings.Default.MuteAds && noErrors && !Properties.Settings.Default.BlockAds)
             {
-                var result = MessageBox.Show("Spotify ads will not be muted if EZBlocker is not running.\r\n\r\nAre you sure you want to exit?", "EZBlocker",
-                                 MessageBoxButtons.YesNo,
-                                 MessageBoxIcon.Warning);
-
-                e.Cancel = (result == DialogResult.No);
+                //var result = MessageBox.Show("Spotify ads will not be muted if EZBlocker is not running.\r\n\r\nAre you sure you want to exit?", "EZBlocker", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                //e.Cancel = (result == DialogResult.No);
             }
         }
     }

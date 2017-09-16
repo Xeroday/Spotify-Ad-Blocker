@@ -1,4 +1,6 @@
-﻿namespace EZBlocker
+﻿using System.Reflection;
+
+namespace EZBlocker
 {
     partial class Main
     {
@@ -68,11 +70,6 @@
             this.panelTitle.SuspendLayout();
             this.SuspendLayout();
             // 
-            // timerMain
-            // 
-            this.timerMain.Interval = 600;
-            this.timerMain.Tick += new System.EventHandler(this.TimerMain_Tick);
-            // 
             // notifyIcon
             // 
             this.notifyIcon.ContextMenuStrip = this.contextMenuStrip;
@@ -120,7 +117,7 @@
             this.toolStripMenuItemExit.Text = "&Exit";
             this.toolStripMenuItemExit.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.toolStripMenuItemExit.TextDirection = System.Windows.Forms.ToolStripTextDirection.Horizontal;
-            this.toolStripMenuItemExit.Click += new System.EventHandler(this.ToolStripMenuItemExit_Click);
+            this.toolStripMenuItemExit.Click += new System.EventHandler(this.BtnClose_Click);
             // 
             // timerHeartbeat
             // 
@@ -206,7 +203,7 @@
             this.labelSongName.Size = new System.Drawing.Size(386, 50);
             this.labelSongName.TabIndex = 9;
             this.labelSongName.Text = "Loading...";
-            this.labelSongName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.labelSongName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // btnMute
             // 
@@ -219,7 +216,7 @@
             this.btnMute.Text = "Mute/Unmute Spotify";
             this.btnMute.UseVisualStyleBackColor = true;
             this.btnMute.Visible = false;
-            this.btnMute.Click += new System.EventHandler(this.BtnMute_Click);
+            this.btnMute.Click += new System.EventHandler(this.BtnMuteAds_Click);
             // 
             // appLabel
             // 
@@ -231,7 +228,7 @@
             this.appLabel.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.appLabel.Size = new System.Drawing.Size(446, 30);
             this.appLabel.TabIndex = 0;
-            this.appLabel.Text = "EZBlocker";
+            this.appLabel.Text = "EZBlocker " + Assembly.GetExecutingAssembly().GetName().Version.ToString();
             this.appLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.appLabel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form_MouseDown);
             this.appLabel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form_MouseMove);

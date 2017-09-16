@@ -4,6 +4,12 @@ This modded version is based on the latest official release (1.6.8.6)
 
 --- Changelogs ---
 
+ Version 1.0.2.0:
+ - Fixed and updated checking of Spotiy process
+ - Cleaned from not used source code
+ - Fixed minimize function
+ - Added version on the title
+
  Version 1.0.1.0:
  - Added support for Spotify from Windows Store
  - Updated checking of Spotify process
