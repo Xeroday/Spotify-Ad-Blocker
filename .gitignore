@@ -154,3 +154,7 @@ $RECYCLE.BIN/
 #EZBlocker/EZBlocker/AudioUtilities.cs#
 #EZBlocker/EZBlocker/Volume.cs
 signing.txt
+EZBlocker/.vs/EZBlocker/v15/Server/sqlite3/db.lock
+EZBlocker/.vs/EZBlocker/v15/Server/sqlite3/storage.ide
+EZBlocker/.vs/EZBlocker/v15/Server/sqlite3/storage.ide-shm
+EZBlocker/.vs/EZBlocker/v15/Server/sqlite3/storage.ide-wal
