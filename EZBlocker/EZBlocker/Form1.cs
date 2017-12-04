@@ -611,6 +611,7 @@ namespace EZBlocker
 
             // Set up UI
             SpotifyMuteCheckbox.Checked = Properties.Settings.Default.SpotifyMute;
+            ExitOnCloseCheckbox.Checked = Properties.Settings.Default.ExitOnClose;
             if (File.Exists(hostsPath))
             {
                 string hostsFile = File.ReadAllText(hostsPath);
