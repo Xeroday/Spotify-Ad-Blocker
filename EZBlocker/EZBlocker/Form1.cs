@@ -14,8 +14,11 @@ namespace EZBlocker
 {
     public partial class Main : Form
     {
+        private const int SECONDS_BEFORE_EXITING_AFTER_CLOSE = 20;
+
         private bool muted = false;
         private bool spotifyMute = false;
+        private bool exitOnClose = true;
         private float volume = 0.9f;
         private string lastArtistName = "";
         private int exitTolerance = 0;
@@ -78,17 +81,22 @@ namespace EZBlocker
             try {
                 if (Process.GetProcessesByName("spotify").Length < 1)
                 {
-                    if (exitTolerance > 20)
+                    MainTimer.Interval = 1000;
+                    if (exitOnClose)
                     {
-                        File.AppendAllText(logPath, "Spotify process not found\r\n");
-                        Notify("Spotify not found, please restart EZBlocker.");
-                        if (exitTolerance > 22)
+                        if (exitTolerance >= SECONDS_BEFORE_EXITING_AFTER_CLOSE)
                         {
-                            Notify("Exiting EZBlocker.");
+                            File.AppendAllText(logPath, "Spotify process not found\r\n");
+                            Notify("Spotify not found. Exiting EZBlocker...");
                             Application.Exit();
                         }
+                        exitTolerance += 1;
                     }
-                    exitTolerance += 1;
+                    else
+                    {
+                        exitTolerance = 0;
+                    }
+                    return;
                 }
                 else
                 {
@@ -120,6 +128,7 @@ namespace EZBlocker
                 }
                 else if (whr.isPrivateSession)
                 {
+                    MainTimer.Interval = 5000;
                     if (lastArtistName != whr.artistName)
                     {
                         StatusLabel.Text = "Playing: *Private Session*";
@@ -144,6 +153,7 @@ namespace EZBlocker
                 }
                 else if (!whr.isPlaying)
                 {
+                    if (MainTimer.Interval > 600) MainTimer.Interval = 600;
                     StatusLabel.Text = "Spotify is paused";
                     artistTooltip.SetToolTip(StatusLabel, lastArtistName = "");
                 }
@@ -671,6 +681,15 @@ namespace EZBlocker
         private void websiteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start(website);
+        }
+
+        private void ExitOnCloseCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            exitOnClose = ExitOnCloseCheckbox.Checked;
+            if (visitorId == null) return; // Still setting up UI
+            LogAction("/settings/exitOnClose/" + exitOnClose.ToString());
+            Properties.Settings.Default.ExitOnClose = exitOnClose;
+            Properties.Settings.Default.Save();
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
