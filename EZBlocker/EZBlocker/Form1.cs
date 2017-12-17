@@ -78,10 +78,10 @@ namespace EZBlocker
             try {
                 if (Process.GetProcessesByName("spotify").Length < 1)
                 {
-                    if (exitTolerance > 10)
+                    if (exitTolerance > 1)
                     {
-                        File.AppendAllText(logPath, "Spotify process not found\r\n");
-                        Notify("Spotify not found, exiting EZBlocker.");
+                        //File.AppendAllText(logPath, "Spotify process not found\r\n");
+                        //Notify("Spotify not found, exiting EZBlocker.");
                         Application.Exit();
                     }
                     exitTolerance += 1;
@@ -319,22 +319,22 @@ namespace EZBlocker
                     MessageBox.Show("There was an error updating EZBlocker. Please run as Administrator to update.");
                 }
             }
-            try
-            {
-                int latest = Convert.ToInt32(GetPage("https://www.ericzhang.me/dl/?file=EZBlocker-version.txt", EZBlockerUA));
-                int current = Convert.ToInt32(Assembly.GetExecutingAssembly().GetName().Version.ToString().Replace(".", ""));
-                if (latest <= current)
-                    return;
-                if (MessageBox.Show("There is a newer version of EZBlocker available. Would you like to upgrade?", "EZBlocker", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                {
-                    Process.Start(website);
-                    Application.Exit();
-                }
-            }
-            catch
-            {
-                MessageBox.Show("Error checking for update.", "EZBlocker");
-            }
+            //try
+            //{
+                //int latest = Convert.ToInt32(GetPage("https://www.ericzhang.me/dl/?file=EZBlocker-version.txt", EZBlockerUA));
+                //int current = Convert.ToInt32(Assembly.GetExecutingAssembly().GetName().Version.ToString().Replace(".", ""));
+                //if (latest <= current)
+                    //return;
+                //if (MessageBox.Show("There is a newer version of EZBlocker available. Would you like to upgrade?", "EZBlocker", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                //{
+                    //Process.Start(website);
+                    //Application.Exit();
+                //}
+            //}
+            //catch
+            //{
+                //MessageBox.Show("Error checking for update.", "EZBlocker");
+            //}
         }
 
         /**
@@ -663,20 +663,20 @@ namespace EZBlocker
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            if (!Properties.Settings.Default.UserEducated)
-            {
-                var result = MessageBox.Show("Spotify ads will not be muted if EZBlocker is not running.\r\n\r\nAre you sure you want to exit?", "EZBlocker",
-                                 MessageBoxButtons.YesNo,
-                                 MessageBoxIcon.Warning);
+            //if (!Properties.Settings.Default.UserEducated)
+            //{
+                //var result = MessageBox.Show("Spotify ads will not be muted if EZBlocker is not running.\r\n\r\nAre you sure you want to exit?", "EZBlocker",
+                                 //MessageBoxButtons.YesNo,
+                                 //MessageBoxIcon.Warning);
 
-                e.Cancel = (result == DialogResult.No);
+                //e.Cancel = (result == DialogResult.No);
 
-                if (result == DialogResult.Yes)
-                {
-                    Properties.Settings.Default.UserEducated = true;
-                    Properties.Settings.Default.Save();
-                }
-            }
+                //if (result == DialogResult.Yes)
+                //{
+                    //Properties.Settings.Default.UserEducated = true;
+                    //Properties.Settings.Default.Save();
+                //}
+            //}
         }
     }
 }
