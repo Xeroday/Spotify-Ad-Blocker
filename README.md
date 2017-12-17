@@ -7,6 +7,15 @@ This is my own personal spin on EZBlocker by Xeroday.
 To download a pre-compiled binary of the latest version, click [here][3].
 
 Changelog (Major releases):
+ - V 1.8 (December 17, 2017)
+  - Lowered exit tolerance time to close EZBlocker faster
+  - Disabled "Spotify not found" notification
+  - Disabled EZBlocker updates leading to Xeroday master
+  - Disabled exit notification MessageBox
+  - Updated WebHelperHook to match Xeroday master updates to regain JSON fetching
+  - Updated latest Executable
+
+
  - V 1.7 (October 21, 2016)
   - Diabled 'Private Session' Warning Message
   - Disabled 'EZBlocker is Hidden' Notification
