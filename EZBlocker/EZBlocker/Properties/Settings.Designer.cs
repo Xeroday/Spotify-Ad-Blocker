@@ -70,5 +70,16 @@ namespace EZBlocker.Properties {
                 this["UserEducated"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Generic.List<System.String> BlockedArtists {
+            get {
+                return ((global::System.Collections.Generic.List<System.String>)(this["BlockedArtists"]));
+            }
+            set {
+                this["BlockedArtists"] = value;
+            }
+        }
     }
 }
