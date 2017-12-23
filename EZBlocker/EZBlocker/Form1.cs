@@ -20,6 +20,7 @@ namespace EZBlocker
         private string lastArtistName = "";
         private int exitTolerance = 0;
         private ToolTip artistTooltip = new ToolTip();
+        private ArtistManagerForm _artistManagerForm = new ArtistManagerForm();
 
         private string nircmdPath = Application.StartupPath + @"\nircmd.exe";
         private string jsonPath = Application.StartupPath + @"\Newtonsoft.Json.dll";
@@ -96,6 +97,13 @@ namespace EZBlocker
                 }
 
                 WebHelperResult whr = WebHelperHook.GetStatus();
+
+                ArtistSettingManager manager = new ArtistSettingManager();
+                if (manager.ContainsArtist(whr.artistName))
+                {
+                    NextTrack();
+                }
+                _artistManagerForm.SetArtist(whr.artistName);
 
                 if (whr.isAd) // Track is ad
                 {
@@ -425,6 +433,7 @@ namespace EZBlocker
         {
             if (this.WindowState == FormWindowState.Minimized)
             {
+                _artistManagerForm.Hide();;
                 this.ShowInTaskbar = false;
                 this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
                 Notify("EZBlocker is hidden. Double-click this icon to restore.");
@@ -671,6 +680,15 @@ namespace EZBlocker
         private void websiteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start(website);
+        }
+
+        private void btnArtistManager_Click(object sender, EventArgs e)
+        {
+            if (!_artistManagerForm.Visible)
+            {
+                _artistManagerForm = new ArtistManagerForm();
+                _artistManagerForm.Show();
+            }
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
