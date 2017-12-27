@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("EZBlocker")]
-[assembly: AssemblyDescription("http://www.ericzhang.me")]
+[assembly: AssemblyDescription("https://github.com/Novaki92/Spotify-Ad-Blocker")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Eric Zhang")]
+[assembly: AssemblyCompany("Novaki")]
 [assembly: AssemblyProduct("EZBlocker")]
-[assembly: AssemblyCopyright("Copyright ©  2012-2016 Eric Zhang")]
+[assembly: AssemblyCopyright("Copyright ©  2012-2017 Novaki")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -31,5 +31,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.6.8.2")]
-[assembly: AssemblyFileVersion("1.6.8.2")]
+[assembly: AssemblyVersion("1.8.1.0")]
+[assembly: AssemblyFileVersion("1.8.1.0")]
