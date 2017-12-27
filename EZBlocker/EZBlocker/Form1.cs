@@ -124,10 +124,12 @@ namespace EZBlocker
                 }
                 else if (!whr.isRunning)
                 {
-                    ArtistLabel.Text = "Spotify is not running";
+                    SongLabel.Text = "";
+                    AlbumLabel.Text = "Spotify is closed";
+                    ArtistLabel.Text = "Exiting EZBlocker";
                     //Notify("Error connecting to Spotify. Retrying...");
                     File.AppendAllText(logPath, "Not running.\r\n");
-                    MainTimer.Interval = 5000;
+                    MainTimer.Interval = 10;
                     /*
                     MainTimer.Enabled = false;
                     MessageBox.Show("Spotify is not running. Please restart EZBlocker after starting Spotify.", "EZBlocker", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, (MessageBoxOptions)0x40000);
