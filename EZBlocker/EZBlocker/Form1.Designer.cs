@@ -143,9 +143,8 @@
             this.AlbumLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.AlbumLabel.Location = new System.Drawing.Point(9, 130);
             this.AlbumLabel.Name = "AlbumLabel";
-            this.AlbumLabel.Size = new System.Drawing.Size(54, 13);
+            this.AlbumLabel.Size = new System.Drawing.Size(0, 13);
             this.AlbumLabel.TabIndex = 12;
-            this.AlbumLabel.Text = "Loading...";
             // 
             // SongLabel
             // 
@@ -153,9 +152,8 @@
             this.SongLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SongLabel.Location = new System.Drawing.Point(9, 117);
             this.SongLabel.Name = "SongLabel";
-            this.SongLabel.Size = new System.Drawing.Size(54, 13);
+            this.SongLabel.Size = new System.Drawing.Size(0, 13);
             this.SongLabel.TabIndex = 13;
-            this.SongLabel.Text = "Loading...";
             // 
             // Main
             // 
