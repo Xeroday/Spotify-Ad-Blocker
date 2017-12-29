@@ -349,7 +349,7 @@ namespace EZBlocker
                     int releaseKey = Convert.ToInt32(ndpKey.GetValue("Release"));
                     if (releaseKey >= 378389) return true;
                 }
-            } catch (Exception ignore) {}
+            } catch (Exception) {}
             return false;
         }
 
@@ -512,7 +512,7 @@ namespace EZBlocker
                 Process.Start(volumeMixerPath);
                 LogAction("/button/volumemixer");
             }
-            catch (Exception ignore)
+            catch (Exception)
             {
                 MessageBox.Show("Could not open Volume Mixer. This is only available on Windows 7/8/10", "EZBlocker");
             }
@@ -559,34 +559,37 @@ namespace EZBlocker
 
             CheckUpdate();
 
-            // Start Spotify and give EZBlocker higher priority
-            try
-            {
-                if (File.Exists(spotifyPath) && Process.GetProcessesByName("spotify").Length < 1)
-                {
-                    Process.Start(spotifyPath);
-                }
-                Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High; // Windows throttles down when minimized to task tray, so make sure EZBlocker runs smoothly
+            Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High; // Windows throttles down when minimized to task tray, so make sure EZBlocker runs smoothly
 
-                // Check for open.spotify.com in hosts
-                String hostsContent = File.ReadAllText(hostsPath);
-                if (hostsContent.Contains("open.spotify.com"))
+            if (exitOnClose)
+            {
+                try
                 {
-                    if (IsUserAnAdmin())
+                    if (File.Exists(spotifyPath) && Process.GetProcessesByName("spotify").Length < 1)
                     {
-                        File.WriteAllText(hostsPath, hostsContent.Replace("open.spotify.com", "localhost"));
-                        MessageBox.Show("An EZBlocker patch has been applied to your hosts file. If EZBlocker is stuck at 'Loading', please restart your computer.", "EZBlocker", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        Process.Start(spotifyPath);
                     }
-                    else
+
+                    // Check for open.spotify.com in hosts
+                    String hostsContent = File.ReadAllText(hostsPath);
+                    if (hostsContent.Contains("open.spotify.com"))
                     {
-                        MessageBox.Show("EZBlocker has detected an error in your hosts file.\r\n\r\nPlease re-run EZBlocker as Administrator or remove 'open.spotify.com' from your hosts file.", "EZBlocker", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        Application.Exit();
+                        if (IsUserAnAdmin())
+                        {
+                            File.WriteAllText(hostsPath, hostsContent.Replace("open.spotify.com", "localhost"));
+                            MessageBox.Show("An EZBlocker patch has been applied to your hosts file. If EZBlocker is stuck at 'Loading', please restart your computer.", "EZBlocker", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        else
+                        {
+                            MessageBox.Show("EZBlocker has detected an error in your hosts file.\r\n\r\nPlease re-run EZBlocker as Administrator or remove 'open.spotify.com' from your hosts file.", "EZBlocker", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            Application.Exit();
+                        }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                }
             }
 
             // Extract dependencies
