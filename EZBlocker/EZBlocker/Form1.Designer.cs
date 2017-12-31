@@ -31,7 +31,6 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.MainTimer = new System.Windows.Forms.Timer(this.components);
-            this.MuteButton = new System.Windows.Forms.Button();
             this.NotifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.NotifyIconContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -46,6 +45,7 @@
             this.BlockBannersCheckbox = new System.Windows.Forms.CheckBox();
             this.StartupCheckbox = new System.Windows.Forms.CheckBox();
             this.ExitOnCloseCheckbox = new System.Windows.Forms.CheckBox();
+            this.DisableNotificationsCheckbox = new System.Windows.Forms.CheckBox();
             this.NotifyIconContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -53,18 +53,6 @@
             // 
             this.MainTimer.Interval = 600;
             this.MainTimer.Tick += new System.EventHandler(this.MainTimer_Tick);
-            // 
-            // MuteButton
-            // 
-            this.MuteButton.Location = new System.Drawing.Point(16, 217);
-            this.MuteButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.MuteButton.Name = "MuteButton";
-            this.MuteButton.Size = new System.Drawing.Size(79, 33);
-            this.MuteButton.TabIndex = 3;
-            this.MuteButton.Text = "Mute/UnMute Spotify";
-            this.MuteButton.UseVisualStyleBackColor = true;
-            this.MuteButton.Visible = false;
-            this.MuteButton.Click += new System.EventHandler(this.MuteButton_Click);
             // 
             // NotifyIcon
             // 
@@ -84,41 +72,40 @@
             this.separatorToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.NotifyIconContextMenu.Name = "NotifyIconContextMenu";
-            this.NotifyIconContextMenu.Size = new System.Drawing.Size(132, 82);
+            this.NotifyIconContextMenu.Size = new System.Drawing.Size(117, 76);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(131, 24);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // websiteToolStripMenuItem
             // 
             this.websiteToolStripMenuItem.Name = "websiteToolStripMenuItem";
-            this.websiteToolStripMenuItem.Size = new System.Drawing.Size(131, 24);
+            this.websiteToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.websiteToolStripMenuItem.Text = "Website";
             this.websiteToolStripMenuItem.Click += new System.EventHandler(this.websiteToolStripMenuItem_Click);
             // 
             // separatorToolStripMenuItem
             // 
             this.separatorToolStripMenuItem.Name = "separatorToolStripMenuItem";
-            this.separatorToolStripMenuItem.Size = new System.Drawing.Size(128, 6);
+            this.separatorToolStripMenuItem.Size = new System.Drawing.Size(113, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(131, 24);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.exitToolStripMenuItem.Text = "&Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // WebsiteLink
             // 
             this.WebsiteLink.AutoSize = true;
-            this.WebsiteLink.Location = new System.Drawing.Point(192, 170);
-            this.WebsiteLink.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.WebsiteLink.Location = new System.Drawing.Point(144, 160);
             this.WebsiteLink.Name = "WebsiteLink";
-            this.WebsiteLink.Size = new System.Drawing.Size(107, 17);
+            this.WebsiteLink.Size = new System.Drawing.Size(80, 13);
             this.WebsiteLink.TabIndex = 5;
             this.WebsiteLink.TabStop = true;
             this.WebsiteLink.Text = "Report Problem";
@@ -133,10 +120,9 @@
             // SpotifyMuteCheckbox
             // 
             this.SpotifyMuteCheckbox.AutoSize = true;
-            this.SpotifyMuteCheckbox.Location = new System.Drawing.Point(16, 59);
-            this.SpotifyMuteCheckbox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.SpotifyMuteCheckbox.Location = new System.Drawing.Point(12, 48);
             this.SpotifyMuteCheckbox.Name = "SpotifyMuteCheckbox";
-            this.SpotifyMuteCheckbox.Size = new System.Drawing.Size(141, 21);
+            this.SpotifyMuteCheckbox.Size = new System.Drawing.Size(109, 17);
             this.SpotifyMuteCheckbox.TabIndex = 6;
             this.SpotifyMuteCheckbox.Text = "Mute Only Spotify";
             this.SpotifyMuteCheckbox.UseVisualStyleBackColor = true;
@@ -144,10 +130,9 @@
             // 
             // VolumeMixerButton
             // 
-            this.VolumeMixerButton.Location = new System.Drawing.Point(16, 7);
-            this.VolumeMixerButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.VolumeMixerButton.Location = new System.Drawing.Point(12, 6);
             this.VolumeMixerButton.Name = "VolumeMixerButton";
-            this.VolumeMixerButton.Size = new System.Drawing.Size(283, 44);
+            this.VolumeMixerButton.Size = new System.Drawing.Size(212, 36);
             this.VolumeMixerButton.TabIndex = 7;
             this.VolumeMixerButton.Text = "Open Volume Mixer";
             this.VolumeMixerButton.UseVisualStyleBackColor = true;
@@ -157,20 +142,18 @@
             // 
             this.StatusLabel.AutoSize = true;
             this.StatusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.StatusLabel.Location = new System.Drawing.Point(12, 170);
-            this.StatusLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.StatusLabel.Location = new System.Drawing.Point(9, 160);
             this.StatusLabel.Name = "StatusLabel";
-            this.StatusLabel.Size = new System.Drawing.Size(71, 17);
+            this.StatusLabel.Size = new System.Drawing.Size(54, 13);
             this.StatusLabel.TabIndex = 9;
             this.StatusLabel.Text = "Loading...";
             // 
             // BlockBannersCheckbox
             // 
             this.BlockBannersCheckbox.AutoSize = true;
-            this.BlockBannersCheckbox.Location = new System.Drawing.Point(16, 87);
-            this.BlockBannersCheckbox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.BlockBannersCheckbox.Location = new System.Drawing.Point(12, 71);
             this.BlockBannersCheckbox.Name = "BlockBannersCheckbox";
-            this.BlockBannersCheckbox.Size = new System.Drawing.Size(219, 21);
+            this.BlockBannersCheckbox.Size = new System.Drawing.Size(165, 17);
             this.BlockBannersCheckbox.TabIndex = 10;
             this.BlockBannersCheckbox.Text = "Disable All Ads (Experimental)";
             this.BlockBannersCheckbox.UseVisualStyleBackColor = true;
@@ -179,10 +162,9 @@
             // StartupCheckbox
             // 
             this.StartupCheckbox.AutoSize = true;
-            this.StartupCheckbox.Location = new System.Drawing.Point(16, 116);
-            this.StartupCheckbox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.StartupCheckbox.Location = new System.Drawing.Point(12, 94);
             this.StartupCheckbox.Name = "StartupCheckbox";
-            this.StartupCheckbox.Size = new System.Drawing.Size(188, 21);
+            this.StartupCheckbox.Size = new System.Drawing.Size(145, 17);
             this.StartupCheckbox.TabIndex = 11;
             this.StartupCheckbox.Text = "Start EZBlocker on Login";
             this.StartupCheckbox.UseVisualStyleBackColor = true;
@@ -191,20 +173,31 @@
             // ExitOnCloseCheckbox
             // 
             this.ExitOnCloseCheckbox.AutoSize = true;
-            this.ExitOnCloseCheckbox.Location = new System.Drawing.Point(15, 145);
-            this.ExitOnCloseCheckbox.Margin = new System.Windows.Forms.Padding(4);
+            this.ExitOnCloseCheckbox.Location = new System.Drawing.Point(11, 118);
             this.ExitOnCloseCheckbox.Name = "ExitOnCloseCheckbox";
-            this.ExitOnCloseCheckbox.Size = new System.Drawing.Size(180, 21);
+            this.ExitOnCloseCheckbox.Size = new System.Drawing.Size(140, 17);
             this.ExitOnCloseCheckbox.TabIndex = 12;
             this.ExitOnCloseCheckbox.Text = "Exit when Spotify closes";
             this.ExitOnCloseCheckbox.UseVisualStyleBackColor = true;
             this.ExitOnCloseCheckbox.CheckedChanged += new System.EventHandler(this.ExitOnCloseCheckbox_CheckedChanged);
             // 
+            // DisableNotificationsCheckbox
+            // 
+            this.DisableNotificationsCheckbox.AutoSize = true;
+            this.DisableNotificationsCheckbox.Location = new System.Drawing.Point(11, 141);
+            this.DisableNotificationsCheckbox.Name = "DisableNotificationsCheckbox";
+            this.DisableNotificationsCheckbox.Size = new System.Drawing.Size(120, 17);
+            this.DisableNotificationsCheckbox.TabIndex = 13;
+            this.DisableNotificationsCheckbox.Text = "Disable notifications";
+            this.DisableNotificationsCheckbox.UseVisualStyleBackColor = true;
+            this.DisableNotificationsCheckbox.CheckedChanged += new System.EventHandler(this.DisableNotificationsCheckbox_CheckedChanged);
+            // 
             // Main
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(307, 198);
+            this.ClientSize = new System.Drawing.Size(230, 179);
+            this.Controls.Add(this.DisableNotificationsCheckbox);
             this.Controls.Add(this.ExitOnCloseCheckbox);
             this.Controls.Add(this.StartupCheckbox);
             this.Controls.Add(this.BlockBannersCheckbox);
@@ -212,11 +205,9 @@
             this.Controls.Add(this.VolumeMixerButton);
             this.Controls.Add(this.SpotifyMuteCheckbox);
             this.Controls.Add(this.WebsiteLink);
-            this.Controls.Add(this.MuteButton);
             this.Cursor = System.Windows.Forms.Cursors.Default;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MaximizeBox = false;
             this.Name = "Main";
             this.RightToLeftLayout = true;
@@ -231,8 +222,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Button MuteButton;
         private System.Windows.Forms.NotifyIcon NotifyIcon;
         private System.Windows.Forms.LinkLabel WebsiteLink;
         private System.Windows.Forms.Timer Heartbeat;
@@ -248,6 +237,7 @@
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem websiteToolStripMenuItem;
         private System.Windows.Forms.CheckBox ExitOnCloseCheckbox;
+        private System.Windows.Forms.CheckBox DisableNotificationsCheckbox;
     }
 }
 

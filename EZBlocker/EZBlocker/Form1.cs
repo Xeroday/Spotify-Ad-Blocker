@@ -19,6 +19,7 @@ namespace EZBlocker
         private bool muted = false;
         private bool spotifyMute = false;
         private bool exitOnClose = true;
+        private bool disableNotifs = false;
         private float volume = 0.9f;
         private string lastArtistName = "";
         private int exitTolerance = 0;
@@ -87,7 +88,11 @@ namespace EZBlocker
                         if (exitTolerance >= SECONDS_BEFORE_EXITING_AFTER_CLOSE)
                         {
                             File.AppendAllText(logPath, "Spotify process not found\r\n");
-                            Notify("Spotify not found. Exiting EZBlocker...");
+
+                            if (!disableNotifs)
+                            {
+                                Notify("Spotify not found. Exiting EZBlocker...");
+                            }
                             Application.Exit();
                         }
                         exitTolerance += 1;
@@ -408,7 +413,11 @@ namespace EZBlocker
                 {
                     this.Activate();
                 }
-                Notify("EZBlocker is already open.");
+
+                if (!disableNotifs)
+                {
+                    Notify("EZBlocker is already open.");
+                }
             }
             base.WndProc(ref m);
         }
@@ -437,7 +446,11 @@ namespace EZBlocker
             {
                 this.ShowInTaskbar = false;
                 this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
-                Notify("EZBlocker is hidden. Double-click this icon to restore.");
+
+                if (!disableNotifs)
+                {
+                    Notify("EZBlocker is hidden. Double-click this icon to restore.");
+                }
             }
         }
 
@@ -559,6 +572,14 @@ namespace EZBlocker
 
             CheckUpdate();
 
+            // Set up UI
+            SpotifyMuteCheckbox.Checked = Properties.Settings.Default.SpotifyMute;
+            ExitOnCloseCheckbox.Checked = Properties.Settings.Default.ExitOnClose;
+            DisableNotificationsCheckbox.Checked = Properties.Settings.Default.DisableNotifs;
+            spotifyMute = Properties.Settings.Default.SpotifyMute;
+            exitOnClose = Properties.Settings.Default.ExitOnClose;
+            disableNotifs = Properties.Settings.Default.DisableNotifs;
+
             Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High; // Windows throttles down when minimized to task tray, so make sure EZBlocker runs smoothly
 
             if (exitOnClose)
@@ -612,9 +633,6 @@ namespace EZBlocker
                 MessageBox.Show("Error loading EZBlocker dependencies. Please run EZBlocker as administrator or put EZBlocker in a user folder.");
             }
 
-            // Set up UI
-            SpotifyMuteCheckbox.Checked = Properties.Settings.Default.SpotifyMute;
-            ExitOnCloseCheckbox.Checked = Properties.Settings.Default.ExitOnClose;
             if (File.Exists(hostsPath))
             {
                 string hostsFile = File.ReadAllText(hostsPath);
@@ -663,10 +681,13 @@ namespace EZBlocker
             
             MainTimer.Enabled = true;
 
-            if (Process.GetProcessesByName("spotifywebhelper").Length < 1)
+            if (!disableNotifs)
             {
-                Notify("Please enable 'Allow Spotify to be opened from the web' in your Spotify 'Preferences' -> 'Advanced settings'.");
+                if (Process.GetProcessesByName("spotifywebhelper").Length < 1)
+                {
+                    Notify("Please enable 'Allow Spotify to be opened from the web' in your Spotify 'Preferences' -> 'Advanced settings'.");
 
+                }
             }
 
             LogAction("/launch");
@@ -693,6 +714,15 @@ namespace EZBlocker
             if (visitorId == null) return; // Still setting up UI
             LogAction("/settings/exitOnClose/" + exitOnClose.ToString());
             Properties.Settings.Default.ExitOnClose = exitOnClose;
+            Properties.Settings.Default.Save();
+        }
+
+        private void DisableNotificationsCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            disableNotifs = DisableNotificationsCheckbox.Checked;
+            if (visitorId == null) return; // Still setting up UI
+            LogAction("/settings/disableNotifs/" + disableNotifs.ToString());
+            Properties.Settings.Default.DisableNotifs = disableNotifs;
             Properties.Settings.Default.Save();
         }
 
