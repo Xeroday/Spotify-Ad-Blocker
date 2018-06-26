@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Eric Zhang")]
 [assembly: AssemblyProduct("EZBlocker")]
-[assembly: AssemblyCopyright("Copyright ©  2012-2017 Eric Zhang")]
+[assembly: AssemblyCopyright("Copyright ©  2012-2018 Eric Zhang")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -31,5 +31,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.6.8.6")]
-[assembly: AssemblyFileVersion("1.6.8.6")]
+[assembly: AssemblyVersion("1.6.9.0")]
+[assembly: AssemblyFileVersion("1.6.9.0")]
