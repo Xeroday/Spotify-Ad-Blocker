@@ -30,7 +30,6 @@ namespace EZBlocker
                 }
                 else // another instance is already running
                 {
-                    WindowUtilities.ShowFirstInstance();
                     return;
                 }
             }

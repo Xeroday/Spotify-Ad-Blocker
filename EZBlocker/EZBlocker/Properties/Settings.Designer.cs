@@ -12,7 +12,7 @@ namespace EZBlocker.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "14.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.7.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -26,12 +26,12 @@ namespace EZBlocker.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string UID {
+        public string CID {
             get {
-                return ((string)(this["UID"]));
+                return ((string)(this["CID"]));
             }
             set {
-                this["UID"] = value;
+                this["CID"] = value;
             }
         }
         
@@ -44,18 +44,6 @@ namespace EZBlocker.Properties {
             }
             set {
                 this["UpdateSettings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool SpotifyMute {
-            get {
-                return ((bool)(this["SpotifyMute"]));
-            }
-            set {
-                this["SpotifyMute"] = value;
             }
         }
         

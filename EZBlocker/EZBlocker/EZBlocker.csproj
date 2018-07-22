@@ -56,43 +56,33 @@
   <PropertyGroup>
     <StartupObject>EZBlocker.Program</StartupObject>
   </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup>
+    <NoWin32Manifest>true</NoWin32Manifest>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CoreAudio, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Resources\CoreAudio.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Resources\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Json\CSRF.cs" />
-    <Compile Include="Json\OAuth.cs" />
+    <Compile Include="AudioUtils.cs" />
+    <Compile Include="Analytics.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="WebHelperHook.cs" />
-    <Compile Include="WebHelperResult.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="EZBlockerMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="EZBlockerMain.Designer.cs">
+      <DependentUpon>EZBlockerMain.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Json\SpotifyAnswer.cs" />
-    <Compile Include="WindowUtilities.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="SpotifyHook.cs" />
+    <EmbeddedResource Include="EZBlockerMain.resx">
+      <DependentUpon>EZBlockerMain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -119,9 +109,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="my_music.ico" />
-    <Content Include="Resources\CoreAudio.dll" />
-    <Content Include="Resources\Newtonsoft.Json.dll" />
-    <None Include="Resources\nircmd32.exe" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
