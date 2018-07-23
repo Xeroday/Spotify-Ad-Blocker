@@ -40,7 +40,7 @@ Changelog (Major releases only):
   - Fix muting for some users
   - Fix crashing for adding to blocklist
   - Added Google Analytics
-  - V 1.2.2 (Jan 24, 2014):
+- V 1.2.2 (Jan 24, 2014):
   - More improvements on ad detection (Fewer false-positives)
   - Fix not muting when minimized bug
   - Cleaner ad detection code

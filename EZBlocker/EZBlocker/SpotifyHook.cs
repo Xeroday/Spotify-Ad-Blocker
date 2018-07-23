@@ -13,6 +13,7 @@ namespace EZBlocker
         public IntPtr Handle { get; private set; }
 
         private readonly Timer RefreshTimer;
+        private int SpotifyAdTolerance = 0;
 
         public SpotifyHook()
         {
@@ -22,23 +23,37 @@ namespace EZBlocker
                 {
                     WindowName = Spotify.MainWindowTitle;
                     Handle = Spotify.MainWindowHandle;
-                    VolumeControl = AudioUtils.GetVolumeControl(Spotify);
+                    if (VolumeControl == null) VolumeControl = AudioUtils.GetVolumeControl(Spotify);
                 }
                 else
                 {
                     ClearHooks();
                 }
-            }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(300));
+            }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(500));
         }
 
         public bool IsPlaying()
         {
-            return AudioUtils.GetPeakVolume(VolumeControl) > 0;
+            return !WindowName.Equals("") && !WindowName.Equals("Drag") && AudioUtils.GetPeakVolume(VolumeControl) > 0;
         }
 
         public bool IsAdPlaying()
         {
-            return IsPlaying() && !WindowName.Contains(" - ");
+            if (IsPlaying())
+            {
+                if (WindowName.Equals("Spotify") && SpotifyAdTolerance < 1) // Prevent user pausing Spotify from being detected as ad (PeakVolume needs time to adjust)
+                {
+                    Debug.WriteLine("Tolerance " + SpotifyAdTolerance);
+                    SpotifyAdTolerance++;
+                    return false;
+                }
+                else if (!WindowName.Contains(" - "))
+                {
+                    return true;
+                }
+            }
+            SpotifyAdTolerance = 0;
+            return false;
         }
 
         public bool IsRunning()
@@ -68,7 +83,8 @@ namespace EZBlocker
             Spotify = null;
             WindowName = "";
             Handle = IntPtr.Zero;
-            Marshal.ReleaseComObject(VolumeControl);
+            if (VolumeControl != null) Marshal.ReleaseComObject(VolumeControl);
+            VolumeControl = null;
         }
 
         private bool HookSpotify()

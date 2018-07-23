@@ -48,7 +48,7 @@ namespace EZBlocker
                     Debug.WriteLine(AudioUtils.GetPeakVolume(hook.VolumeControl));
                     if (hook.IsAdPlaying())
                     {
-                        if (MainTimer.Interval < 1500) MainTimer.Interval = 1500;
+                        if (MainTimer.Interval < 1000) MainTimer.Interval = 1000;
                         if (!playingAd) playingAd = true;
                         if (!muted) Mute(true);
 
@@ -60,9 +60,13 @@ namespace EZBlocker
                             LogAction("/mute/" + artist);
                         }
                     }
-                    else if (hook.IsPlaying()) // Normal music
+                    else if (hook.IsPlaying() && !hook.WindowName.Equals("Spotify")) // Normal music
                     {
-                        if (muted) Mute(false);
+                        if (muted)
+                        {
+                            Thread.Sleep(750); // Give extra time for ad to change out
+                            Mute(false);
+                        }
                         if (MainTimer.Interval > 400) MainTimer.Interval = 400;
                         if (playingAd) playingAd = false;
 
