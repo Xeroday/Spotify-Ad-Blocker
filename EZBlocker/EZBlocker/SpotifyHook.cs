@@ -38,7 +38,7 @@ namespace EZBlocker
 
         public bool IsAdPlaying()
         {
-            return IsPlaying() && !WindowName.Contains(" - ");
+            return IsPlaying() && !WindowName.Contains(" - ") && !WindowName.Equals("Drag") && !string.IsNullOrWhiteSpace(WindowName);
         }
 
         public bool IsRunning()

@@ -74,10 +74,6 @@ namespace EZBlocker
                             LogAction("/play/" + artist);
                         }
                     }
-                    else if (playingAd) // If here, means we were in an ad state, but Spotify was paused and ad is no longer playing
-                    {
-                        AudioUtils.SendPlayPause(hook.Handle);
-                    }
                     else
                     {
                         StatusLabel.Text = "Spotify is paused";
