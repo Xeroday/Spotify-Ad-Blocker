@@ -58,5 +58,17 @@ namespace EZBlocker.Properties {
                 this["UserEducated"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool StartSpotify {
+            get {
+                return ((bool)(this["StartSpotify"]));
+            }
+            set {
+                this["StartSpotify"] = value;
+            }
+        }
     }
 }

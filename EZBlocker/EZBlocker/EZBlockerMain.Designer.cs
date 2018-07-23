@@ -43,6 +43,7 @@
             this.StatusLabel = new System.Windows.Forms.Label();
             this.BlockBannersCheckbox = new System.Windows.Forms.CheckBox();
             this.StartupCheckbox = new System.Windows.Forms.CheckBox();
+            this.SpotifyCheckbox = new System.Windows.Forms.CheckBox();
             this.NotifyIconContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -100,7 +101,7 @@
             // WebsiteLink
             // 
             this.WebsiteLink.AutoSize = true;
-            this.WebsiteLink.Location = new System.Drawing.Point(185, 108);
+            this.WebsiteLink.Location = new System.Drawing.Point(185, 133);
             this.WebsiteLink.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.WebsiteLink.Name = "WebsiteLink";
             this.WebsiteLink.Size = new System.Drawing.Size(107, 17);
@@ -130,7 +131,7 @@
             // 
             this.StatusLabel.AutoSize = true;
             this.StatusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.StatusLabel.Location = new System.Drawing.Point(13, 108);
+            this.StatusLabel.Location = new System.Drawing.Point(13, 133);
             this.StatusLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.StatusLabel.Name = "StatusLabel";
             this.StatusLabel.Size = new System.Drawing.Size(71, 17);
@@ -161,11 +162,24 @@
             this.StartupCheckbox.UseVisualStyleBackColor = true;
             this.StartupCheckbox.CheckedChanged += new System.EventHandler(this.StartupCheckbox_CheckedChanged);
             // 
+            // SpotifyCheckbox
+            // 
+            this.SpotifyCheckbox.AutoSize = true;
+            this.SpotifyCheckbox.Location = new System.Drawing.Point(16, 108);
+            this.SpotifyCheckbox.Margin = new System.Windows.Forms.Padding(4);
+            this.SpotifyCheckbox.Name = "SpotifyCheckbox";
+            this.SpotifyCheckbox.Size = new System.Drawing.Size(201, 21);
+            this.SpotifyCheckbox.TabIndex = 12;
+            this.SpotifyCheckbox.Text = "Start Spotify with EZBlocker";
+            this.SpotifyCheckbox.UseVisualStyleBackColor = true;
+            this.SpotifyCheckbox.CheckedChanged += new System.EventHandler(this.SpotifyCheckbox_CheckedChanged);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(296, 135);
+            this.ClientSize = new System.Drawing.Size(296, 160);
+            this.Controls.Add(this.SpotifyCheckbox);
             this.Controls.Add(this.StartupCheckbox);
             this.Controls.Add(this.BlockBannersCheckbox);
             this.Controls.Add(this.StatusLabel);
@@ -202,6 +216,7 @@
         private System.Windows.Forms.ToolStripSeparator separatorToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem websiteToolStripMenuItem;
+        private System.Windows.Forms.CheckBox SpotifyCheckbox;
     }
 }
 

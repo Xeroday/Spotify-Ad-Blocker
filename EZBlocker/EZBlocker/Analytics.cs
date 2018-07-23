@@ -41,7 +41,7 @@ namespace EZBlocker
                 { "v", "1" },
                 { "tid", "UA-42480515-3" },
                 { "t", "pageview" },
-                { "cid", cid }, // client idd
+                { "cid", cid }, // client id
                 { "cm", cm }, // Campaign medium, EZBlocker version
                 { "cn", "EZBlocker Windows" }, // Campaign name
                 { "cs", cs}, // Campaign source, OS Version

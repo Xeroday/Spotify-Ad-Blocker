@@ -30,7 +30,7 @@ namespace EZBlocker
 
         public bool IsPlaying()
         {
-            return !WindowName.Equals("") && !WindowName.Equals("Spotify");
+            return AudioUtils.GetPeakVolume(Spotify) > 0;
         }
 
         public bool IsAdPlaying()

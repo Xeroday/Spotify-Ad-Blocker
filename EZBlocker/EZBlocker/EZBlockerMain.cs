@@ -45,6 +45,7 @@ namespace EZBlocker
             try {
                 if (hook.IsRunning())
                 {
+                    Debug.WriteLine(AudioUtils.GetPeakVolume(hook.Spotify));
                     if (hook.IsAdPlaying())
                     {
                         if (MainTimer.Interval < 1500) MainTimer.Interval = 1500;
@@ -87,6 +88,7 @@ namespace EZBlocker
                 {
                     MainTimer.Interval = 5000;
                     StatusLabel.Text = "Spotify is not running";
+                    lastArtistName = "";
                     artistTooltip.SetToolTip(StatusLabel, "");
                 }
             }
@@ -107,17 +109,6 @@ namespace EZBlocker
             muted = AudioUtils.IsMuted(hook.Spotify) != null ? (bool)AudioUtils.IsMuted(hook.Spotify) : false;
         }
 
-        /**
-         * Gets the source of a given URL
-         **/
-        private string GetPage(string URL, string ua)
-        {
-            WebClient w = new WebClient();
-            w.Headers.Add("user-agent", ua);
-            string s = w.DownloadString(URL);
-            return s;
-        }
-
         private string Truncate(string name)
         {
             if (name.Length > 12)
@@ -132,17 +123,12 @@ namespace EZBlocker
          **/
         private void CheckUpdate()
         {
-            if (Properties.Settings.Default.UpdateSettings) // If true, then first launch of latest EZBlocker
-            {
-                Properties.Settings.Default.Upgrade();
-                Properties.Settings.Default.UpdateSettings = false;
-                Properties.Settings.Default.Save();
-            }
-
             try
             {
-                StatusLabel.Text = "Checking for update...";
-                int latest = Convert.ToInt32(GetPage("https://www.ericzhang.me/dl/?file=EZBlocker-version.txt", "EZBlocker " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " " + System.Environment.OSVersion));
+                WebClient w = new WebClient();
+                w.Headers.Add("user-agent", "EZBlocker " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " " + System.Environment.OSVersion);
+                string s = w.DownloadString("https://www.ericzhang.me/dl/?file=EZBlocker-version.txt");
+                int latest = Convert.ToInt32(s);
                 int current = Convert.ToInt32(Assembly.GetExecutingAssembly().GetName().Version.ToString().Replace(".", ""));
                 if (latest <= current)
                     return;
@@ -152,7 +138,7 @@ namespace EZBlocker
                     Application.Exit();
                 }
             }
-            catch
+            catch (Exception)
             {
                 MessageBox.Show("Error checking for update.", "EZBlocker");
             }
@@ -178,19 +164,23 @@ namespace EZBlocker
 
         private void Main_Load(object sender, EventArgs e)
         {
+            if (Properties.Settings.Default.UpdateSettings) // If true, then first launch of latest EZBlocker
+            {
+                Properties.Settings.Default.Upgrade();
+                Properties.Settings.Default.UpdateSettings = false;
+                Properties.Settings.Default.Save();
+            }
+
             // Start Spotify and give EZBlocker higher priority
             try
             {
-                if (File.Exists(spotifyPath) && Process.GetProcessesByName("spotify").Length < 1)
+                if (Properties.Settings.Default.StartSpotify && File.Exists(spotifyPath) && Process.GetProcessesByName("spotify").Length < 1)
                 {
                     Process.Start(spotifyPath);
                 }
                 Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High; // Windows throttles down when minimized to task tray, so make sure EZBlocker runs smoothly
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
+            catch (Exception) {}
 
             // Set up UI
             if (File.Exists(hostsPath))
@@ -211,6 +201,7 @@ namespace EZBlocker
                     startupKey.DeleteValue("EZBlocker");
                 }
             }
+            SpotifyCheckbox.Checked = Properties.Settings.Default.StartSpotify;
             
             // Check .NET
             if (!HasDotNet())
@@ -224,7 +215,7 @@ namespace EZBlocker
                     MessageBox.Show("EZBlocker may not function properly without .NET Framework 4.5 or above.");
                 }
             }
-            
+
             // Set up Analytics
             if (String.IsNullOrEmpty(Properties.Settings.Default.CID))
             {
@@ -237,12 +228,12 @@ namespace EZBlocker
             hook = new SpotifyHook();
 
             Mute(false);
-            
-            CheckUpdate();
 
             MainTimer.Enabled = true;
 
             LogAction("/launch");
+
+            Task.Run(() => CheckUpdate());
         }
 
         private static bool HasDotNet()
@@ -310,7 +301,7 @@ namespace EZBlocker
                 }
                 // Always clear hosts
                 string[] text = File.ReadAllLines(hostsPath);
-                text = text.Where(line => !adHosts.Contains(line.Replace("0.0.0.0 ", "")) && line.Length > 0 && !line.Contains("open.spotify.com")).ToArray();
+                text = text.Where(line => !adHosts.Contains(line.Replace("0.0.0.0 ", "")) && line.Length > 0).ToArray();
                 File.WriteAllLines(hostsPath, text);
 
                 if (BlockBannersCheckbox.Checked)
@@ -346,6 +337,15 @@ namespace EZBlocker
                 startupKey.DeleteValue("EZBlocker");
             }
             LogAction("/settings/startup/" + StartupCheckbox.Checked.ToString());
+        }
+
+
+        private void SpotifyCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!MainTimer.Enabled) return; // Still setting up UI
+            Properties.Settings.Default.StartSpotify = SpotifyCheckbox.Checked;
+            Properties.Settings.Default.Save();
+            LogAction("/settings/startSpotify/" + SpotifyCheckbox.Checked.ToString());
         }
 
         private void VolumeMixerButton_Click(object sender, EventArgs e)
@@ -403,5 +403,6 @@ namespace EZBlocker
 
         [DllImport("shell32.dll")]
         public static extern bool IsUserAnAdmin();
+
     }
 }

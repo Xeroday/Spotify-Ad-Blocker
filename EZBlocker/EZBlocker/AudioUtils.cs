@@ -15,6 +15,10 @@ namespace EZBlocker
             SendMessage(target, WM_APPCOMMAND, IntPtr.Zero, (IntPtr)MEDIA_PLAYPAUSE);
         }
 
+        public static void SendNextTrack(IntPtr target)
+        {
+            SendMessage(target, WM_APPCOMMAND, IntPtr.Zero, (IntPtr)MEDIA_PLAYPAUSE);
+        }
 
         public static bool? IsMuted(Process p)
         {
@@ -56,6 +60,20 @@ namespace EZBlocker
 
             volume.SetMasterVolume(level / 100, Guid.Empty);
             Marshal.ReleaseComObject(volume);
+        }
+
+        public static float GetPeakVolume(Process p)
+        {
+            ISimpleAudioVolume volume = GetVolumeControl(p);
+            if (volume == null)
+                return 0f;
+
+            IAudioMeterInformation meter = (IAudioMeterInformation)volume;
+            meter.GetPeakValue(out float peak);
+
+            Marshal.ReleaseComObject(volume);
+            Marshal.ReleaseComObject(meter);
+            return peak;
         }
 
         private static ISimpleAudioVolume GetVolumeControl(Process p)
@@ -235,6 +253,12 @@ namespace EZBlocker
 
             [PreserveSig]
             int SetDuckingPreference(bool optOut);
+        }
+
+        [Guid("C02216F6-8C67-4B5B-9D00-D008E73E0064"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        private interface IAudioMeterInformation
+        {
+            float GetPeakValue(out float pfPeak);
         }
 
         // SendMessage for media controls
