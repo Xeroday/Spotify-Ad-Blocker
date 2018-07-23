@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Threading;
 
 namespace EZBlocker
@@ -7,6 +8,7 @@ namespace EZBlocker
     class SpotifyHook
     {
         public Process Spotify { get; private set; }
+        public AudioUtils.ISimpleAudioVolume VolumeControl { get; private set; }
         public string WindowName { get; private set; }
         public IntPtr Handle { get; private set; }
 
@@ -20,6 +22,7 @@ namespace EZBlocker
                 {
                     WindowName = Spotify.MainWindowTitle;
                     Handle = Spotify.MainWindowHandle;
+                    VolumeControl = AudioUtils.GetVolumeControl(Spotify);
                 }
                 else
                 {
@@ -30,7 +33,7 @@ namespace EZBlocker
 
         public bool IsPlaying()
         {
-            return AudioUtils.GetPeakVolume(Spotify) > 0;
+            return AudioUtils.GetPeakVolume(VolumeControl) > 0;
         }
 
         public bool IsAdPlaying()
@@ -65,6 +68,7 @@ namespace EZBlocker
             Spotify = null;
             WindowName = "";
             Handle = IntPtr.Zero;
+            Marshal.ReleaseComObject(VolumeControl);
         }
 
         private bool HookSpotify()

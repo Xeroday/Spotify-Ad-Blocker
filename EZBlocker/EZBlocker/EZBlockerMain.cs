@@ -45,7 +45,7 @@ namespace EZBlocker
             try {
                 if (hook.IsRunning())
                 {
-                    Debug.WriteLine(AudioUtils.GetPeakVolume(hook.Spotify));
+                    Debug.WriteLine(AudioUtils.GetPeakVolume(hook.VolumeControl));
                     if (hook.IsAdPlaying())
                     {
                         if (MainTimer.Interval < 1500) MainTimer.Interval = 1500;
@@ -63,7 +63,7 @@ namespace EZBlocker
                     else if (hook.IsPlaying()) // Normal music
                     {
                         if (muted) Mute(false);
-                        if (MainTimer.Interval > 600) MainTimer.Interval = 600;
+                        if (MainTimer.Interval > 400) MainTimer.Interval = 400;
                         if (playingAd) playingAd = false;
 
                         string artist = hook.GetArtist();
@@ -81,6 +81,7 @@ namespace EZBlocker
                     else
                     {
                         StatusLabel.Text = "Spotify is paused";
+                        lastArtistName = "";
                         artistTooltip.SetToolTip(StatusLabel, "");
                     }
                 }
@@ -105,8 +106,8 @@ namespace EZBlocker
          **/
         private void Mute(bool mute)
         {
-            AudioUtils.SetMute(hook.Spotify, mute);
-            muted = AudioUtils.IsMuted(hook.Spotify) != null ? (bool)AudioUtils.IsMuted(hook.Spotify) : false;
+            AudioUtils.SetMute(hook.VolumeControl, mute);
+            muted = AudioUtils.IsMuted(hook.VolumeControl) != null ? (bool)AudioUtils.IsMuted(hook.VolumeControl) : false;
         }
 
         private string Truncate(string name)

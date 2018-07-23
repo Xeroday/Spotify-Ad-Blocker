@@ -20,63 +20,51 @@ namespace EZBlocker
             SendMessage(target, WM_APPCOMMAND, IntPtr.Zero, (IntPtr)MEDIA_PLAYPAUSE);
         }
 
-        public static bool? IsMuted(Process p)
+        public static bool? IsMuted(ISimpleAudioVolume v)
         {
-            ISimpleAudioVolume volume = GetVolumeControl(p);
-            if (volume == null)
+            if (v == null)
                 return null;
 
-            volume.GetMute(out bool mute);
-            Marshal.ReleaseComObject(volume);
+            v.GetMute(out bool mute);
             return mute;
         }
 
-        public static void SetMute(Process p, bool mute)
+        public static void SetMute(ISimpleAudioVolume v, bool mute)
         {
-            ISimpleAudioVolume volume = GetVolumeControl(p);
-            if (volume == null)
+            if (v == null)
                 return;
 
-            volume.SetMute(mute, Guid.Empty);
-            Marshal.ReleaseComObject(volume);
+            v.SetMute(mute, Guid.Empty);
         }
 
-        public static float? GetVolume(Process p)
+        public static float? GetVolume(ISimpleAudioVolume v)
         {
-            ISimpleAudioVolume volume = GetVolumeControl(p);
-            if (volume == null)
+            if (v == null)
                 return null;
 
-            volume.GetMasterVolume(out float level);
-            Marshal.ReleaseComObject(volume);
+            v.GetMasterVolume(out float level);
             return level * 100;
         }
 
-        public static void SetVolume(Process p, float level)
+        public static void SetVolume(ISimpleAudioVolume v, float level)
         {
-            ISimpleAudioVolume volume = GetVolumeControl(p);
-            if (volume == null)
+            if (v == null)
                 return;
 
-            volume.SetMasterVolume(level / 100, Guid.Empty);
-            Marshal.ReleaseComObject(volume);
+            v.SetMasterVolume(level / 100, Guid.Empty);
         }
 
-        public static float GetPeakVolume(Process p)
+        public static float GetPeakVolume(ISimpleAudioVolume v)
         {
-            ISimpleAudioVolume volume = GetVolumeControl(p);
-            if (volume == null)
+            if (v == null)
                 return 0f;
 
-            IAudioMeterInformation meter = (IAudioMeterInformation)volume;
+            IAudioMeterInformation meter = (IAudioMeterInformation)v;
             meter.GetPeakValue(out float peak);
-
-            Marshal.ReleaseComObject(volume);
-            Marshal.ReleaseComObject(meter);
             return peak;
         }
 
-        private static ISimpleAudioVolume GetVolumeControl(Process p)
+        public static ISimpleAudioVolume GetVolumeControl(Process p)
         {
             if (p == null) return null;
 
@@ -125,10 +113,10 @@ namespace EZBlocker
             }
             finally
             {
-                if (deviceEnumerator != null) Marshal.ReleaseComObject(deviceEnumerator);
-                if (speakers != null) Marshal.ReleaseComObject(speakers);
-                if (sm != null) Marshal.ReleaseComObject(sm);
                 if (sessionEnumerator != null) Marshal.ReleaseComObject(sessionEnumerator);
+                if (sm != null) Marshal.ReleaseComObject(sm);
+                if (speakers != null) Marshal.ReleaseComObject(speakers);
+                if (deviceEnumerator != null) Marshal.ReleaseComObject(deviceEnumerator);
             }
 
             return volumeControl;
@@ -156,7 +144,7 @@ namespace EZBlocker
         }
 
         [Guid("87CE5498-68D6-44E5-9215-6DA47EF883D8"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        private interface ISimpleAudioVolume
+        public interface ISimpleAudioVolume
         {
             [PreserveSig]
             int SetMasterVolume(float fLevel, Guid EventContext);
