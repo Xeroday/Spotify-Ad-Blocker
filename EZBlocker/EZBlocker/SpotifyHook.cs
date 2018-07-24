@@ -34,14 +34,14 @@ namespace EZBlocker
 
         public bool IsPlaying()
         {
-            return !WindowName.Equals("") && !WindowName.Equals("Drag") && AudioUtils.GetPeakVolume(VolumeControl) > 0;
+            return !WindowName.Equals("") && !WindowName.Equals("Drag") && (AudioUtils.GetPeakVolume(VolumeControl) > 0 || WindowName.Contains(" - "));
         }
 
         public bool IsAdPlaying()
         {
             if (IsPlaying())
             {
-                if (WindowName.Equals("Spotify") && SpotifyAdTolerance < 1) // Prevent user pausing Spotify from being detected as ad (PeakVolume needs time to adjust)
+                if (WindowName.Equals("Spotify") && SpotifyAdTolerance < 3) // Prevent user pausing Spotify from being detected as ad (PeakVolume needs time to adjust)
                 {
                     Debug.WriteLine("Tolerance " + SpotifyAdTolerance);
                     SpotifyAdTolerance++;

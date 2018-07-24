@@ -61,7 +61,7 @@ namespace EZBlocker
 
             IAudioMeterInformation meter = (IAudioMeterInformation)v;
             meter.GetPeakValue(out float peak);
-            return peak;
+            return peak * 100;
         }
 
         public static ISimpleAudioVolume GetVolumeControl(Process p)
