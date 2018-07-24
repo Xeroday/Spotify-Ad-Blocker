@@ -19,13 +19,13 @@ namespace EZBlocker
         private string lastArtistName = "";
         private ToolTip artistTooltip = new ToolTip();
 
-        private string spotifyPath = Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe";
-        private string volumeMixerPath = Environment.GetEnvironmentVariable("WINDIR") + @"\System32\SndVol.exe";
-        private string hostsPath = Environment.GetEnvironmentVariable("WINDIR") + @"\System32\drivers\etc\hosts";
+        private readonly string spotifyPath = Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe";
+        private readonly string volumeMixerPath = Environment.GetEnvironmentVariable("WINDIR") + @"\System32\SndVol.exe";
+        private readonly string hostsPath = Environment.GetEnvironmentVariable("WINDIR") + @"\System32\drivers\etc\hosts";
 
-        private string[] adHosts = { "pubads.g.doubleclick.net", "securepubads.g.doubleclick.net", "www.googletagservices.com", "gads.pubmatic.com", "ads.pubmatic.com", "tpc.googlesyndication.com", "pagead2.googlesyndication.com", "googleads.g.doubleclick.net" };
+        private readonly string[] adHosts = { "pubads.g.doubleclick.net", "securepubads.g.doubleclick.net", "www.googletagservices.com", "gads.pubmatic.com", "ads.pubmatic.com", "tpc.googlesyndication.com", "pagead2.googlesyndication.com", "googleads.g.doubleclick.net" };
 
-        private const string website = @"https://www.ericzhang.me/projects/spotify-ad-blocker-ezblocker/";
+        public const string website = @"https://www.ericzhang.me/projects/spotify-ad-blocker-ezblocker/";
 
         private Analytics a;
         private DateTime lastRequest;
@@ -45,7 +45,6 @@ namespace EZBlocker
             try {
                 if (hook.IsRunning())
                 {
-                    Debug.WriteLine(AudioUtils.GetPeakVolume(hook.VolumeControl));
                     if (hook.IsAdPlaying())
                     {
                         if (MainTimer.Interval < 1000) MainTimer.Interval = 1000;
