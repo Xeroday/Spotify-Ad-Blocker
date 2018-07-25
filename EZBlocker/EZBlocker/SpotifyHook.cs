@@ -13,7 +13,7 @@ namespace EZBlocker
         public IntPtr Handle { get; private set; }
 
         private readonly Timer RefreshTimer;
-        private int SpotifyAdTolerance = 0;
+        private int SpotifyTolerance = 0;
 
         public SpotifyHook()
         {
@@ -34,25 +34,41 @@ namespace EZBlocker
 
         public bool IsPlaying()
         {
-            return !WindowName.Equals("") && !WindowName.Equals("Drag") && (AudioUtils.GetPeakVolume(VolumeControl) > 0 || WindowName.Contains(" - "));
+            if (AudioUtils.GetPeakVolume(VolumeControl) > 0)
+            {
+                if (WindowName.Equals("Spotify") && SpotifyTolerance < 3)
+                {
+                    Debug.WriteLine("Tolerance " + SpotifyTolerance);
+                    SpotifyTolerance++;
+                    return false;
+                }
+                else
+                {
+                    SpotifyTolerance = 0;
+                    return true;
+                }
+            }
+            SpotifyTolerance = 0;
+            return false;
         }
 
         public bool IsAdPlaying()
         {
-            if (IsPlaying())
+            if (!WindowName.Equals("") && !WindowName.Equals("Drag") && IsPlaying())
             {
-                if (WindowName.Equals("Spotify") && SpotifyAdTolerance < 3) // Prevent user pausing Spotify from being detected as ad (PeakVolume needs time to adjust)
+                if (WindowName.Equals("Spotify") && SpotifyTolerance < 3) // Prevent user pausing Spotify from being detected as ad (PeakVolume needs time to adjust)
                 {
-                    Debug.WriteLine("Tolerance " + SpotifyAdTolerance);
-                    SpotifyAdTolerance++;
+                    Debug.WriteLine("Tolerance " + SpotifyTolerance);
+                    SpotifyTolerance++;
                     return false;
                 }
                 else if (!WindowName.Contains(" - "))
                 {
+                    SpotifyTolerance = 0;
                     return true;
                 }
             }
-            SpotifyAdTolerance = 0;
+            SpotifyTolerance = 0;
             return false;
         }
 
@@ -99,6 +115,8 @@ namespace EZBlocker
             }
             return false;
         }
-    }
 
+        [DllImport("user32.dll")]
+        private static extern bool ShowWindow(IntPtr hwnd, int nCmdShow);
+    }
 }

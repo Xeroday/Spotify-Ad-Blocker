@@ -4,12 +4,10 @@ using System.IO;
 using System.Diagnostics;
 using ICSharpCode.SharpZipLib.Zip;
 using ICSharpCode.SharpZipLib.Core;
+using System.Threading;
 
 namespace EZBlocker
 {
-    /// <summary>
-    /// SpotifyPatcher patches Spotify to send player status to a local endpoint
-    /// </summary>
     class SpotifyPatcher
     {
         private readonly string spotifyPath = Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe";
@@ -17,34 +15,22 @@ namespace EZBlocker
         private readonly string tmpPath = Environment.GetEnvironmentVariable("TMP") + @"\EZBlocker\";
         private readonly string backupPath = "";
 
-        private readonly Dictionary<String, String> patches;
-        private readonly string worker;
-
         public SpotifyPatcher()
         {
             Directory.CreateDirectory(tmpPath);
             backupPath = tmpPath + "backup.spa";
+        }
 
-            patches = new Dictionary<string, string>
+        public bool Patch()
+        {
+            Dictionary<String, String> patches = new Dictionary<string, string>
             {
                 { "openProductUpgradePage", "openWebsite" },
                 { "UPGRADE_LABEL", "'EZBlocker'" },
                 { "UPGRADE_TOOLTIP_TEXT", "'Open EZBlocker Website'" },
-                { "<script type=\"text/javascript\" src=\"/zlink.bundle.js\"></script>", @"<script src=/zlink.bundle.js></script><script>function openWebsite(){window.open('{WEBSITE}')}w=new Worker('worker.js'),w.onmessage=function(e){w.postMessage(document.getElementById('player-button-next').disabled)},w.postMessage(document.getElementById('player-button-next').disabled)</script>".Replace("{WEBSITE}", Main.website) }
+                { "<script type=\"text/javascript\" src=\"/zlink.bundle.js\"></script>", @"<script src=/zlink.bundle.js></script><script>function openWebsite(){window.open('{WEBSITE}')}w=new Worker('worker.js'),w.onmessage=function(e){w.postMessage(document.getElementById('player-button-next').disabled)},w.postMessage('')</script>".Replace("{WEBSITE}", Main.website) }
             };
-            worker = @"var sendEZB=function(e){var t=new XMLHttpRequest;t.open('GET','http://localhost:19691/'+e,!0),t.send()};self.addEventListener('message',function(e){sendEZB(e.data),setTimeout(function(){postMessage('ready')},300)},!1);";
-        }
-
-        public bool Patch()
-        { 
-            foreach (Process p in Process.GetProcessesByName("spotify"))
-            {
-                if (p.MainWindowTitle.Length > 1)
-                {
-                    p.Kill();
-                    break;
-                }
-            }
+            string worker = @"var sendEZB=function(e){var t=new XMLHttpRequest;t.open('GET','http://localhost:19691/'+e,!0),t.send()};self.addEventListener('message',function(e){sendEZB(e.data),setTimeout(function(){postMessage('ready')},300)},!1);";
 
             string workingDir = Path.Combine(tmpPath, new Random().Next(999, 9999).ToString());
             try
@@ -61,12 +47,12 @@ namespace EZBlocker
 
                 // Patch index
                 string patchFile = Path.Combine(workingDir, "index.html");
-                string contents = File.ReadAllText(patchFile);
+                string contents = File.ReadAllText(patchFile, System.Text.Encoding.UTF8);
                 foreach (KeyValuePair<string, string> patch in patches)
                 {
                     contents = contents.Replace(patch.Key, patch.Value);
                 }
-                File.WriteAllText(patchFile, contents);
+                File.WriteAllText(patchFile, contents, System.Text.Encoding.UTF8);
 
                 string patchedPath = Path.Combine(tmpPath, "zlink.spa");
                 File.Delete(patchedPath);
@@ -84,15 +70,25 @@ namespace EZBlocker
                 return false;
             }
 
+            // Restart Spotify
             try
             {
+                foreach (Process p in Process.GetProcessesByName("spotify"))
+                {
+                    if (p.MainWindowTitle.Length > 1)
+                    {
+                        p.Kill();
+                        break;
+                    }
+                }
+                Thread.Sleep(3000);
                 Process.Start(spotifyPath);
-            }
+            } catch { };
 
             return true;
         }
 
-        private bool Restore()
+        public bool Restore()
         {
             if (File.Exists(backupPath))
             {
@@ -120,12 +116,8 @@ namespace EZBlocker
 
         private void CompressFolder(string path, ZipOutputStream zipStream, int folderOffset)
         {
-
-            string[] files = Directory.GetFiles(path);
-
-            foreach (string filename in files)
+            foreach (string filename in Directory.GetFiles(path))
             {
-
                 FileInfo fi = new FileInfo(filename);
 
                 string entryName = filename.Substring(folderOffset); // Makes the name in zip based on the folder

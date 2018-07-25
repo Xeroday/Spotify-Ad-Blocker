@@ -70,5 +70,17 @@ namespace EZBlocker.Properties {
                 this["StartSpotify"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastPatched {
+            get {
+                return ((string)(this["LastPatched"]));
+            }
+            set {
+                this["LastPatched"] = value;
+            }
+        }
     }
 }
