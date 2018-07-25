@@ -9,14 +9,14 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using Microsoft.Win32;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace EZBlocker
 {
     public partial class Main : Form
     {
         private bool muted = false;
-        private bool playingAd = false;
-        private string lastArtistName = "";
+        private string lastArtistName = @"N/A";
         private ToolTip artistTooltip = new ToolTip();
 
         private readonly string spotifyPath = Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe";
@@ -49,7 +49,7 @@ namespace EZBlocker
                 {
                     if (listener.Message.Equals("true"))
                     {
-                        if (MainTimer.Interval < 1000) MainTimer.Interval = 1000;
+                        if (MainTimer.Interval != 1000) MainTimer.Interval = 1000;
                         if (!muted) Mute(true);
                         if (!hook.IsPlaying())
                         {
@@ -72,8 +72,7 @@ namespace EZBlocker
                             Thread.Sleep(750); // Give extra time for ad to change out
                             Mute(false);
                         }
-                        if (MainTimer.Interval > 400) MainTimer.Interval = 400;
-                        if (playingAd) playingAd = false;
+                        if (MainTimer.Interval != 400) MainTimer.Interval = 400;
 
                         string artist = hook.GetArtist();
                         if (lastArtistName != artist)
@@ -86,15 +85,15 @@ namespace EZBlocker
                     else
                     {
                         StatusLabel.Text = "Spotify is paused";
-                        lastArtistName = "";
+                        lastArtistName = @"N/A";
                         artistTooltip.SetToolTip(StatusLabel, "");
                     }
                 }
                 else
                 {
-                    MainTimer.Interval = 5000;
+                    if (MainTimer.Interval != 1000) MainTimer.Interval = 1000;
                     StatusLabel.Text = "Spotify not found";
-                    lastArtistName = "";
+                    lastArtistName = @"N/A";
                     artistTooltip.SetToolTip(StatusLabel, "");
                 }
             }
@@ -111,8 +110,8 @@ namespace EZBlocker
          **/
         private void Mute(bool mute)
         {
-            AudioUtils.SetMute(hook.VolumeControl, mute);
-            muted = AudioUtils.IsMuted(hook.VolumeControl) != null ? (bool)AudioUtils.IsMuted(hook.VolumeControl) : false;
+            AudioUtils.SetMute(hook.VolumeControl.Control, mute);
+            muted = AudioUtils.IsMuted(hook.VolumeControl.Control) != null ? (bool)AudioUtils.IsMuted(hook.VolumeControl.Control) : false;
         }
 
         private string Truncate(string name)
@@ -181,9 +180,25 @@ namespace EZBlocker
   
             if (!File.Exists(spotifyPath))
             {
-                MessageBox.Show("Spotify is not found, please re-install.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Process.Start("https://download.scdn.co/SpotifySetup.exe");
+                if (MessageBox.Show("Spotify is not installed or you have the Windows Store version.\r\n\r\nPlease click 'Yes' to install the normal desktop version of Spotify.", "EZBlocker", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    try // Remove Windows Store version.
+                    {
+                        ProcessStartInfo startInfo = new ProcessStartInfo
+                        {
+                            FileName = "powershell.exe",
+                            Arguments = "-Command \"Get-AppxPackage *Spotify* | Remove-AppxPackage\""
+                        };
+                        var uninstall = Process.Start(startInfo);
+                        uninstall.WaitForExit();
+                    }
+                    catch (Exception ex) {
+                        Debug.WriteLine(ex);
+                    }
+                    Process.Start("https://download.scdn.co/SpotifySetup.exe");
+                }
                 Application.Exit();
+                return;
             }
 
             // Start Spotify and give EZBlocker higher priority
@@ -231,7 +246,7 @@ namespace EZBlocker
             string currentVersion = FileVersionInfo.GetVersionInfo(spotifyPath).FileVersion;
             if (!Properties.Settings.Default.LastPatched.Equals(currentVersion))
             {
-                MessageBox.Show("EZBlocker needs to modify Spotify.\r\n\r\nTo return to the original, right click the EZBlocker icon in your task tray and choose 'Remove Patch'.", "EZBlocker");
+                // MessageBox.Show("EZBlocker needs to modify Spotify.\r\n\r\nTo return to the original, right click the EZBlocker icon in your task tray and choose 'Remove Patch'.", "EZBlocker");
                 if (!patcher.Patch())
                 {
                     MessageBox.Show("Error patching Spotify. EZBlocker may not work.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
