@@ -16,7 +16,7 @@ namespace EZBlocker
     public partial class Main : Form
     {
         private bool muted = false;
-        private string lastArtistName = @"N/A";
+        private string lastMessage = "";
         private ToolTip artistTooltip = new ToolTip();
 
         private readonly string spotifyPath = Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe";
@@ -58,10 +58,12 @@ namespace EZBlocker
                         }
 
                         string artist = hook.GetArtist();
-                        if (lastArtistName != artist)
+                        string message = "Muting: " + Truncate(artist);
+                        if (lastMessage != message)
                         {
-                            StatusLabel.Text = "Muting: " + Truncate(artist);
-                            artistTooltip.SetToolTip(StatusLabel, lastArtistName = artist);
+                            lastMessage = message;
+                            StatusLabel.Text = message;
+                            artistTooltip.SetToolTip(StatusLabel, artist);
                             LogAction("/mute/" + artist);
                         }
                     }
@@ -75,26 +77,36 @@ namespace EZBlocker
                         if (MainTimer.Interval != 400) MainTimer.Interval = 400;
 
                         string artist = hook.GetArtist();
-                        if (lastArtistName != artist)
+                        string message = "Playing: " + Truncate(artist);
+                        if (lastMessage != message)
                         {
-                            StatusLabel.Text = "Playing: " + Truncate(artist);
-                            artistTooltip.SetToolTip(StatusLabel, lastArtistName = artist);
+                            lastMessage = message;
+                            StatusLabel.Text = message;
+                            artistTooltip.SetToolTip(StatusLabel, artist);
                             LogAction("/play/" + artist);
                         }
                     }
                     else
                     {
-                        StatusLabel.Text = "Spotify is paused";
-                        lastArtistName = @"N/A";
-                        artistTooltip.SetToolTip(StatusLabel, "");
+                        string message = "Spotify is paused";
+                        if (lastMessage != message)
+                        {
+                            lastMessage = message;
+                            StatusLabel.Text = message;
+                            artistTooltip.SetToolTip(StatusLabel, "");
+                        }
                     }
                 }
                 else
                 {
                     if (MainTimer.Interval != 1000) MainTimer.Interval = 1000;
-                    StatusLabel.Text = "Spotify not found";
-                    lastArtistName = @"N/A";
-                    artistTooltip.SetToolTip(StatusLabel, "");
+                    string message = "Spotify not found";
+                    if (lastMessage != message)
+                    {
+                        lastMessage = message;
+                        StatusLabel.Text = message;
+                        artistTooltip.SetToolTip(StatusLabel, "");
+                    };
                 }
             }
             catch (Exception ex)
