@@ -35,6 +35,7 @@
             this.NotifyIconContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.websiteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.undoPatchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.separatorToolStripMenuItem = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.WebsiteLink = new System.Windows.Forms.LinkLabel();
@@ -44,7 +45,6 @@
             this.BlockBannersCheckbox = new System.Windows.Forms.CheckBox();
             this.StartupCheckbox = new System.Windows.Forms.CheckBox();
             this.SpotifyCheckbox = new System.Windows.Forms.CheckBox();
-            this.undoPatchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.NotifyIconContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -72,7 +72,7 @@
             this.separatorToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.NotifyIconContextMenu.Name = "NotifyIconContextMenu";
-            this.NotifyIconContextMenu.Size = new System.Drawing.Size(172, 106);
+            this.NotifyIconContextMenu.Size = new System.Drawing.Size(205, 132);
             // 
             // openToolStripMenuItem
             // 
@@ -87,6 +87,13 @@
             this.websiteToolStripMenuItem.Size = new System.Drawing.Size(204, 24);
             this.websiteToolStripMenuItem.Text = "Website";
             this.websiteToolStripMenuItem.Click += new System.EventHandler(this.websiteToolStripMenuItem_Click);
+            // 
+            // undoPatchToolStripMenuItem
+            // 
+            this.undoPatchToolStripMenuItem.Name = "undoPatchToolStripMenuItem";
+            this.undoPatchToolStripMenuItem.Size = new System.Drawing.Size(204, 24);
+            this.undoPatchToolStripMenuItem.Text = "Remove Patch";
+            this.undoPatchToolStripMenuItem.Click += new System.EventHandler(this.undoPatchToolStripMenuItem_Click);
             // 
             // separatorToolStripMenuItem
             // 
@@ -175,13 +182,6 @@
             this.SpotifyCheckbox.Text = "Start Spotify with EZBlocker";
             this.SpotifyCheckbox.UseVisualStyleBackColor = true;
             this.SpotifyCheckbox.CheckedChanged += new System.EventHandler(this.SpotifyCheckbox_CheckedChanged);
-            // 
-            // undoPatchToolStripMenuItem
-            // 
-            this.undoPatchToolStripMenuItem.Name = "undoPatchToolStripMenuItem";
-            this.undoPatchToolStripMenuItem.Size = new System.Drawing.Size(204, 24);
-            this.undoPatchToolStripMenuItem.Text = "Remove Patch";
-            this.undoPatchToolStripMenuItem.Click += new System.EventHandler(this.undoPatchToolStripMenuItem_Click);
             // 
             // Main
             // 
