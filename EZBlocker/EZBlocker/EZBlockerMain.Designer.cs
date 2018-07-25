@@ -72,7 +72,7 @@
             this.separatorToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.NotifyIconContextMenu.Name = "NotifyIconContextMenu";
-            this.NotifyIconContextMenu.Size = new System.Drawing.Size(205, 132);
+            this.NotifyIconContextMenu.Size = new System.Drawing.Size(172, 106);
             // 
             // openToolStripMenuItem
             // 
@@ -115,7 +115,7 @@
             // Heartbeat
             // 
             this.Heartbeat.Enabled = true;
-            this.Heartbeat.Interval = 60000;
+            this.Heartbeat.Interval = 30000;
             this.Heartbeat.Tick += new System.EventHandler(this.Heartbeat_Tick);
             // 
             // VolumeMixerButton

@@ -29,7 +29,7 @@ namespace EZBlocker
 
         private Analytics a;
         private DateTime lastRequest;
-        private string lastAction;
+        private string lastAction = "";
         private SpotifyPatcher patcher;
         private Listener listener;
         private SpotifyHook hook;
@@ -47,7 +47,7 @@ namespace EZBlocker
             try {
                 if (hook.IsRunning())
                 {
-                    if (listener.Message.Equals("true")) // On an ad
+                    if (listener.Message.Equals("true"))
                     {
                         if (MainTimer.Interval < 1000) MainTimer.Interval = 1000;
                         if (!muted) Mute(true);
@@ -154,6 +154,7 @@ namespace EZBlocker
         {
             if (lastAction.Equals(action) && DateTime.Now - lastRequest < TimeSpan.FromMinutes(5)) return;
             Task.Run(() => a.LogAction(action));
+            lastAction = action;
             lastRequest = DateTime.Now;
         }
 
