@@ -34,6 +34,7 @@ namespace EZBlocker
                 else
                 {
                     ClearHooks();
+                    HookSpotify();
                 }
             }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(500));
         }
@@ -65,7 +66,7 @@ namespace EZBlocker
 
         public bool IsRunning()
         {
-            if (Spotify == null && !HookSpotify())
+            if (Spotify == null)
                 return false;
 
             Spotify.Refresh();

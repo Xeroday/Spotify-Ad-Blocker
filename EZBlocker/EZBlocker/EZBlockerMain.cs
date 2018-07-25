@@ -69,7 +69,7 @@ namespace EZBlocker
                     {
                         if (muted)
                         {
-                            Thread.Sleep(750); // Give extra time for ad to change out
+                            Thread.Sleep(500); // Give extra time for ad to change out
                             Mute(false);
                         }
                         if (MainTimer.Interval != 400) MainTimer.Interval = 400;
@@ -180,7 +180,7 @@ namespace EZBlocker
   
             if (!File.Exists(spotifyPath))
             {
-                if (MessageBox.Show("Spotify is not installed or you have the Windows Store version.\r\n\r\nPlease click 'Yes' to install the normal desktop version of Spotify.", "EZBlocker", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (MessageBox.Show("Spotify is not installed or you have the Windows Store version.\r\n\r\nPlease click 'OK' to install the normal desktop version of Spotify.", "EZBlocker", MessageBoxButtons.OKCancel) == DialogResult.OK)
                 {
                     try // Remove Windows Store version.
                     {
