@@ -78,21 +78,21 @@
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
             this.openToolStripMenuItem.Size = new System.Drawing.Size(204, 24);
-            this.openToolStripMenuItem.Text = "Open";
+            this.openToolStripMenuItem.Text = Properties.strings.ToolStripOpen;
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // websiteToolStripMenuItem
             // 
             this.websiteToolStripMenuItem.Name = "websiteToolStripMenuItem";
             this.websiteToolStripMenuItem.Size = new System.Drawing.Size(204, 24);
-            this.websiteToolStripMenuItem.Text = "Website";
+            this.websiteToolStripMenuItem.Text = Properties.strings.ToolStripWebsite;
             this.websiteToolStripMenuItem.Click += new System.EventHandler(this.websiteToolStripMenuItem_Click);
             // 
             // undoPatchToolStripMenuItem
             // 
             this.undoPatchToolStripMenuItem.Name = "undoPatchToolStripMenuItem";
             this.undoPatchToolStripMenuItem.Size = new System.Drawing.Size(204, 24);
-            this.undoPatchToolStripMenuItem.Text = "Remove Patch";
+            this.undoPatchToolStripMenuItem.Text = Properties.strings.ToolStripRemovePatch;
             this.undoPatchToolStripMenuItem.Click += new System.EventHandler(this.undoPatchToolStripMenuItem_Click);
             // 
             // separatorToolStripMenuItem
@@ -104,7 +104,7 @@
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(204, 24);
-            this.exitToolStripMenuItem.Text = "&Exit";
+            this.exitToolStripMenuItem.Text = Properties.strings.ToolStripExit;
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // WebsiteLink
@@ -116,7 +116,7 @@
             this.WebsiteLink.Size = new System.Drawing.Size(107, 17);
             this.WebsiteLink.TabIndex = 5;
             this.WebsiteLink.TabStop = true;
-            this.WebsiteLink.Text = "Report Problem";
+            this.WebsiteLink.Text = Properties.strings.WebsiteLinkText;
             this.WebsiteLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.WebsiteLink_LinkClicked);
             // 
             // Heartbeat
@@ -132,7 +132,7 @@
             this.VolumeMixerButton.Name = "VolumeMixerButton";
             this.VolumeMixerButton.Size = new System.Drawing.Size(267, 44);
             this.VolumeMixerButton.TabIndex = 7;
-            this.VolumeMixerButton.Text = "Open Volume Control";
+            this.VolumeMixerButton.Text = Properties.strings.VolumeMixerButtonText;
             this.VolumeMixerButton.UseVisualStyleBackColor = true;
             this.VolumeMixerButton.Click += new System.EventHandler(this.VolumeMixerButton_Click);
             // 
@@ -145,7 +145,7 @@
             this.StatusLabel.Name = "StatusLabel";
             this.StatusLabel.Size = new System.Drawing.Size(71, 17);
             this.StatusLabel.TabIndex = 9;
-            this.StatusLabel.Text = "Loading...";
+            this.StatusLabel.Text = Properties.strings.StatusLabelLoadingText;
             // 
             // BlockBannersCheckbox
             // 
@@ -155,7 +155,7 @@
             this.BlockBannersCheckbox.Name = "BlockBannersCheckbox";
             this.BlockBannersCheckbox.Size = new System.Drawing.Size(139, 21);
             this.BlockBannersCheckbox.TabIndex = 10;
-            this.BlockBannersCheckbox.Text = "Block Banner Ads";
+            this.BlockBannersCheckbox.Text = Properties.strings.BlockBannersCheckboxText;
             this.BlockBannersCheckbox.UseVisualStyleBackColor = true;
             this.BlockBannersCheckbox.Click += new System.EventHandler(this.SkipAdsCheckbox_Click);
             // 
@@ -167,7 +167,7 @@
             this.StartupCheckbox.Name = "StartupCheckbox";
             this.StartupCheckbox.Size = new System.Drawing.Size(185, 21);
             this.StartupCheckbox.TabIndex = 11;
-            this.StartupCheckbox.Text = "Start EZBlocker on Login";
+            this.StartupCheckbox.Text = Properties.strings.StartupCheckboxText;
             this.StartupCheckbox.UseVisualStyleBackColor = true;
             this.StartupCheckbox.CheckedChanged += new System.EventHandler(this.StartupCheckbox_CheckedChanged);
             // 
@@ -179,7 +179,7 @@
             this.SpotifyCheckbox.Name = "SpotifyCheckbox";
             this.SpotifyCheckbox.Size = new System.Drawing.Size(201, 21);
             this.SpotifyCheckbox.TabIndex = 12;
-            this.SpotifyCheckbox.Text = "Start Spotify with EZBlocker";
+            this.SpotifyCheckbox.Text = Properties.strings.SpotifyCheckboxText;
             this.SpotifyCheckbox.UseVisualStyleBackColor = true;
             this.SpotifyCheckbox.CheckedChanged += new System.EventHandler(this.SpotifyCheckbox_CheckedChanged);
             // 
