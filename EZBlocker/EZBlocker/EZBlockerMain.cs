@@ -65,7 +65,7 @@ namespace EZBlocker
                             LogAction("/mute/" + artist);
                         }
                     }
-                    else if (hook.IsPlaying()) // Normal music
+                    else if (hook.IsPlaying() && !hook.WindowName.Equals("Spotify")) // Normal music
                     {
                         if (muted)
                         {

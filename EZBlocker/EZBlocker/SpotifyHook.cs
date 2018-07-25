@@ -107,9 +107,9 @@ namespace EZBlocker
         {
             foreach (Process p in Process.GetProcessesByName("spotify"))
             {
+                Spotify = p;
                 if (p.MainWindowTitle.Length > 1)
                 {
-                    Spotify = p;
                     return true;
                 }
             }
