@@ -1,18 +1,40 @@
 
+
 EZBlocker
 =========
 
-EZBlocker is a Spotify Ad Blocker written in C# for Windows 7/8/10.
+EZBlocker is a Spotify Ad Blocker written in C# for Windows 7/8/10. The goal for EZBlocker is to be the most reliable and stable ad blocker for Spotify.
 
-It uses non-intrusive methods to read the Spotify client to extract song information. When an advertisement is playing, EZBlocker will mute Spotify and automatically resume playing regular music when the ad is over.
-
-Because EZBlocker does not modify the Spotify client in any way, it is less buggy compared to other ad blockers. The goal for EZBlocker is to be the most reliable and stable ad blocker for Spotify.
-
-For more info, visit the [EZBlocker project page][2].
+When an advertisement is playing, EZBlocker will mute Spotify and automatically resume playing regular music when the ad is over.
 
 To download a pre-compiled binary of the latest version, click [here][1].
 
-Changelog (Major releases only):
+For more info, visit the [EZBlocker project page][2].
+
+## Technical overview
+
+The current version of EZBlocker hooks Spotify in three ways: window titles, audio sessions, and a reverse listener. 
+
+**Window title**
+The window title is used to grab the name of the currently playing song/artist/advertisement. EZBlocker also uses the window title to grab the Spotify process handle.
+
+**Audio session**
+Using lower level COM interfaces, EZBlocker is able to both find and extract information from Spotify's audio session. 
+
+Firstly, if the Spotify window is hidden (in the tray), its window title cannot be used locate the correct Spotify process handle. In this case, EZBlocker falls back to searching through the audio sessions to find the correct process.
+
+Secondly, the audio session is a somewhat reliable way to detect whether or not a song/advertisement is playing regardless of whether or not the Spotify window is hidden. It can be inaccurate at times, eg. when a song has a 3 second gap of no sound, but can automatically recover.
+
+**Reverse Listener**
+I've historically tried to avoid modifying the Spotify application, but since the shutdown of its unofficial local API (in mid July 2018), there was no reliable way to detect if an advertisement was playing.
+
+Spotify is built with the Chromium Embedded Framework, which means many of its components are written in HTML/JS. EZBlocker patches one of them to attach a web worker that sends a signal to a local listener when an advertisement is playing.
+
+More data could probably be extracted through the web worker, but I haven't had time to explore.
+
+
+# Changelog (Major releases only):
+
 - V 1.7 (July 22, 2018):
   - Almost a complete re-write of the application (lighter, more performant, cleaner code)
   - New Spotify ad detection and muting logic after Spotify's shutdown of its local API
@@ -21,41 +43,12 @@ Changelog (Major releases only):
   - Fix bugs caused by newer Spotify local API
   - Update dependencies
   - Now requires .NET Framework 4.5
-- V 1.5 (March 6, 2015):
-  - Support for Spotify versions 1.0 and above
-  - Support for blocking banner advertisements and muting video advertisements
-  - Adblocking is now fully automated and not dependent on any blocklists
-  - UI revamped from user feedback
-- V 1.4 (November 22, 2014):
-  - Huge improvements to ad-detection
-  - More stable muting/unmuting of Spotify process
-  - Minor bug fixes
-- V 1.3.6 (April 5, 2014):
-  - Fix for new Spotify update (sneaky update broke most ad blockers)
-  - Settings are now auto-saved
-  - Option to mute whole computer for those w/ issues muting just Spotify
-  - Blocklist now opens in an easier to use form
-  - Better support for 64-bit systems
-- V 1.3 (Feb 8, 2014):
-  - Fix muting for some users
-  - Fix crashing for adding to blocklist
-  - Added Google Analytics
-- V 1.2.2 (Jan 24, 2014):
-  - More improvements on ad detection (Fewer false-positives)
-  - Fix not muting when minimized bug
-  - Cleaner ad detection code
-  - Faster blocklist lookups
-- V 1.2 (Jan 9, 2014):
-  - Port EZBlocker to C# (Still .NET 3.5)
-  - Improve accuracy of blocklist checking
-  - Improve accuracy of auto ad detection
-  - Improve main muting logic
-  - Minimize notification balloons
-  - New option to disable notifications
-- V 1.1:
-  - Add auto blacklist adding mechanism
-  - Add update checker
 
+## Translations
+To better support non-English speakers, I've started an effort to translate EZBlocker. Please reach out if you are a native speaker of a non-English language. 
+
+The following are contributors to this goal:
+- Portuguese: Raí
 
   [1]: http://www.ericzhang.me/dl/?file=EZBlocker.php
   [2]: http://www.ericzhang.me/projects/spotify-ad-blocker-ezblocker/

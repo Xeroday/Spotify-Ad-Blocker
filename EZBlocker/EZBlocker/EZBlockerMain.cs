@@ -37,6 +37,7 @@ namespace EZBlocker
 
         public Main()
         {
+            Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
             InitializeComponent();
         }
 
@@ -59,7 +60,7 @@ namespace EZBlocker
                         }
 
                         string artist = hook.GetArtist();
-                        string message = Properties.strings.StatusMuting + Truncate(artist);
+                        string message = Properties.strings.StatusMuting + " " + Truncate(artist);
                         if (lastMessage != message)
                         {
                             lastMessage = message;
@@ -78,7 +79,7 @@ namespace EZBlocker
                         if (MainTimer.Interval != 400) MainTimer.Interval = 400;
 
                         string artist = hook.GetArtist();
-                        string message = Properties.strings.StatusPlaying + Truncate(artist);
+                        string message = Properties.strings.StatusPlaying + " " + Truncate(artist);
                         if (lastMessage != message)
                         {
                             lastMessage = message;
@@ -129,9 +130,9 @@ namespace EZBlocker
 
         private string Truncate(string name)
         {
-            if (name.Length > 12)
+            if (name.Length > 10)
             {
-                return name.Substring(0, 12) + "...";
+                return name.Substring(0, 10) + "...";
             }
             return name;
         }
@@ -283,9 +284,6 @@ namespace EZBlocker
             LogAction("/launch");
 
             Task.Run(() => CheckUpdate());
-
-            Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("es");
-            Debug.WriteLine(Properties.strings.VolumeMixerButtonText);
         }
 
         private void RestoreFromTray()

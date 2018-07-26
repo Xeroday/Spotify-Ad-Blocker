@@ -177,11 +177,11 @@ Click 'OK' to install the normal desktop version of Spotify.</value>
     <comment>On main form</comment>
   </data>
 	<data name="StatusMuting" xml:space="preserve">
-    <value>Muting:</value>
+    <value>Muting: </value>
     <comment>Status label</comment>
   </data>
 	<data name="StatusNotFound" xml:space="preserve">
-    <value>Spotify not found</value>
+    <value>Spotify not found.</value>
     <comment>Status label</comment>
   </data>
 	<data name="StatusPaused" xml:space="preserve">
@@ -189,7 +189,7 @@ Click 'OK' to install the normal desktop version of Spotify.</value>
     <comment>Status label</comment>
   </data>
 	<data name="StatusPlaying" xml:space="preserve">
-    <value>Playing:</value>
+    <value>Playing: </value>
     <comment>Status label</comment>
   </data>
 	<data name="ToolStripExit" xml:space="preserve">
@@ -197,27 +197,23 @@ Click 'OK' to install the normal desktop version of Spotify.</value>
     <comment>In tray menu</comment>
   </data>
 	<data name="ToolStripOpen" xml:space="preserve">
-    <value>Show EZBlocker Window</value>
+    <value>Open EZBlocker</value>
     <comment>In tray menu</comment>
   </data>
 	<data name="ToolStripRemovePatch" xml:space="preserve">
-    <value>Remove EZBlocker from Spotify</value>
+    <value>Remove Patch</value>
     <comment>In tray menu</comment>
   </data>
 	<data name="ToolStripWebsite" xml:space="preserve">
-    <value>Open EZBlocker Website</value>
+    <value>EZBlocker Website</value>
     <comment>In tray menu</comment>
   </data>
-	<data name="TranslatedByText" xml:space="preserve">
-    <value>Translated by Eric Zhang</value>
-    <comment>Translator Name</comment>
-  </data>
 	<data name="UndoPatchFailMessageBox" xml:space="preserve">
-    <value>Failed to remove EZBlocker from Spotify.</value>
+    <value>Failed to uninstall patch.</value>
     <comment>RemovePatch</comment>
   </data>
 	<data name="UndoPatchOKMessageBox" xml:space="preserve">
-    <value>EZBlocker removed from Spotify.</value>
+    <value>EZBlocker patch uninstalled.</value>
     <comment>RemovePatch</comment>
   </data>
 	<data name="UpgradeErrorMessageBox" xml:space="preserve">
@@ -233,7 +229,7 @@ Click 'OK' to install the normal desktop version of Spotify.</value>
     <comment>On main form</comment>
   </data>
 	<data name="VolumeMixerOpenError" xml:space="preserve">
-    <value>Could not open Volume Control</value>
+    <value>Could not open Volume Mixer.</value>
     <comment>VolumeMixerButton</comment>
   </data>
 	<data name="WebsiteLinkText" xml:space="preserve">

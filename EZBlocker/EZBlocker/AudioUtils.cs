@@ -120,8 +120,10 @@ namespace EZBlocker
                 if (speakers != null) Marshal.ReleaseComObject(speakers);
                 if (deviceEnumerator != null) Marshal.ReleaseComObject(deviceEnumerator);
             }
-
-            return new VolumeControl(ctlPid, volumeControl);
+            
+            if (volumeControl != null)
+                return new VolumeControl(ctlPid, volumeControl);
+            return null;
         }
 
         public class VolumeControl

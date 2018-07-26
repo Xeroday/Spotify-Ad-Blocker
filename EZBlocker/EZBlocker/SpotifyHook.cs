@@ -27,9 +27,15 @@ namespace EZBlocker
                 {
                     WindowName = Spotify.MainWindowTitle;
                     Handle = Spotify.MainWindowHandle;
-                    if (VolumeControl == null) VolumeControl = AudioUtils.GetVolumeControl(Children);
-                    lastPeak = peak;
-                    peak = AudioUtils.GetPeakVolume(VolumeControl.Control);
+                    if (VolumeControl == null)
+                    {
+                        VolumeControl = AudioUtils.GetVolumeControl(Children);
+                    }
+                    else
+                    {
+                        lastPeak = peak;
+                        peak = AudioUtils.GetPeakVolume(VolumeControl.Control);
+                    }
                 }
                 else
                 {

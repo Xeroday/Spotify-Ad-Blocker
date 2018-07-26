@@ -180,7 +180,7 @@ namespace EZBlocker.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Muting: .
+        ///   Looks up a localized string similar to Muting:.
         /// </summary>
         internal static string StatusMuting {
             get {
@@ -189,7 +189,7 @@ namespace EZBlocker.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Spotify not found..
+        ///   Looks up a localized string similar to Spotify not found.
         /// </summary>
         internal static string StatusNotFound {
             get {
@@ -207,7 +207,7 @@ namespace EZBlocker.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Playing: .
+        ///   Looks up a localized string similar to Playing:.
         /// </summary>
         internal static string StatusPlaying {
             get {
@@ -225,7 +225,7 @@ namespace EZBlocker.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open EZBlocker.
+        ///   Looks up a localized string similar to Show EZBlocker Window.
         /// </summary>
         internal static string ToolStripOpen {
             get {
@@ -234,7 +234,7 @@ namespace EZBlocker.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove Patch.
+        ///   Looks up a localized string similar to Remove EZBlocker from Spotify.
         /// </summary>
         internal static string ToolStripRemovePatch {
             get {
@@ -243,7 +243,7 @@ namespace EZBlocker.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to EZBlocker Website.
+        ///   Looks up a localized string similar to Open EZBlocker Website.
         /// </summary>
         internal static string ToolStripWebsite {
             get {
@@ -252,7 +252,16 @@ namespace EZBlocker.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to uninstall patch..
+        ///   Looks up a localized string similar to Translated by Eric Zhang.
+        /// </summary>
+        internal static string TranslatedByText {
+            get {
+                return ResourceManager.GetString("TranslatedByText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to remove EZBlocker from Spotify..
         /// </summary>
         internal static string UndoPatchFailMessageBox {
             get {
@@ -261,7 +270,7 @@ namespace EZBlocker.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to EZBlocker patch uninstalled..
+        ///   Looks up a localized string similar to EZBlocker removed from Spotify..
         /// </summary>
         internal static string UndoPatchOKMessageBox {
             get {
@@ -297,7 +306,7 @@ namespace EZBlocker.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Could not open Volume Mixer..
+        ///   Looks up a localized string similar to Could not open Volume Control.
         /// </summary>
         internal static string VolumeMixerOpenError {
             get {

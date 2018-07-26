@@ -30,7 +30,7 @@ namespace EZBlocker
                 { "UPGRADE_TOOLTIP_TEXT", "'Open EZBlocker Website'" },
                 { "<script type=\"text/javascript\" src=\"/zlink.bundle.js\"></script>", @"<script src=/zlink.bundle.js></script><script>function openWebsite(){window.open('{WEBSITE}')}w=new Worker('worker.js'),w.onmessage=function(e){w.postMessage(document.getElementById('player-button-next').disabled)},w.postMessage('')</script>".Replace("{WEBSITE}", Main.website) }
             };
-            string worker = @"var sendEZB=function(e){var t=new XMLHttpRequest;t.open('GET','http://localhost:19691/'+e,!0),t.send()};self.addEventListener('message',function(e){sendEZB(e.data),setTimeout(function(){postMessage('ready')},300)},!1);";
+            string worker = @"var lastMessage='',sendEZB=function(e){if(lastMessage!==e){var s=new XMLHttpRequest;s.open('GET','http://localhost:19691/'+e,!0),s.send(),lastMessage=e}};self.addEventListener('message',function(e){sendEZB(e.data),setTimeout(function(){postMessage('ready')},300)},!1);";
 
             string workingDir = Path.Combine(tmpPath, new Random().Next(999, 9999).ToString());
             try
@@ -70,7 +70,7 @@ namespace EZBlocker
                 return false;
             }
 
-            // Restart Spotify
+            // Restart Spotify if running
             try
             {
                 foreach (Process p in Process.GetProcessesByName("spotify"))
@@ -78,11 +78,11 @@ namespace EZBlocker
                     if (p.MainWindowTitle.Length > 1)
                     {
                         p.Kill();
+                        Thread.Sleep(3000);
+                        Process.Start(spotifyPath);
                         break;
                     }
                 }
-                Thread.Sleep(3000);
-                Process.Start(spotifyPath);
             } catch { };
 
             return true;
