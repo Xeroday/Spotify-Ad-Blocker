@@ -64,6 +64,7 @@ namespace EZBlocker
             }
             catch (Exception e)
             {
+                Debug.WriteLine(e);
                 Directory.Delete(workingDir, true);
                 Restore();
                 return false;
@@ -74,15 +75,14 @@ namespace EZBlocker
             {
                 foreach (Process p in Process.GetProcessesByName("spotify"))
                 {
-                    if (p.MainWindowTitle.Length > 1)
-                    {
-                        p.Kill();
-                        Thread.Sleep(3000);
-                        Process.Start(spotifyPath);
-                        break;
-                    }
+                    p.Kill();
                 }
-            } catch { };
+            } catch (Exception e) {
+                Debug.WriteLine(e);
+            }
+
+            Thread.Sleep(3000);
+            Process.Start(spotifyPath);
 
             return true;
         }

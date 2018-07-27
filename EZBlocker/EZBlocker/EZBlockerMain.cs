@@ -176,6 +176,7 @@ namespace EZBlocker
          **/
         private void Heartbeat_Tick(object sender, EventArgs e)
         {
+            CheckPatch(false);
             if (DateTime.Now - lastRequest > TimeSpan.FromMinutes(5))
             {
                 LogAction("/heartbeat");
@@ -214,6 +215,10 @@ namespace EZBlocker
                 Application.Exit();
                 return;
             }
+
+            // Patch Spotify
+            patcher = new SpotifyPatcher();
+            CheckPatch(true);
 
             // Start Spotify and give EZBlocker higher priority
             try
@@ -255,23 +260,6 @@ namespace EZBlocker
             }
             a = new Analytics(Properties.Settings.Default.CID, Assembly.GetExecutingAssembly().GetName().Version.ToString());
 
-            // Patch Spotify
-            patcher = new SpotifyPatcher();
-            string currentVersion = FileVersionInfo.GetVersionInfo(spotifyPath).FileVersion;
-            if (!Properties.Settings.Default.LastPatched.Equals(currentVersion))
-            {
-                // MessageBox.Show("EZBlocker needs to modify Spotify.\r\n\r\nTo return to the original, right click the EZBlocker icon in your task tray and choose 'Remove Patch'.", "EZBlocker");
-                if (!patcher.Patch())
-                {
-                    MessageBox.Show(Properties.strings.PatchErrorMessageBox, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                else
-                {
-                    Properties.Settings.Default.LastPatched = currentVersion;
-                    Properties.Settings.Default.Save();
-                }
-            }
-
             // Start Spotify hook
             hook = new SpotifyHook();
 
@@ -284,6 +272,24 @@ namespace EZBlocker
             LogAction("/launch");
 
             Task.Run(() => CheckUpdate());
+        }
+
+        private void CheckPatch(bool launch)
+        {
+            string currentVersion = FileVersionInfo.GetVersionInfo(spotifyPath).FileVersion;
+            if (!Properties.Settings.Default.LastPatched.Equals(currentVersion) || launch) // Always attempt to patch on launch
+            {
+                // MessageBox.Show("EZBlocker needs to modify Spotify.\r\n\r\nTo return to the original, right click the EZBlocker icon in your task tray and choose 'Remove Patch'.", "EZBlocker");
+                if (!patcher.Patch())
+                {
+                    MessageBox.Show(Properties.strings.PatchErrorMessageBox, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    Properties.Settings.Default.LastPatched = currentVersion;
+                    Properties.Settings.Default.Save();
+                }
+            }
         }
 
         private void RestoreFromTray()

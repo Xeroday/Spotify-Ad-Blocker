@@ -110,13 +110,12 @@
             resources.ApplyResources(this.WebsiteLink, "WebsiteLink");
             this.WebsiteLink.Name = "WebsiteLink";
             this.WebsiteLink.TabStop = true;
-            this.WebsiteLink.Text = global::EZBlocker.Properties.strings.WebsiteLinkText;
             this.WebsiteLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.WebsiteLink_LinkClicked);
             // 
             // Heartbeat
             // 
             this.Heartbeat.Enabled = true;
-            this.Heartbeat.Interval = 30000;
+            this.Heartbeat.Interval = 60000;
             this.Heartbeat.Tick += new System.EventHandler(this.Heartbeat_Tick);
             // 
             // VolumeMixerButton

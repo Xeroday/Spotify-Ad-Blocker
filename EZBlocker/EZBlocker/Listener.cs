@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Net;
 
 namespace EZBlocker
@@ -46,8 +45,6 @@ namespace EZBlocker
             {
                 Message = path;
             }
-
-            Debug.WriteLine(Message);
 
             byte[] buffer = System.Text.Encoding.UTF8.GetBytes("1");
             response.ContentLength64 = buffer.Length;
