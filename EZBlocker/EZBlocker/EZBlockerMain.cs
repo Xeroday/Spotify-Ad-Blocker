@@ -279,7 +279,6 @@ namespace EZBlocker
             string currentVersion = FileVersionInfo.GetVersionInfo(spotifyPath).FileVersion;
             if (!Properties.Settings.Default.LastPatched.Equals(currentVersion) || launch) // Always attempt to patch on launch
             {
-                Debug.WriteLine("Checking patch");
                 // MessageBox.Show("EZBlocker needs to modify Spotify.\r\n\r\nTo return to the original, right click the EZBlocker icon in your task tray and choose 'Remove Patch'.", "EZBlocker");
                 if (!patcher.Patch())
                 {
