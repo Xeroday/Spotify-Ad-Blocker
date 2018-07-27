@@ -215,6 +215,23 @@ namespace EZBlocker
                 return;
             }
 
+            // Patch Spotify
+            patcher = new SpotifyPatcher();
+            string currentVersion = FileVersionInfo.GetVersionInfo(spotifyPath).FileVersion;
+            if (!Properties.Settings.Default.LastPatched.Equals(currentVersion) || true) // Always attempt to patch
+            {
+                // MessageBox.Show("EZBlocker needs to modify Spotify.\r\n\r\nTo return to the original, right click the EZBlocker icon in your task tray and choose 'Remove Patch'.", "EZBlocker");
+                if (!patcher.Patch())
+                {
+                    MessageBox.Show(Properties.strings.PatchErrorMessageBox, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    Properties.Settings.Default.LastPatched = currentVersion;
+                    Properties.Settings.Default.Save();
+                }
+            }
+
             // Start Spotify and give EZBlocker higher priority
             try
             {
@@ -254,23 +271,6 @@ namespace EZBlocker
                 Properties.Settings.Default.Save();
             }
             a = new Analytics(Properties.Settings.Default.CID, Assembly.GetExecutingAssembly().GetName().Version.ToString());
-
-            // Patch Spotify
-            patcher = new SpotifyPatcher();
-            string currentVersion = FileVersionInfo.GetVersionInfo(spotifyPath).FileVersion;
-            if (!Properties.Settings.Default.LastPatched.Equals(currentVersion))
-            {
-                // MessageBox.Show("EZBlocker needs to modify Spotify.\r\n\r\nTo return to the original, right click the EZBlocker icon in your task tray and choose 'Remove Patch'.", "EZBlocker");
-                if (!patcher.Patch())
-                {
-                    MessageBox.Show(Properties.strings.PatchErrorMessageBox, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                else
-                {
-                    Properties.Settings.Default.LastPatched = currentVersion;
-                    Properties.Settings.Default.Save();
-                }
-            }
 
             // Start Spotify hook
             hook = new SpotifyHook();
