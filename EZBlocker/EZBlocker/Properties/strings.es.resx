@@ -118,122 +118,125 @@
 		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
 	</resheader>
 	<data name="BlockBannersCheckboxText" xml:space="preserve">
-    <value>Block Banner Ads</value>
+    <value>Bloquear Banners</value>
     <comment>On main form</comment>
   </data>
 	<data name="BlockBannersRestart" xml:space="preserve">
-    <value>You may need to restart Spotify or your computer for this setting to take effect.</value>
+    <value>Podría tener que reiniciar Spotify para que ésta configuración sea aplicada.</value>
     <comment>BlockBannersCheckbox</comment>
   </data>
 	<data name="BlockBannersUAC" xml:space="preserve">
-    <value>Enabling/Disabling this option requires Administrator privileges.
+    <value>Habilitar/Deshabilitar esta opción requiere privilegios de Administrador.
 
-Please reopen EZBlocker with "Run as Administrator".</value>
+Por favor, reabra EZBlocker con "Ejecutar como administrador".</value>
     <comment>BlockBannersCheckbox</comment>
   </data>
 	<data name="HiddenNotify" xml:space="preserve">
-    <value>EZBlocker is hidden. Double-click this icon to restore.</value>
+    <value>EZBlocker está oculto. Haga doble click en este icono para restaurar.</value>
     <comment>NotifyIcon</comment>
   </data>
 	<data name="OnExitMessageBox" xml:space="preserve">
-    <value>Spotify ads will not be muted if EZBlocker is not running.
+    <value>Los anuncios de Spotify no serán silenciados si EZBlocker no está siendo ejecutado.
 
-Are you sure you want to exit?</value>
+¿Seguro que desea salir?</value>
     <comment>OnFormClosing</comment>
   </data>
 	<data name="PatchErrorMessageBox" xml:space="preserve">
-    <value>Error patching Spotify. EZBlocker may not work.</value>
+    <value>Error parcheando Spotify. EZBlocker podría no funcionar.</value>
     <comment>On startup</comment>
   </data>
 	<data name="ReportProblemClipboard" xml:space="preserve">
-    <value>EZBlocker Version: {0}
-Spotify Version: {1}</value>
+    <value>Versión de EZBlocker: {0}
+Versión de Spotify: {1}</value>
     <comment>ReportProblemLink</comment>
   </data>
 	<data name="ReportProblemMessageBox" xml:space="preserve">
-    <value>Please leave a comment clearly describing your problem.
+    <value>Por favor deje un comentario describiendo su problema claramente.
 
-Paste this information (already copied to your clipboard):
+Pegue esta información (Ya ha sido copiada a su portapapeles):
 EZBlocker Version: {0}
 Spotify Version: {1}</value>
     <comment>ReportProblemLink</comment>
   </data>
 	<data name="SpotifyCheckboxText" xml:space="preserve">
-    <value>Start Spotify with EZBlocker</value>
+    <value>Iniciar Spotify con EZblocker</value>
     <comment>On main form</comment>
   </data>
 	<data name="SpotifyNotFoundMessageBox" xml:space="preserve">
-    <value>Spotify is not installed or you have the Windows Store version.
+    <value>Spotify no está instalado o tiene la versión de Microsoft Store.
 
-Click 'OK' to install the normal desktop version of Spotify.</value>
+Pulse 'OK' para instalar la versión de escritorio de Spotify.</value>
     <comment>On startup</comment>
   </data>
 	<data name="StartupCheckboxText" xml:space="preserve">
-    <value>Start EZBlocker on Login</value>
+    <value>Abrir EZBlocker al iniciar sesión</value>
     <comment>On main form</comment>
   </data>
 	<data name="StatusLabelLoadingText" xml:space="preserve">
-    <value>Loading...</value>
+    <value>Cargando...</value>
     <comment>On main form</comment>
   </data>
 	<data name="StatusMuting" xml:space="preserve">
-    <value>Muting:</value>
+    <value>Silenciando:</value>
     <comment>Status label</comment>
   </data>
 	<data name="StatusNotFound" xml:space="preserve">
-    <value>Spotify not found.</value>
+    <value>Spotify no encontrado.</value>
     <comment>Status label</comment>
   </data>
 	<data name="StatusPaused" xml:space="preserve">
-    <value>Spotify is paused</value>
+    <value>Spotify está pausado</value>
     <comment>Status label</comment>
   </data>
 	<data name="StatusPlaying" xml:space="preserve">
-    <value>Playing: </value>
+    <value>Reproduciendo: </value>
     <comment>Status label</comment>
   </data>
 	<data name="ToolStripExit" xml:space="preserve">
-    <value>Exit</value>
+    <value>Salir</value>
     <comment>In tray menu</comment>
   </data>
 	<data name="ToolStripOpen" xml:space="preserve">
-    <value>Open EZBlocker</value>
+    <value>Abrir EZBlocker</value>
     <comment>In tray menu</comment>
   </data>
 	<data name="ToolStripRemovePatch" xml:space="preserve">
-    <value>Remove Patch</value>
+    <value>Eliminar EZBlocker de Spotify</value>
     <comment>In tray menu</comment>
   </data>
 	<data name="ToolStripWebsite" xml:space="preserve">
-    <value>EZBlocker Website</value>
+    <value>Abrir web de EZBlocker</value>
     <comment>In tray menu</comment>
   </data>
 	<data name="UndoPatchFailMessageBox" xml:space="preserve">
-    <value>Failed to uninstall patch.</value>
+    <value>Error al eliminar EZBlocker de Spotify.</value>
     <comment>RemovePatch</comment>
   </data>
 	<data name="UndoPatchOKMessageBox" xml:space="preserve">
-    <value>EZBlocker patch uninstalled.</value>
+    <value>EZBlocker eliminado de Spotify.</value>
     <comment>RemovePatch</comment>
   </data>
 	<data name="UpgradeErrorMessageBox" xml:space="preserve">
-    <value>Error checking for update.</value>
+    <value>Error comprobando actualizaciones.</value>
     <comment>CheckUpdate</comment>
   </data>
 	<data name="UpgradeMessageBox" xml:space="preserve">
-    <value>There is a newer version of EZBlocker available. Would you like to upgrade?</value>
+    <value>Hay una nueva versión de EZBlocker disponible. ¿Querría actualizar?</value>
     <comment>CheckUpdate</comment>
   </data>
 	<data name="VolumeMixerButtonText" xml:space="preserve">
-    <value>Open Volume Control</value>
+    <value>Abrir control de volumen</value>
     <comment>On main form</comment>
   </data>
 	<data name="VolumeMixerOpenError" xml:space="preserve">
-    <value>Could not open Volume Mixer.</value>
+    <value>No se pudo abrir el mezclador de volumen.</value>
     <comment>VolumeMixerButton</comment>
   </data>
 	<data name="WebsiteLinkText" xml:space="preserve">
-    <value>Report Problem</value>
+    <value>Reportar problema</value>
     <comment>On main form</comment>
+  </data>
+	<data name="TranslatedByText" xml:space="preserve">
+    <value>Traducido por MiguelSBat</value>
   </data>
 </root>
