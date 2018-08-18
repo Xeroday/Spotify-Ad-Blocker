@@ -102,6 +102,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpotifyHook.cs" />
     <Compile Include="SpotifyPatcher.cs" />
+    <EmbeddedResource Include="EZBlockerMain.de.resx">
+      <DependentUpon>EZBlockerMain.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="EZBlockerMain.resx">
       <DependentUpon>EZBlockerMain.cs</DependentUpon>
       <SubType>Designer</SubType>
