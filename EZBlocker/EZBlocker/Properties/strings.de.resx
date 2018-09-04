@@ -132,7 +132,7 @@ Bitte starte EZBlocker mit "Als Administrator ausführen".</value>
     <comment>BlockBannersCheckbox</comment>
   </data>
   <data name="HiddenNotify" xml:space="preserve">
-    <value>EZBlocker ist verborgen. Doppelklicke auf dieses Icon zum Wiederherstellen.</value>
+    <value>EZBlocker ist verborgen. Klicke doppelt auf dieses Icon zum Wiederherstellen.</value>
     <comment>NotifyIcon</comment>
   </data>
   <data name="OnExitMessageBox" xml:space="preserve">
@@ -237,6 +237,6 @@ Klicke 'OK', um die normale Desktopversion zu installieren</value>
     <comment>On main form</comment>
   </data>
   <data name="TranslatedByText" xml:space="preserve">
-    <value>Übersetzt von bluegrams</value>
+    <value>Übersetzt von Bluegrams</value>
   </data>
 </root>
