@@ -191,29 +191,6 @@ namespace EZBlocker
                 Properties.Settings.Default.UpdateSettings = false;
                 Properties.Settings.Default.Save();
             }
-  
-            if (!File.Exists(spotifyPath))
-            {
-                if (MessageBox.Show(Properties.strings.SpotifyNotFoundMessageBox, "EZBlocker", MessageBoxButtons.OKCancel) == DialogResult.OK)
-                {
-                    try // Remove Windows Store version.
-                    {
-                        ProcessStartInfo startInfo = new ProcessStartInfo
-                        {
-                            FileName = "powershell.exe",
-                            Arguments = "-Command \"Get-AppxPackage *Spotify* | Remove-AppxPackage\""
-                        };
-                        var uninstall = Process.Start(startInfo);
-                        uninstall.WaitForExit();
-                    }
-                    catch (Exception ex) {
-                        Debug.WriteLine(ex);
-                    }
-                    Process.Start("https://download.scdn.co/SpotifySetup.exe");
-                }
-                Application.Exit();
-                return;
-            }
 
             // Start Spotify and give EZBlocker higher priority
             try
