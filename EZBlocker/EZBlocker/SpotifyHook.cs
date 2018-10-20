@@ -15,7 +15,6 @@ namespace EZBlocker
         public IntPtr Handle { get; private set; }
 
         private readonly Timer RefreshTimer;
-        private int SpotifyTolerance = 0;
         private float peak = 0f;
         private float lastPeak = 0f;
 
@@ -47,26 +46,24 @@ namespace EZBlocker
 
         public bool IsPlaying()
         {
-            return peak + lastPeak > 0;
+            return peak > 0 && lastPeak > 0;
         }
 
         public bool IsAdPlaying()
         {
             if (!WindowName.Equals("") && !WindowName.Equals("Drag") && IsPlaying())
             {
-                if (WindowName.Equals("Spotify") && SpotifyTolerance < 3) // Prevent user pausing Spotify from being detected as ad (PeakVolume needs time to adjust)
+                if (WindowName.Equals("Spotify")) // Prevent user pausing Spotify from being detected as ad (PeakVolume needs time to adjust)
                 {
-                    Debug.WriteLine("Tolerance " + SpotifyTolerance);
-                    SpotifyTolerance++;
-                    return false;
+                    Debug.WriteLine("Ad1: " + lastPeak.ToString() + " " + peak.ToString());
+                    return true;
                 }
                 else if (!WindowName.Contains(" - "))
                 {
-                    SpotifyTolerance = 0;
+                    Debug.WriteLine("Ad2: " + lastPeak.ToString() + " " + peak.ToString());
                     return true;
                 }
             }
-            SpotifyTolerance = 0;
             return false;
         }
 

@@ -106,10 +106,6 @@
       <DependentUpon>EZBlockerMain.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\strings.de.resx" />
-    <EmbeddedResource Include="Properties\strings.es.resx" />
-    <EmbeddedResource Include="Properties\strings.fr.resx" />
-    <EmbeddedResource Include="Properties\strings.pt.resx" />
     <EmbeddedResource Include="Properties\strings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>strings.Designer.cs</LastGenOutput>

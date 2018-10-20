@@ -49,7 +49,7 @@ namespace EZBlocker
             try {
                 if (hook.IsRunning())
                 {
-                    if (listener.Message.Equals("true"))
+                    if (hook.IsAdPlaying())
                     {
                         if (MainTimer.Interval != 1000) MainTimer.Interval = 1000;
                         if (!muted) Mute(true);
@@ -88,7 +88,7 @@ namespace EZBlocker
                             LogAction("/play/" + artist);
                         }
                     }
-                    else
+                    else if (hook.WindowName.Equals("Spotify"))
                     {
                         string message = Properties.strings.StatusPaused;
                         if (lastMessage != message)
@@ -176,7 +176,6 @@ namespace EZBlocker
          **/
         private void Heartbeat_Tick(object sender, EventArgs e)
         {
-            CheckPatch(false);
             if (DateTime.Now - lastRequest > TimeSpan.FromMinutes(5))
             {
                 LogAction("/heartbeat");
@@ -215,10 +214,6 @@ namespace EZBlocker
                 Application.Exit();
                 return;
             }
-
-            // Patch Spotify
-            patcher = new SpotifyPatcher();
-            CheckPatch(true);
 
             // Start Spotify and give EZBlocker higher priority
             try
@@ -263,9 +258,9 @@ namespace EZBlocker
             // Start Spotify hook
             hook = new SpotifyHook();
 
-            // Start EZBlocker listener
+            /* Start EZBlocker listener
             listener = new Listener();
-            Task.Run(() => listener.Listen());
+            Task.Run(() => listener.Listen()); */
 
             MainTimer.Enabled = true;
 
@@ -459,7 +454,6 @@ namespace EZBlocker
                     Properties.Settings.Default.Save();
                 }
             }
-            listener.Stop();
         }
 
         [DllImport("shell32.dll")]
