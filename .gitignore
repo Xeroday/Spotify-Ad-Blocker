@@ -40,6 +40,7 @@ build/
 *.tmp_proj
 *.log
 EZBlocker/.vs
+.vs
 *.vspscc
 *.vssscc
 .builds
