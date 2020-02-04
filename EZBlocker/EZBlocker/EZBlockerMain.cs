@@ -9,14 +9,12 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using Microsoft.Win32;
 using System.Threading.Tasks;
-using System.Collections.ObjectModel;
-using System.Globalization;
 
 namespace EZBlocker
 {
     public partial class Main : Form
     {
-        private bool muted = false;
+        private bool? muted = null;
         private string lastMessage = "";
         private ToolTip artistTooltip = new ToolTip();
 
@@ -32,7 +30,6 @@ namespace EZBlocker
         private DateTime lastRequest;
         private string lastAction = "";
         private SpotifyPatcher patcher;
-        private Listener listener;
         private SpotifyHook hook;
 
         public Main()
@@ -49,10 +46,12 @@ namespace EZBlocker
             try {
                 if (hook.IsRunning())
                 {
+                    muted = muted ?? AudioUtils.IsMuted(hook.VolumeControl.Control);
+
                     if (hook.IsAdPlaying())
                     {
                         if (MainTimer.Interval != 1000) MainTimer.Interval = 1000;
-                        if (!muted) Mute(true);
+                        if (muted == false) Mute(true);
                         if (!hook.IsPlaying())
                         {
                             AudioUtils.SendNextTrack(hook.Handle == IntPtr.Zero ? Handle : hook.Handle);
@@ -71,7 +70,7 @@ namespace EZBlocker
                     }
                     else if (hook.IsPlaying() && !hook.WindowName.Equals("Spotify")) // Normal music
                     {
-                        if (muted)
+                        if (muted == true)
                         {
                             Thread.Sleep(500); // Give extra time for ad to change out
                             Mute(false);
@@ -125,7 +124,7 @@ namespace EZBlocker
         private void Mute(bool mute)
         {
             AudioUtils.SetMute(hook.VolumeControl.Control, mute);
-            muted = AudioUtils.IsMuted(hook.VolumeControl.Control) != null ? (bool)AudioUtils.IsMuted(hook.VolumeControl.Control) : false;
+            muted = AudioUtils.IsMuted(hook.VolumeControl.Control);
         }
 
         private string Truncate(string name)
