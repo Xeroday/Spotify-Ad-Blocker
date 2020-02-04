@@ -20,28 +20,30 @@ namespace EZBlocker
 
         public SpotifyHook()
         {
-            RefreshTimer = new Timer((e) =>
+            RefreshTimer = new Timer(RefreshTimer_Tick, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(500));
+        }
+
+        private void RefreshTimer_Tick(object state)
+        {
+            if (IsRunning())
             {
-                if (IsRunning())
+                WindowName = Spotify.MainWindowTitle;
+                Handle = Spotify.MainWindowHandle;
+                if (VolumeControl == null)
                 {
-                    WindowName = Spotify.MainWindowTitle;
-                    Handle = Spotify.MainWindowHandle;
-                    if (VolumeControl == null)
-                    {
-                        VolumeControl = AudioUtils.GetVolumeControl(Children);
-                    }
-                    else
-                    {
-                        lastPeak = peak;
-                        peak = AudioUtils.GetPeakVolume(VolumeControl.Control);
-                    }
+                    VolumeControl = AudioUtils.GetVolumeControl(Children);
                 }
                 else
                 {
-                    ClearHooks();
-                    HookSpotify();
+                    lastPeak = peak;
+                    peak = AudioUtils.GetPeakVolume(VolumeControl.Control);
                 }
-            }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(500));
+            }
+            else
+            {
+                ClearHooks();
+                HookSpotify();
+            }
         }
 
         public bool IsPlaying()
