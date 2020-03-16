@@ -36,6 +36,7 @@
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.websiteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.undoPatchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.separatorToolStripMenuItem = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.WebsiteLink = new System.Windows.Forms.LinkLabel();
@@ -45,6 +46,7 @@
             this.BlockBannersCheckbox = new System.Windows.Forms.CheckBox();
             this.StartupCheckbox = new System.Windows.Forms.CheckBox();
             this.SpotifyCheckbox = new System.Windows.Forms.CheckBox();
+            this.unMuteSpotifyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.NotifyIconContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -67,6 +69,8 @@
             this.openToolStripMenuItem,
             this.websiteToolStripMenuItem,
             this.undoPatchToolStripMenuItem,
+            this.toolStripMenuItem1,
+            this.unMuteSpotifyToolStripMenuItem,
             this.separatorToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.NotifyIconContextMenu.Name = "NotifyIconContextMenu";
@@ -92,6 +96,11 @@
             resources.ApplyResources(this.undoPatchToolStripMenuItem, "undoPatchToolStripMenuItem");
             this.undoPatchToolStripMenuItem.Text = global::EZBlocker.Properties.strings.ToolStripRemovePatch;
             this.undoPatchToolStripMenuItem.Click += new System.EventHandler(this.undoPatchToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            resources.ApplyResources(this.toolStripMenuItem1, "toolStripMenuItem1");
             // 
             // separatorToolStripMenuItem
             // 
@@ -155,6 +164,12 @@
             this.SpotifyCheckbox.UseVisualStyleBackColor = true;
             this.SpotifyCheckbox.CheckedChanged += new System.EventHandler(this.SpotifyCheckbox_CheckedChanged);
             // 
+            // unMuteSpotifyToolStripMenuItem
+            // 
+            this.unMuteSpotifyToolStripMenuItem.Name = "unMuteSpotifyToolStripMenuItem";
+            resources.ApplyResources(this.unMuteSpotifyToolStripMenuItem, "unMuteSpotifyToolStripMenuItem");
+            this.unMuteSpotifyToolStripMenuItem.Click += new System.EventHandler(this.unMuteSpotifyToolStripMenuItem_Click);
+            // 
             // Main
             // 
             resources.ApplyResources(this, "$this");
@@ -193,6 +208,8 @@
         private System.Windows.Forms.ToolStripMenuItem websiteToolStripMenuItem;
         private System.Windows.Forms.CheckBox SpotifyCheckbox;
         private System.Windows.Forms.ToolStripMenuItem undoPatchToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem unMuteSpotifyToolStripMenuItem;
     }
 }
 

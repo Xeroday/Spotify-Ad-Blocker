@@ -16,7 +16,17 @@ namespace EZBlocker
 {
     public partial class Main : Form
     {
-        private bool muted = false;
+        private bool _muted = false;
+        private bool muted {
+            get => _muted;
+            set {
+                if (_muted != value) {
+                    _muted = value;
+                    unMuteSpotifyToolStripMenuItem.Checked = value;
+                }
+            }
+        }
+
         private string lastMessage = "";
         private ToolTip artistTooltip = new ToolTip();
 
@@ -34,7 +44,7 @@ namespace EZBlocker
         private SpotifyPatcher patcher;
         private Listener listener;
         private SpotifyHook hook;
-
+  
         public Main()
         {
             Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
@@ -435,5 +445,9 @@ namespace EZBlocker
 
         [DllImport("shell32.dll")]
         public static extern bool IsUserAnAdmin();
+
+        private void unMuteSpotifyToolStripMenuItem_Click(object sender, EventArgs e) {
+            Mute(!muted);
+        }
     }
 }
