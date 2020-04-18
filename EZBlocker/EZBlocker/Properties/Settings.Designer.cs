@@ -82,5 +82,17 @@ namespace EZBlocker.Properties {
                 this["LastPatched"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SpotifyPath {
+            get {
+                return ((string)(this["SpotifyPath"]));
+            }
+            set {
+                this["SpotifyPath"] = value;
+            }
+        }
     }
 }

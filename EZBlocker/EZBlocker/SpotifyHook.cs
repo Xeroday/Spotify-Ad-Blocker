@@ -41,7 +41,7 @@ namespace EZBlocker
                     ClearHooks();
                     HookSpotify();
                 }
-            }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(500));
+            }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(250));
         }
 
         public bool IsPlaying()
@@ -53,14 +53,9 @@ namespace EZBlocker
         {
             if (!WindowName.Equals("") && !WindowName.Equals("Drag") && IsPlaying())
             {
-                if (WindowName.Equals("Spotify")) // Prevent user pausing Spotify from being detected as ad (PeakVolume needs time to adjust)
+                if (WindowName.Equals("Advertisement"))
                 {
                     Debug.WriteLine("Ad1: " + lastPeak.ToString() + " " + peak.ToString());
-                    return true;
-                }
-                else if (!WindowName.Contains(" - "))
-                {
-                    Debug.WriteLine("Ad2: " + lastPeak.ToString() + " " + peak.ToString());
                     return true;
                 }
             }
