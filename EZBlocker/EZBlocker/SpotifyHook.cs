@@ -41,7 +41,7 @@ namespace EZBlocker
                     ClearHooks();
                     HookSpotify();
                 }
-            }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(250));
+            }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(100));
         }
 
         public bool IsPlaying()
@@ -53,7 +53,7 @@ namespace EZBlocker
         {
             if (!WindowName.Equals("") && !WindowName.Equals("Drag") && IsPlaying())
             {
-                if (WindowName.Equals("Advertisement"))
+                if (WindowName.Equals("Advertisement") || WindowName.Equals("Spotify"))
                 {
                     Debug.WriteLine("Ad1: " + lastPeak.ToString() + " " + peak.ToString());
                     return true;

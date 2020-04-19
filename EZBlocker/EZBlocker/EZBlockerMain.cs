@@ -75,7 +75,7 @@ namespace EZBlocker
                             Thread.Sleep(500); // Give extra time for ad to change out
                             Mute(false);
                         }
-                        if (MainTimer.Interval != 400) MainTimer.Interval = 400;
+                        if (MainTimer.Interval != 200) MainTimer.Interval = 200;
 
                         string artist = hook.GetArtist();
                         string message = Properties.strings.StatusPlaying + " " + Truncate(artist);
