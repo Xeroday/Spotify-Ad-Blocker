@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace EZBlocker
@@ -18,7 +17,7 @@ namespace EZBlocker
 
         public static void SendNextTrack(IntPtr target)
         {
-            SendMessage(target, WM_APPCOMMAND, IntPtr.Zero, (IntPtr)MEDIA_PLAYPAUSE);
+            SendMessage(target, WM_APPCOMMAND, IntPtr.Zero, (IntPtr)MEDIA_NEXTTRACK);
         }
 
         public static bool? IsMuted(ISimpleAudioVolume v)
@@ -263,6 +262,19 @@ namespace EZBlocker
         private interface IAudioMeterInformation
         {
             float GetPeakValue(out float pfPeak);
+        }
+
+        // Integrate with System Media Transport Controls
+        [Guid("99FA3FF4-1742-42A6-902E-087D41F965EC"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        private interface ISystemMediaTransportControls
+        {
+            int get_IsNextEnabled(out bool value);
+        }
+
+        [Guid("ddb0472d-c911-4a1f-86d9-dc3d71a95f5a"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        private interface ISystemMediaTransportControlsInterop
+        {
+            int GetForWindow(IntPtr appWindow, ref Guid iid, [MarshalAs(UnmanagedType.IUnknown)] out object mediaTransportControl);
         }
 
         // SendMessage for media controls

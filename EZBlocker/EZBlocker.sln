@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2042
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EZBlocker", "EZBlocker\EZBlocker.csproj", "{32C0D43C-E0F1-46D6-8661-EF5BE2566BA8}"
 EndProject

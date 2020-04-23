@@ -51,13 +51,10 @@ namespace EZBlocker
 
         public bool IsAdPlaying()
         {
-            if (!WindowName.Equals("") && !WindowName.Equals("Drag") && IsPlaying())
+            if ((WindowName.Equals("Advertisement") || !WindowName.Contains(" - ")) && !WindowName.Equals("") && !WindowName.Equals("Drag") && IsPlaying())
             {
-                if (WindowName.Equals("Advertisement") || WindowName.Equals("Spotify"))
-                {
-                    Debug.WriteLine("Ad1: " + lastPeak.ToString() + " " + peak.ToString());
-                    return true;
-                }
+                Debug.WriteLine("Ad: " + lastPeak.ToString() + " " + peak.ToString());
+                return true;
             }
             return false;
         }

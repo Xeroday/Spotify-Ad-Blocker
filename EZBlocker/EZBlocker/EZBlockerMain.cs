@@ -196,6 +196,9 @@ namespace EZBlocker
             {
                 Properties.Settings.Default.SpotifyPath = spotifyPath;
                 Properties.Settings.Default.Save();
+            } else
+            {
+                spotifyPath = Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe";
             }
 
             // Start Spotify and give EZBlocker higher priority
