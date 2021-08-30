@@ -37,6 +37,10 @@ namespace EZBlocker
 
         public Main()
         {
+            // Set SystemEvents class to recieve windows shutdown update
+            SystemEvents.SessionEnding += new SessionEndingEventHandler(SystemEvents_ShuttingDown);
+
+            // Run application thread
             Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
             InitializeComponent();
         }
@@ -484,6 +488,11 @@ namespace EZBlocker
 
         [DllImport("shell32.dll")]
         public static extern bool IsUserAnAdmin();
-
+        
+        // Stop on windows stop
+        static void SystemEvents_ShuttingDown(onject sender, EventArgs e)
+ 		{
+             Close();
+ 		}
     }
 }
