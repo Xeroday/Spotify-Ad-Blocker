@@ -1,9 +1,11 @@
-
+### **Disclaimer:**
+Spotify ad blocking is agains tos and is 3 years old, it will probably be detected by spotify and you mqy be banned.
+However muting the ads is not against the tos and just mutes the spotify application in the volume mixer.
 
 EZBlocker
 =========
 
-EZBlocker is a Spotify Ad Blocker written in C# for Windows 7/8/10. The goal for EZBlocker is to be the most reliable ad blocker for Spotify.
+EZBlocker is a Spotify Ad Blocker/Muter written in C# for Windows 7/8/10. The goal for EZBlocker is to be the most reliable ad blocker for Spotify.
 
 When an advertisement is playing, EZBlocker will mute Spotify until it's over.
 
@@ -35,7 +37,8 @@ More data could probably be extracted through the web worker, but I haven't had 
 
 
 ## Changelog (Major releases only):
-
+- V 1.8 (August 28, 2021):
+  - Added some quality of life features ex. manually settings the spotify.exe (so it can auto open properly).
 - V 1.7 (July 22, 2018):
   - Almost a complete re-write of the application (lighter, more performant, cleaner code)
   - New Spotify ad detection and muting logic after Spotify's shutdown of its local API
@@ -53,3 +56,8 @@ The following are contributors to this goal:
 
   [1]: http://www.ericzhang.me/dl/?file=EZBlocker.php
   [2]: http://www.ericzhang.me/projects/spotify-ad-blocker-ezblocker/
+
+## Similar projects on other platforms
+
+- **macOS** [MuteSpotifyAds](https://github.com/simonmeusel/MuteSpotifyAds) (auto skip ads feature available)
+- **Linux** [Spotify-AdKiller](https://github.com/SecUpwN/Spotify-AdKiller)
