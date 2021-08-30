@@ -490,9 +490,9 @@ namespace EZBlocker
         public static extern bool IsUserAnAdmin();
         
         // Stop on windows stop
-        static void SystemEvents_ShuttingDown(onject sender, EventArgs e)
+        static void SystemEvents_ShuttingDown(object sender, EventArgs e)
  		{
-             Close();
+            Application.Exit();
  		}
     }
 }
