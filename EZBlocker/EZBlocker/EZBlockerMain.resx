@@ -7405,7 +7405,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;WebsiteLink.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>9</value>
   </data>
   <metadata name="Heartbeat.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>242, 16</value>
@@ -7435,7 +7435,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;VolumeMixerButton.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="StatusLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -7468,7 +7468,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;StatusLabel.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>8</value>
   </data>
   <data name="BlockBannersCheckbox.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -7498,7 +7498,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;BlockBannersCheckbox.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>7</value>
   </data>
   <data name="StartupCheckbox.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -7528,7 +7528,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;StartupCheckbox.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>6</value>
   </data>
   <data name="SpotifyCheckbox.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -7558,7 +7558,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;SpotifyCheckbox.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="OpenSpotifyButton.Location" type="System.Drawing.Point, System.Drawing">
     <value>132, 41</value>
@@ -7579,7 +7579,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;OpenSpotifyButton.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="SettingsButton.Location" type="System.Drawing.Point, System.Drawing">
     <value>154, 63</value>
@@ -7600,6 +7600,30 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;SettingsButton.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="CreditsButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>166, 85</value>
+  </data>
+  <data name="CreditsButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>47, 23</value>
+  </data>
+  <data name="CreditsButton.TabIndex" type="System.Int32, mscorlib">
+    <value>15</value>
+  </data>
+  <data name="CreditsButton.Text" xml:space="preserve">
+    <value>Credits</value>
+  </data>
+  <data name="&gt;&gt;CreditsButton.Name" xml:space="preserve">
+    <value>CreditsButton</value>
+  </data>
+  <data name="&gt;&gt;CreditsButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;CreditsButton.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;CreditsButton.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">

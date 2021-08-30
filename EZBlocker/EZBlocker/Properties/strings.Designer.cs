@@ -99,6 +99,24 @@ namespace EZBlocker.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not open credits window.
+        /// </summary>
+        internal static string CreditsButtonError {
+            get {
+                return ResourceManager.GetString("CreditsButtonError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Credits.
+        /// </summary>
+        internal static string CreditsButtonText {
+            get {
+                return ResourceManager.GetString("CreditsButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reset to default path.
         /// </summary>
         internal static string DefaultPathButtonText {

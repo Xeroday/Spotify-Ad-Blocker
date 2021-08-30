@@ -47,6 +47,7 @@
             this.SpotifyCheckbox = new System.Windows.Forms.CheckBox();
             this.OpenSpotifyButton = new System.Windows.Forms.Button();
             this.SettingsButton = new System.Windows.Forms.Button();
+            this.CreditsButton = new System.Windows.Forms.Button();
             this.NotifyIconContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -173,10 +174,19 @@
             this.SettingsButton.UseVisualStyleBackColor = true;
             this.SettingsButton.Click += new System.EventHandler(this.SettingsButton_Click);
             // 
+            // CreditsButton
+            // 
+            resources.ApplyResources(this.CreditsButton, "CreditsButton");
+            this.CreditsButton.Name = "CreditsButton";
+            this.CreditsButton.Text = global::EZBlocker.Properties.strings.CreditsButtonText;
+            this.CreditsButton.UseVisualStyleBackColor = true;
+            this.CreditsButton.Click += new System.EventHandler(this.CreditsButton_Click);
+            // 
             // Main
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.CreditsButton);
             this.Controls.Add(this.SettingsButton);
             this.Controls.Add(this.VolumeMixerButton);
             this.Controls.Add(this.OpenSpotifyButton);
@@ -215,6 +225,7 @@
         private System.Windows.Forms.ToolStripMenuItem undoPatchToolStripMenuItem;
         private System.Windows.Forms.Button OpenSpotifyButton;
         private System.Windows.Forms.Button SettingsButton;
+        private System.Windows.Forms.Button CreditsButton;
     }
 }
 

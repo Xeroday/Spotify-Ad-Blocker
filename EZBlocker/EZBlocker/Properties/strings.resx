@@ -135,6 +135,14 @@ Please reopen EZBlocker with "Run as Administrator".</value>
     <value>Could not validate executable.</value>
     <comment>FailedExeValidation</comment>
   </data>
+  <data name="CreditsButtonError" xml:space="preserve">
+    <value>Could not open credits window</value>
+    <comment>CreditsButton</comment>
+  </data>
+  <data name="CreditsButtonText" xml:space="preserve">
+    <value>Credits</value>
+    <comment>On main form</comment>
+  </data>
   <data name="DefaultPathButtonText" xml:space="preserve">
     <value>Reset to default path</value>
     <comment>On Settings Form</comment>

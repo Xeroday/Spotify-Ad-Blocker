@@ -314,8 +314,15 @@ namespace EZBlocker
             if (this.WindowState == FormWindowState.Minimized)
             {
                 this.ShowInTaskbar = false;
+                //this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
                 this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
-                Notify(Properties.strings.HiddenNotify);
+                if (!Properties.Settings.Default.UserEducated2)
+                {
+                    Notify(Properties.strings.HiddenNotify);
+                    Properties.Settings.Default.UserEducated2 = true;
+                    Properties.Settings.Default.Save();
+                }
+
             }
         }
 
@@ -504,5 +511,10 @@ namespace EZBlocker
  		{
             Application.Exit();
  		}
+
+        private void CreditsButton_Click(object sender, EventArgs e)
+        {
+            //here
+        }
     }
 }
