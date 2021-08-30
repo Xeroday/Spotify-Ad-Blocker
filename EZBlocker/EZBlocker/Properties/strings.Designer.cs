@@ -19,7 +19,7 @@ namespace EZBlocker.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class strings {
@@ -90,6 +90,42 @@ namespace EZBlocker.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not validate executable..
+        /// </summary>
+        internal static string CouldNotValidateExeError {
+            get {
+                return ResourceManager.GetString("CouldNotValidateExeError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset to default path.
+        /// </summary>
+        internal static string DefaultPathButtonText {
+            get {
+                return ResourceManager.GetString("DefaultPathButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could Not Open File Selector.
+        /// </summary>
+        internal static string FileSelectorError {
+            get {
+                return ResourceManager.GetString("FileSelectorError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Browse....
+        /// </summary>
+        internal static string FileSelectorText {
+            get {
+                return ResourceManager.GetString("FileSelectorText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to EZBlocker is hidden. Double-click this icon to restore..
         /// </summary>
         internal static string HiddenNotify {
@@ -106,6 +142,24 @@ namespace EZBlocker.Properties {
         internal static string OnExitMessageBox {
             get {
                 return ResourceManager.GetString("OnExitMessageBox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Spotify.
+        /// </summary>
+        internal static string OpenSpotifyButtonText {
+            get {
+                return ResourceManager.GetString("OpenSpotifyButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not open Spotify.
+        /// </summary>
+        internal static string OpenSpotifyError {
+            get {
+                return ResourceManager.GetString("OpenSpotifyError", resourceCulture);
             }
         }
         
@@ -138,6 +192,42 @@ namespace EZBlocker.Properties {
         internal static string ReportProblemMessageBox {
             get {
                 return ResourceManager.GetString("ReportProblemMessageBox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could Not Open Settings Menu.
+        /// </summary>
+        internal static string SettingsButtonError {
+            get {
+                return ResourceManager.GetString("SettingsButtonError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        internal static string SettingsButtonText {
+            get {
+                return ResourceManager.GetString("SettingsButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to EZBlocker - Settings.
+        /// </summary>
+        internal static string SettingsMenuText {
+            get {
+                return ResourceManager.GetString("SettingsMenuText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Spotify.exe Location:.
+        /// </summary>
+        internal static string Spotify_exeLocationText {
+            get {
+                return ResourceManager.GetString("Spotify.exeLocationText", resourceCulture);
             }
         }
         
@@ -212,6 +302,24 @@ namespace EZBlocker.Properties {
         internal static string StatusPlaying {
             get {
                 return ResourceManager.GetString("StatusPlaying", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not open the exe, did you select the right one?.
+        /// </summary>
+        internal static string TestSpotifyExeButtonError {
+            get {
+                return ResourceManager.GetString("TestSpotifyExeButtonError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test the executable.
+        /// </summary>
+        internal static string TestSpotifyExeButtonText {
+            get {
+                return ResourceManager.GetString("TestSpotifyExeButtonText", resourceCulture);
             }
         }
         
@@ -293,6 +401,15 @@ namespace EZBlocker.Properties {
         internal static string UpgradeMessageBox {
             get {
                 return ResourceManager.GetString("UpgradeMessageBox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Valid executable!.
+        /// </summary>
+        internal static string ValidExecutable {
+            get {
+                return ResourceManager.GetString("ValidExecutable", resourceCulture);
             }
         }
         

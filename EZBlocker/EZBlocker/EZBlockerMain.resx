@@ -127,8 +127,27 @@
     <value>348, 16</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="openToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>241, 22</value>
+  </data>
+  <data name="websiteToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>241, 22</value>
+  </data>
+  <data name="undoPatchToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>241, 22</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="undoPatchToolStripMenuItem.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="separatorToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>238, 6</value>
+  </data>
+  <data name="exitToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>241, 22</value>
+  </data>
   <data name="NotifyIconContextMenu.Size" type="System.Drawing.Size, System.Drawing">
-    <value>319, 122</value>
+    <value>242, 98</value>
   </data>
   <data name="&gt;&gt;NotifyIconContextMenu.Name" xml:space="preserve">
     <value>NotifyIconContextMenu</value>
@@ -7348,27 +7367,8 @@
   <data name="NotifyIcon.Text" xml:space="preserve">
     <value>EZBlocker</value>
   </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="NotifyIcon.Visible" type="System.Boolean, mscorlib">
     <value>True</value>
-  </data>
-  <data name="openToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>318, 28</value>
-  </data>
-  <data name="websiteToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>318, 28</value>
-  </data>
-  <data name="undoPatchToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>318, 28</value>
-  </data>
-  <data name="undoPatchToolStripMenuItem.Visible" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="separatorToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>315, 6</value>
-  </data>
-  <data name="exitToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>318, 28</value>
   </data>
   <data name="WebsiteLink.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -7381,16 +7381,13 @@
     <value>NoControl</value>
   </data>
   <data name="WebsiteLink.Location" type="System.Drawing.Point, System.Drawing">
-    <value>173, 134</value>
-  </data>
-  <data name="WebsiteLink.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 0, 4, 0</value>
+    <value>136, 109</value>
   </data>
   <data name="WebsiteLink.RightToLeft" type="System.Windows.Forms.RightToLeft, System.Windows.Forms">
     <value>Yes</value>
   </data>
   <data name="WebsiteLink.Size" type="System.Drawing.Size, System.Drawing">
-    <value>113, 18</value>
+    <value>80, 13</value>
   </data>
   <data name="WebsiteLink.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -7408,7 +7405,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;WebsiteLink.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>8</value>
   </data>
   <metadata name="Heartbeat.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>242, 16</value>
@@ -7420,13 +7417,10 @@
     <value>NoControl</value>
   </data>
   <data name="VolumeMixerButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>16, 7</value>
-  </data>
-  <data name="VolumeMixerButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
+    <value>13, 6</value>
   </data>
   <data name="VolumeMixerButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>267, 44</value>
+    <value>200, 36</value>
   </data>
   <data name="VolumeMixerButton.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -7441,7 +7435,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;VolumeMixerButton.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>2</value>
   </data>
   <data name="StatusLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -7453,13 +7447,10 @@
     <value>NoControl</value>
   </data>
   <data name="StatusLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 134</value>
-  </data>
-  <data name="StatusLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 0, 4, 0</value>
+    <value>10, 109</value>
   </data>
   <data name="StatusLabel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>72, 18</value>
+    <value>54, 13</value>
   </data>
   <data name="StatusLabel.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
@@ -7477,7 +7468,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;StatusLabel.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>7</value>
   </data>
   <data name="BlockBannersCheckbox.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -7489,13 +7480,10 @@
     <value>NoControl</value>
   </data>
   <data name="BlockBannersCheckbox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>16, 59</value>
-  </data>
-  <data name="BlockBannersCheckbox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
+    <value>14, 48</value>
   </data>
   <data name="BlockBannersCheckbox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>148, 22</value>
+    <value>111, 17</value>
   </data>
   <data name="BlockBannersCheckbox.TabIndex" type="System.Int32, mscorlib">
     <value>10</value>
@@ -7510,7 +7498,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;BlockBannersCheckbox.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>6</value>
   </data>
   <data name="StartupCheckbox.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -7522,13 +7510,10 @@
     <value>NoControl</value>
   </data>
   <data name="StartupCheckbox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>16, 83</value>
-  </data>
-  <data name="StartupCheckbox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
+    <value>14, 67</value>
   </data>
   <data name="StartupCheckbox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>196, 22</value>
+    <value>145, 17</value>
   </data>
   <data name="StartupCheckbox.TabIndex" type="System.Int32, mscorlib">
     <value>11</value>
@@ -7543,7 +7528,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;StartupCheckbox.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>5</value>
   </data>
   <data name="SpotifyCheckbox.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -7555,13 +7540,10 @@
     <value>NoControl</value>
   </data>
   <data name="SpotifyCheckbox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>16, 108</value>
-  </data>
-  <data name="SpotifyCheckbox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
+    <value>14, 88</value>
   </data>
   <data name="SpotifyCheckbox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>214, 22</value>
+    <value>158, 17</value>
   </data>
   <data name="SpotifyCheckbox.TabIndex" type="System.Int32, mscorlib">
     <value>12</value>
@@ -7576,16 +7558,58 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;SpotifyCheckbox.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="OpenSpotifyButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>132, 41</value>
+  </data>
+  <data name="OpenSpotifyButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>81, 23</value>
+  </data>
+  <data name="OpenSpotifyButton.TabIndex" type="System.Int32, mscorlib">
+    <value>13</value>
+  </data>
+  <data name="&gt;&gt;OpenSpotifyButton.Name" xml:space="preserve">
+    <value>OpenSpotifyButton</value>
+  </data>
+  <data name="&gt;&gt;OpenSpotifyButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;OpenSpotifyButton.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;OpenSpotifyButton.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="SettingsButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>154, 63</value>
+  </data>
+  <data name="SettingsButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>59, 23</value>
+  </data>
+  <data name="SettingsButton.TabIndex" type="System.Int32, mscorlib">
+    <value>14</value>
+  </data>
+  <data name="&gt;&gt;SettingsButton.Name" xml:space="preserve">
+    <value>SettingsButton</value>
+  </data>
+  <data name="&gt;&gt;SettingsButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;SettingsButton.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;SettingsButton.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>8, 16</value>
+    <value>6, 13</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>291, 163</value>
+    <value>224, 132</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -14795,9 +14819,6 @@
         AAAAAAAAAAAAAAAAAACAAQAAwAcAAIADAACAAQAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAIAB
         AADAAwAA4AcAAPAPAAA=
 </value>
-  </data>
-  <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
   </data>
   <data name="$this.RightToLeftLayout" type="System.Boolean, mscorlib">
     <value>True</value>

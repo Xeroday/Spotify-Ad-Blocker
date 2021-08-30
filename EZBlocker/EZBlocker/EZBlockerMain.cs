@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Globalization;
 
+
 namespace EZBlocker
 {
     public partial class Main : Form
@@ -45,7 +46,8 @@ namespace EZBlocker
          **/
         private void MainTimer_Tick(object sender, EventArgs e)
         {
-            try {
+            try
+            {
                 if (hook.IsRunning())
                 {
                     if (hook.IsAdPlaying())
@@ -115,7 +117,7 @@ namespace EZBlocker
                 Debug.WriteLine(ex);
             }
         }
-       
+
         /**
          * Mutes/Unmutes Spotify.
          
@@ -158,7 +160,7 @@ namespace EZBlocker
             }
             catch (Exception)
             {
-                MessageBox.Show(Properties.strings.UpgradeErrorMessageBox, "EZBlocker");
+                AutoClosingMessageBox.Show(Properties.strings.UpgradeErrorMessageBox + " (Closing in 3 seconds.)", "EZBlocker", 3000);
             }
         }
 
@@ -196,7 +198,8 @@ namespace EZBlocker
             {
                 Properties.Settings.Default.SpotifyPath = spotifyPath;
                 Properties.Settings.Default.Save();
-            } else
+            }
+            else
             {
                 spotifyPath = Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe";
             }
@@ -210,7 +213,7 @@ namespace EZBlocker
                     Process.Start(Properties.Settings.Default.SpotifyPath);
                 }
             }
-            catch (Exception) {}
+            catch (Exception) { }
 
             // Set up UI
             if (File.Exists(hostsPath))
@@ -232,7 +235,7 @@ namespace EZBlocker
                 }
             }
             SpotifyCheckbox.Checked = Properties.Settings.Default.StartSpotify;
-            
+
             // Set up Analytics
             if (String.IsNullOrEmpty(Properties.Settings.Default.CID))
             {
@@ -255,7 +258,7 @@ namespace EZBlocker
             Task.Run(() => CheckUpdate());
         }
 
-        private string GetSpotifyPath()
+        public static string GetSpotifyPath()
         {
             foreach (Process p in Process.GetProcessesByName("spotify"))
             {
@@ -273,7 +276,7 @@ namespace EZBlocker
             this.WindowState = FormWindowState.Normal;
             this.ShowInTaskbar = true;
         }
-        
+
         private void Notify(String message)
         {
             NotifyIcon.ShowBalloonTip(5000, "EZBlocker", message, ToolTipIcon.None);
@@ -379,6 +382,19 @@ namespace EZBlocker
             }
         }
 
+        private void OpenSpotifyButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Process.Start(Properties.Settings.Default.SpotifyPath);
+                LogAction("/button/startedSpotify");
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(Properties.strings.OpenSpotifyError, "EZBlocker");
+            }
+        }
+
         private void WebsiteLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             if (File.Exists(Properties.Settings.Default.SpotifyPath))
@@ -420,6 +436,7 @@ namespace EZBlocker
             }
         }
 
+
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             if (!MainTimer.Enabled) return; // Still setting up UI
@@ -439,7 +456,34 @@ namespace EZBlocker
             }
         }
 
+        // Open Settings Menu
+        private SettingsMenu settingsMenu;
+
+        private void SettingsButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //open settings menu
+                if (settingsMenu == null)
+                {
+                    //only open if it is not currently open
+                    settingsMenu = new SettingsMenu();
+                    settingsMenu.Show();
+                }
+                settingsMenu.WindowState = System.Windows.Forms.FormWindowState.Normal;
+                settingsMenu.Focus();
+                settingsMenu.Show();
+
+                LogAction("/button/openSettings");
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(Properties.strings.SettingsButtonError, "EZBlocker");
+            }
+        }
+
         [DllImport("shell32.dll")]
         public static extern bool IsUserAnAdmin();
+
     }
 }

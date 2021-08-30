@@ -45,6 +45,8 @@
             this.BlockBannersCheckbox = new System.Windows.Forms.CheckBox();
             this.StartupCheckbox = new System.Windows.Forms.CheckBox();
             this.SpotifyCheckbox = new System.Windows.Forms.CheckBox();
+            this.OpenSpotifyButton = new System.Windows.Forms.Button();
+            this.SettingsButton = new System.Windows.Forms.Button();
             this.NotifyIconContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -155,15 +157,33 @@
             this.SpotifyCheckbox.UseVisualStyleBackColor = true;
             this.SpotifyCheckbox.CheckedChanged += new System.EventHandler(this.SpotifyCheckbox_CheckedChanged);
             // 
+            // OpenSpotifyButton
+            // 
+            resources.ApplyResources(this.OpenSpotifyButton, "OpenSpotifyButton");
+            this.OpenSpotifyButton.Name = "OpenSpotifyButton";
+            this.OpenSpotifyButton.Text = global::EZBlocker.Properties.strings.OpenSpotifyButtonText;
+            this.OpenSpotifyButton.UseVisualStyleBackColor = true;
+            this.OpenSpotifyButton.Click += new System.EventHandler(this.OpenSpotifyButton_Click);
+            // 
+            // SettingsButton
+            // 
+            resources.ApplyResources(this.SettingsButton, "SettingsButton");
+            this.SettingsButton.Name = "SettingsButton";
+            this.SettingsButton.Text = global::EZBlocker.Properties.strings.SettingsButtonText;
+            this.SettingsButton.UseVisualStyleBackColor = true;
+            this.SettingsButton.Click += new System.EventHandler(this.SettingsButton_Click);
+            // 
             // Main
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.SettingsButton);
+            this.Controls.Add(this.VolumeMixerButton);
+            this.Controls.Add(this.OpenSpotifyButton);
             this.Controls.Add(this.SpotifyCheckbox);
             this.Controls.Add(this.StartupCheckbox);
             this.Controls.Add(this.BlockBannersCheckbox);
             this.Controls.Add(this.StatusLabel);
-            this.Controls.Add(this.VolumeMixerButton);
             this.Controls.Add(this.WebsiteLink);
             this.Cursor = System.Windows.Forms.Cursors.Default;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -193,6 +213,8 @@
         private System.Windows.Forms.ToolStripMenuItem websiteToolStripMenuItem;
         private System.Windows.Forms.CheckBox SpotifyCheckbox;
         private System.Windows.Forms.ToolStripMenuItem undoPatchToolStripMenuItem;
+        private System.Windows.Forms.Button OpenSpotifyButton;
+        private System.Windows.Forms.Button SettingsButton;
     }
 }
 
