@@ -1,0 +1,6 @@
+to credit
+-Xeroday Base Program
+-Robert3141 Close on shutdown
+-OpenByteDev Unmute Spotify on startup
+-cfvescovo Add "Similar projects on other platforms" in README
+-Sogolembo Notification on Minimize changed to first time only
