@@ -1,4 +1,4 @@
-#**Disclaimer:**
+### **Disclaimer:**
 Spotify ad blocking is agains tos and is 3 years old, it will probably be detected by spotify and you mqy be banned.
 However muting the ads is not against the tos and just mutes the spotify application in the volume mixer.
 
