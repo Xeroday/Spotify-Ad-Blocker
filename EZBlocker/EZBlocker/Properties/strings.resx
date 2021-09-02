@@ -248,6 +248,10 @@ Click 'OK' to install the normal desktop version of Spotify.</value>
     <value>Test the executable</value>
     <comment>On Settings Form</comment>
   </data>
+  <data name="ThanksLabelText" xml:space="preserve">
+    <value>Thanks to:</value>
+    <comment>On credits form</comment>
+  </data>
   <data name="ToolStripExit" xml:space="preserve">
     <value>Exit</value>
     <comment>In tray menu</comment>

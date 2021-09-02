@@ -503,6 +503,30 @@ namespace EZBlocker
             }
         }
 
+        private CreditsMenu creditsMenu;
+
+        private void CreditsButton_Click(object sender, EventArgs e)
+        {
+            //here
+            try
+            {
+                if (creditsMenu == null)
+                {
+                    creditsMenu = new CreditsMenu();
+                    creditsMenu.Show();
+                }
+                creditsMenu.WindowState = System.Windows.Forms.FormWindowState.Normal;
+                creditsMenu.Focus();
+                creditsMenu.Show();
+
+                LogAction("/button/openCredits");
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(Properties.strings.CreditsButtonError, "EZBlocker");
+            }
+        }
+
         [DllImport("shell32.dll")]
         public static extern bool IsUserAnAdmin();
         
@@ -512,9 +536,5 @@ namespace EZBlocker
             Application.Exit();
  		}
 
-        private void CreditsButton_Click(object sender, EventArgs e)
-        {
-            //here
-        }
     }
 }

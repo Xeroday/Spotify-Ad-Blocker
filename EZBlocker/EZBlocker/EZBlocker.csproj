@@ -152,6 +152,12 @@
   <ItemGroup>
     <Compile Include="AudioUtils.cs" />
     <Compile Include="Analytics.cs" />
+    <Compile Include="CreditsMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CreditsMenu.Designer.cs">
+      <DependentUpon>CreditsMenu.cs</DependentUpon>
+    </Compile>
     <Compile Include="Listener.cs" />
     <Compile Include="Properties\strings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -175,6 +181,9 @@
     </Compile>
     <Compile Include="SpotifyHook.cs" />
     <Compile Include="SpotifyPatcher.cs" />
+    <EmbeddedResource Include="CreditsMenu.resx">
+      <DependentUpon>CreditsMenu.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="EZBlockerMain.resx">
       <DependentUpon>EZBlockerMain.cs</DependentUpon>
       <SubType>Designer</SubType>

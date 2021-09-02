@@ -342,6 +342,15 @@ namespace EZBlocker.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Thanks to:.
+        /// </summary>
+        internal static string ThanksLabelText {
+            get {
+                return ResourceManager.GetString("ThanksLabelText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exit.
         /// </summary>
         internal static string ToolStripExit {
