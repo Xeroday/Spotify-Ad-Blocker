@@ -3,57 +3,52 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
+using Windows.Media.Control;
 
 namespace EZBlocker
 {
     class SpotifyHook
     {
         public Process Spotify { get; private set; }
-        private HashSet<int> Children;
-        public AudioUtils.VolumeControl VolumeControl { get; private set; }
+        private List<int> Children;
+        public List<AudioUtils.VolumeControl> VolumeControls { get; private set; }
         public string WindowName { get; private set; }
         public IntPtr Handle { get; private set; }
 
+        private GlobalSystemMediaTransportControlsSession gsmtcs;
+        private bool IsNextEnabled = true;
+
         private readonly Timer RefreshTimer;
-        private float peak = 0f;
-        private float lastPeak = 0f;
 
         public SpotifyHook()
         {
             RefreshTimer = new Timer((e) =>
             {
-                if (IsRunning())
+                if (IsRunning() && gsmtcs != null)
                 {
                     WindowName = Spotify.MainWindowTitle;
                     Handle = Spotify.MainWindowHandle;
-                    if (VolumeControl == null)
-                    {
-                        VolumeControl = AudioUtils.GetVolumeControl(Children);
-                    }
-                    else
-                    {
-                        lastPeak = peak;
-                        peak = AudioUtils.GetPeakVolume(VolumeControl.Control);
-                    }
+                    IsNextEnabled = gsmtcs.GetPlaybackInfo().Controls.IsNextEnabled;
+                    Debug.WriteLine("Hook: Next " + IsNextEnabled);
                 }
                 else
                 {
-                    ClearHooks();
-                    HookSpotify();
+                    RefreshHooks();
                 }
-            }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(100));
+            }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(300));
         }
 
         public bool IsPlaying()
         {
-            return peak > 0 && lastPeak > 0;
+            Debug.WriteLine("Hook: " + gsmtcs.GetPlaybackInfo().PlaybackStatus);
+            return gsmtcs.GetPlaybackInfo().PlaybackStatus == GlobalSystemMediaTransportControlsSessionPlaybackStatus.Playing;
         }
 
         public bool IsAdPlaying()
         {
-            if ((WindowName.Equals("Advertisement") || !WindowName.Contains(" - ")) && !WindowName.Equals("") && !WindowName.Equals("Drag") && IsPlaying())
+            if (WindowName.Equals("Advertisement") || !IsNextEnabled && IsPlaying())
             {
-                Debug.WriteLine("Ad: " + lastPeak.ToString() + " " + peak.ToString());
+                Debug.WriteLine("Hook: " + "IsAdPlaying true");
                 return true;
             }
             return false;
@@ -86,37 +81,60 @@ namespace EZBlocker
             Spotify = null;
             WindowName = "";
             Handle = IntPtr.Zero;
-            if (VolumeControl != null) Marshal.ReleaseComObject(VolumeControl.Control);
-            VolumeControl = null;
+            if (VolumeControls != null)
+            {
+                foreach (AudioUtils.VolumeControl volumeControl in VolumeControls)
+                {
+                    Marshal.ReleaseComObject(volumeControl.Control);
+                }
+                VolumeControls = null;
+            }
+            gsmtcs = null;
         }
 
         private bool HookSpotify()
         {
-            Children = new HashSet<int>();
+            // Hook windows media controller
+            try
+            {
+                gsmtcs = GlobalSystemMediaTransportControlsSessionManager.RequestAsync().GetAwaiter().GetResult().GetCurrentSession();
+            } catch (Exception e)
+            {
+                Debug.WriteLine("Hook: " + e);
+            }
 
-            // Try hooking through window title
+            // Hook processes
+            Children = new List<int>();
             foreach (Process p in Process.GetProcessesByName("spotify"))
             {
                 Children.Add(p.Id);
-                Spotify = p;
-                if (p.MainWindowTitle.Length > 1)
+                if (p.MainWindowTitle.Length > 1 && Spotify == null)
                 {
-                    return true;
+                    Spotify = p;
                 }
             }
 
-            // Try hooking through audio device
-            VolumeControl = AudioUtils.GetVolumeControl(Children);
-            if (VolumeControl != null)
+            // Hook audio controls
+            VolumeControls = new List<AudioUtils.VolumeControl>();
+            foreach (int child in Children)
             {
-                Spotify = Process.GetProcessById(VolumeControl.ProcessId);
-                return true;
+                AudioUtils.VolumeControl volumeControl = AudioUtils.GetVolumeControl(child);
+                if (volumeControl != null)
+                {
+                    if (Spotify == null) Spotify = Process.GetProcessById(volumeControl.ProcessId);
+                    VolumeControls.Add(volumeControl);
+                }
             }
 
+            if (VolumeControls.Count > 0) return true;
+            
             return false;
         }
 
-        [DllImport("user32.dll")]
-        private static extern bool ShowWindow(IntPtr hwnd, int nCmdShow);
+        public void RefreshHooks()
+        {
+            ClearHooks();
+            HookSpotify();
+        }
     }
 }

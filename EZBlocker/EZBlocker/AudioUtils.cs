@@ -64,10 +64,8 @@ namespace EZBlocker
             return peak * 100;
         }
 
-        public static VolumeControl GetVolumeControl(HashSet<int> p)
+        public static VolumeControl GetVolumeControl(int p)
         {
-            if (p == null) return null;
-
             ISimpleAudioVolume volumeControl = null;
             IMMDeviceEnumerator deviceEnumerator = null;
             IMMDevice speakers = null;
@@ -100,7 +98,7 @@ namespace EZBlocker
 
                         // Get and compare process id
                         ctl.GetProcessId(out ctlPid);
-                        if (p.Contains(ctlPid))
+                        if (p == ctlPid)
                         {
                             volumeControl = ctl as ISimpleAudioVolume;
                             break;
