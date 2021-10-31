@@ -30,8 +30,6 @@ namespace EZBlocker
         private Analytics a;
         private DateTime lastRequest;
         private string lastAction = "";
-        private SpotifyPatcher patcher;
-        private Listener listener;
         private SpotifyHook hook;
 
         public Main()
@@ -72,7 +70,7 @@ namespace EZBlocker
                     {
                         if (muted)
                         {
-                            Thread.Sleep(500); // Give extra time for ad to change out
+                            Thread.Sleep(200); // Give extra time for ad to change out
                             Mute(false);
                         }
                         if (MainTimer.Interval != 200) MainTimer.Interval = 200;
@@ -244,10 +242,6 @@ namespace EZBlocker
             // Start Spotify hook
             hook = new SpotifyHook();
 
-            /* Start EZBlocker listener
-            listener = new Listener();
-            Task.Run(() => listener.Listen()); */
-
             MainTimer.Enabled = true;
 
             LogAction("/launch");
@@ -405,21 +399,6 @@ namespace EZBlocker
             Process.Start(website);
         }
 
-        private void undoPatchToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.LastPatched = "";
-            Properties.Settings.Default.Save();
-
-            if (patcher.Restore())
-            {
-                MessageBox.Show(Properties.strings.UndoPatchOKMessageBox, "EZBlocker");
-            }
-            else
-            {
-                MessageBox.Show(Properties.strings.UndoPatchFailMessageBox, "EZBlocker");
-            }
-        }
-
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             if (!MainTimer.Enabled) return; // Still setting up UI
@@ -441,5 +420,6 @@ namespace EZBlocker
 
         [DllImport("shell32.dll")]
         public static extern bool IsUserAnAdmin();
+
     }
 }

@@ -127,8 +127,20 @@
     <value>348, 16</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="openToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>205, 22</value>
+  </data>
+  <data name="websiteToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>205, 22</value>
+  </data>
+  <data name="separatorToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>202, 6</value>
+  </data>
+  <data name="exitToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>205, 22</value>
+  </data>
   <data name="NotifyIconContextMenu.Size" type="System.Drawing.Size, System.Drawing">
-    <value>319, 122</value>
+    <value>206, 98</value>
   </data>
   <data name="&gt;&gt;NotifyIconContextMenu.Name" xml:space="preserve">
     <value>NotifyIconContextMenu</value>
@@ -7352,24 +7364,6 @@
   <data name="NotifyIcon.Visible" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="openToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>318, 28</value>
-  </data>
-  <data name="websiteToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>318, 28</value>
-  </data>
-  <data name="undoPatchToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>318, 28</value>
-  </data>
-  <data name="undoPatchToolStripMenuItem.Visible" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="separatorToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>315, 6</value>
-  </data>
-  <data name="exitToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>318, 28</value>
-  </data>
   <data name="WebsiteLink.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -7381,7 +7375,7 @@
     <value>NoControl</value>
   </data>
   <data name="WebsiteLink.Location" type="System.Drawing.Point, System.Drawing">
-    <value>173, 134</value>
+    <value>195, 168</value>
   </data>
   <data name="WebsiteLink.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 0, 4, 0</value>
@@ -7390,7 +7384,7 @@
     <value>Yes</value>
   </data>
   <data name="WebsiteLink.Size" type="System.Drawing.Size, System.Drawing">
-    <value>113, 18</value>
+    <value>80, 13</value>
   </data>
   <data name="WebsiteLink.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -7420,13 +7414,13 @@
     <value>NoControl</value>
   </data>
   <data name="VolumeMixerButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>16, 7</value>
+    <value>18, 9</value>
   </data>
   <data name="VolumeMixerButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
+    <value>4, 5, 4, 5</value>
   </data>
   <data name="VolumeMixerButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>267, 44</value>
+    <value>300, 55</value>
   </data>
   <data name="VolumeMixerButton.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -7453,13 +7447,13 @@
     <value>NoControl</value>
   </data>
   <data name="StatusLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 134</value>
+    <value>15, 168</value>
   </data>
   <data name="StatusLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>4, 0, 4, 0</value>
   </data>
   <data name="StatusLabel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>72, 18</value>
+    <value>54, 13</value>
   </data>
   <data name="StatusLabel.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
@@ -7489,13 +7483,13 @@
     <value>NoControl</value>
   </data>
   <data name="BlockBannersCheckbox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>16, 59</value>
+    <value>18, 74</value>
   </data>
   <data name="BlockBannersCheckbox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
+    <value>4, 5, 4, 5</value>
   </data>
   <data name="BlockBannersCheckbox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>148, 22</value>
+    <value>111, 17</value>
   </data>
   <data name="BlockBannersCheckbox.TabIndex" type="System.Int32, mscorlib">
     <value>10</value>
@@ -7522,13 +7516,13 @@
     <value>NoControl</value>
   </data>
   <data name="StartupCheckbox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>16, 83</value>
+    <value>18, 104</value>
   </data>
   <data name="StartupCheckbox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
+    <value>4, 5, 4, 5</value>
   </data>
   <data name="StartupCheckbox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>196, 22</value>
+    <value>145, 17</value>
   </data>
   <data name="StartupCheckbox.TabIndex" type="System.Int32, mscorlib">
     <value>11</value>
@@ -7555,13 +7549,13 @@
     <value>NoControl</value>
   </data>
   <data name="SpotifyCheckbox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>16, 108</value>
+    <value>18, 135</value>
   </data>
   <data name="SpotifyCheckbox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
+    <value>4, 5, 4, 5</value>
   </data>
   <data name="SpotifyCheckbox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>214, 22</value>
+    <value>158, 17</value>
   </data>
   <data name="SpotifyCheckbox.TabIndex" type="System.Int32, mscorlib">
     <value>12</value>
@@ -7582,10 +7576,10 @@
     <value>True</value>
   </metadata>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>8, 16</value>
+    <value>9, 20</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>291, 163</value>
+    <value>327, 204</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -14797,7 +14791,7 @@
 </value>
   </data>
   <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
+    <value>4, 5, 4, 5</value>
   </data>
   <data name="$this.RightToLeftLayout" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -14830,12 +14824,6 @@
     <value>websiteToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;websiteToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;undoPatchToolStripMenuItem.Name" xml:space="preserve">
-    <value>undoPatchToolStripMenuItem</value>
-  </data>
-  <data name="&gt;&gt;undoPatchToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;separatorToolStripMenuItem.Name" xml:space="preserve">

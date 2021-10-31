@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Threading.Tasks;
+using Windows.Media.Control;
 
 namespace EZBlocker
 {
@@ -14,6 +16,9 @@ namespace EZBlocker
         public string WindowName { get; private set; }
         public IntPtr Handle { get; private set; }
 
+        private GlobalSystemMediaTransportControlsSession gsmtcs;
+        private bool IsNextEnabled = true;
+
         private readonly Timer RefreshTimer;
         private float peak = 0f;
         private float lastPeak = 0f;
@@ -22,7 +27,7 @@ namespace EZBlocker
         {
             RefreshTimer = new Timer((e) =>
             {
-                if (IsRunning())
+                if (IsRunning() && gsmtcs != null)
                 {
                     WindowName = Spotify.MainWindowTitle;
                     Handle = Spotify.MainWindowHandle;
@@ -35,13 +40,15 @@ namespace EZBlocker
                         lastPeak = peak;
                         peak = AudioUtils.GetPeakVolume(VolumeControl.Control);
                     }
+                        IsNextEnabled = gsmtcs.GetPlaybackInfo().Controls.IsNextEnabled;
+                        Debug.WriteLine(IsNextEnabled);
                 }
                 else
                 {
                     ClearHooks();
                     HookSpotify();
                 }
-            }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(100));
+            }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(300));
         }
 
         public bool IsPlaying()
@@ -51,7 +58,7 @@ namespace EZBlocker
 
         public bool IsAdPlaying()
         {
-            if ((WindowName.Equals("Advertisement") || !WindowName.Contains(" - ")) && !WindowName.Equals("") && !WindowName.Equals("Drag") && IsPlaying())
+            if (WindowName.Equals("Advertisement") || !IsNextEnabled && !WindowName.Equals("") && !WindowName.Equals("Drag") && IsPlaying())
             {
                 Debug.WriteLine("Ad: " + lastPeak.ToString() + " " + peak.ToString());
                 return true;
@@ -88,10 +95,15 @@ namespace EZBlocker
             Handle = IntPtr.Zero;
             if (VolumeControl != null) Marshal.ReleaseComObject(VolumeControl.Control);
             VolumeControl = null;
+            gsmtcs = null;
         }
 
         private bool HookSpotify()
         {
+            // First hook windows media controller
+            gsmtcs = GlobalSystemMediaTransportControlsSessionManager.RequestAsync().GetAwaiter().GetResult().GetCurrentSession();
+
+            // Hook Spotify process
             Children = new HashSet<int>();
 
             // Try hooking through window title
@@ -115,8 +127,5 @@ namespace EZBlocker
 
             return false;
         }
-
-        [DllImport("user32.dll")]
-        private static extern bool ShowWindow(IntPtr hwnd, int nCmdShow);
     }
 }
