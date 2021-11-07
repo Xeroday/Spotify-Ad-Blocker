@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace EZBlocker
@@ -9,6 +10,23 @@ namespace EZBlocker
         private const int WM_APPCOMMAND = 0x319;
         private const int MEDIA_PLAYPAUSE = 0xE0000;
         private const int MEDIA_NEXTTRACK = 0xB0000;
+
+        public static void SetSpotifyMute(bool mute)
+        {
+            List<int> children = new List<int>();
+            foreach (Process p in Process.GetProcessesByName("spotify"))
+            {
+                children.Add(p.Id);
+            }
+            foreach (int child in children)
+            {
+                VolumeControl volumeControl = GetVolumeControl(child);
+                if (volumeControl != null)
+                {
+                    SetMute(volumeControl.Control, mute);
+                }
+            }
+        }
 
         public static void SendPlayPause(IntPtr target)
         {

@@ -88,7 +88,7 @@
   <ItemGroup>
     <Compile Include="AudioUtils.cs" />
     <Compile Include="Analytics.cs" />
-    <Compile Include="Listener.cs" />
+    <Compile Include="MediaHook.cs" />
     <Compile Include="Properties\strings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -103,7 +103,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SpotifyHook.cs" />
     <EmbeddedResource Include="EZBlockerMain.resx">
       <DependentUpon>EZBlockerMain.cs</DependentUpon>
       <SubType>Designer</SubType>
