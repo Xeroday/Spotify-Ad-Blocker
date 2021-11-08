@@ -55,3 +55,8 @@ The following are contributors to this goal:
 
   [1]: http://www.ericzhang.me/dl/?file=EZBlocker.php
   [2]: http://www.ericzhang.me/projects/spotify-ad-blocker-ezblocker/
+  
+## Similar projects on other platforms
+
+- **macOS** [MuteSpotifyAds](https://github.com/simonmeusel/MuteSpotifyAds) (auto skip ads feature available)
+- **Linux** [Spotify-AdKiller](https://github.com/SecUpwN/Spotify-AdKiller)
