@@ -197,6 +197,10 @@ namespace EZBlocker
             } else
             {
                 spotifyPath = Environment.GetEnvironmentVariable("APPDATA") + @"\Spotify\spotify.exe";
+                if (spotifyPath == "")
+                {
+                    spotifyPath = Environment.GetEnvironmentVariable("ProgramFiles") + @"\WindowsApps\SpotifyAB.SpotifyMusic_1.179.763.0_x86__zpdnekdrzrea0\Spotify.exe";
+                }
             }
 
             // Start Spotify and give EZBlocker higher priority
