@@ -43,7 +43,7 @@ namespace EZBlocker
             sessions.AddRange(SessionManager.GetSessions());
             foreach (GlobalSystemMediaTransportControlsSession session in sessions)
             {
-                if (session != null && session.SourceAppUserModelId == "Spotify.exe")
+                if (session != null && ((session.SourceAppUserModelId == "Spotify.exe") || (session.SourceAppUserModelId == "SpotifyAB.SpotifyMusic_zpdnekdrzrea0!Spotify")))
                 {
                     Debug.WriteLine("Registering " + session.GetHashCode());
                     if (unmute) AudioUtils.SetSpotifyMute(false);
